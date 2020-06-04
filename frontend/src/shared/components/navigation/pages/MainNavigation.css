@@ -1,3 +1,8 @@
+.nav-title {
+  color: white;
+  display: none;
+}
+
 .main-navigation__menu-btn {
   width: 3rem;
   height: 3rem;
@@ -18,12 +23,12 @@
 }
 
 .main-navigation__title {
-  color: white;
+  color: f1faee;
 }
 
 .main-navigation__title a {
   text-decoration: none;
-  color: white;
+  color: f1faee;
 }
 
 .main-navigation__header-nav {
@@ -40,6 +45,10 @@
   }
 
   .main-navigation__header-nav {
+    display: block;
+  }
+
+  .nav-title {
     display: block;
   }
 }

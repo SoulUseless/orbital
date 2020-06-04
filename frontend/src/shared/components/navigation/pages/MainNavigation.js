@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import MainHeader from './MainHeader';
@@ -7,44 +7,67 @@ import SideDrawer from './SideDrawer';
 import Backdrop from '../../UIElements/Backdrop';
 import './MainNavigation.css';
 
-const MainNavigation = props => {
-  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+import {AuthContext} from "../../../context/auth-context";
 
-  const openDrawerHandler = () => {
-    setDrawerIsOpen(true);
-  };
+const MainNavigation = (props) => {
+    const auth = useContext(AuthContext); //no tokens yet
+    const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
-  const closeDrawerHandler = () => {
-    setDrawerIsOpen(false);
-  };
+    const openDrawerHandler = () => {
+        setDrawerIsOpen(true);
+    };
 
-  return (
-    <React.Fragment>
-      {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}
-      <SideDrawer show={drawerIsOpen} onClick={closeDrawerHandler}>
-        <nav className="main-navigation__drawer-nav">
-          <NavLinks />
-        </nav>
-      </SideDrawer>
+    const closeDrawerHandler = () => {
+        setDrawerIsOpen(false);
+    };
 
-      <MainHeader>
-        <button
-          className="main-navigation__menu-btn"
-          onClick={openDrawerHandler}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
-        <h1 className="main-navigation__title">
-          <Link to="/">YourPlaces</Link>
-        </h1>
-        <nav className="main-navigation__header-nav">
-          <NavLinks />
-        </nav>
-      </MainHeader>
-    </React.Fragment>
-  );
+    let titleBar; //hopefully can use user name to replace placeholder
+    if (auth.isLoggedIn) {
+        if (auth.userType === "student") {
+            titleBar = <h1 className="nav-title"> Welcome to Level Up, ((student))! </h1>
+        } else {
+            titleBar = <h1 className="nav-title"> Welcome to Level Up, ((startup))! </h1>
+        }
+    } else {
+        titleBar = <h1 className="nav-title"> Welcome to Level Up! </h1>
+    }
+    
+    return (
+        <React.Fragment>
+            {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}
+            <SideDrawer show={drawerIsOpen} onClick={closeDrawerHandler}>
+                <nav className="main-navigation__drawer-nav">
+                    <NavLinks />
+                </nav>
+            </SideDrawer>
+
+            <MainHeader>
+                <button
+                    className="main-navigation__menu-btn"
+                    onClick={openDrawerHandler}
+                >
+                    <span />
+                    <span />
+                    <span />
+                </button>
+                <div className="main-navigation__title">
+                    <Link to="/">
+                        <img
+                            src="logo.png"
+                            alt="Logo"
+                            height="150"
+                            width="150"
+                        />
+                        {/* broken? */}
+                    </Link>
+                </div>
+                {titleBar}                
+                <nav className="main-navigation__header-nav">
+                    <NavLinks />
+                </nav>
+            </MainHeader>
+        </React.Fragment>
+    );
 };
 
 export default MainNavigation;
