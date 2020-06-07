@@ -1,0 +1,40 @@
+Database
+
+Student
+- studentId
+- email
+- password
+- contact number
+- array of uncompleted challenges id
+- array of completed challenges id
+- array of external achievements id
+- tiers reached
+- array of submissions id
+
+Startup
+- startup id
+- email
+- password
+- contact
+- array of challenges id
+
+Challenge
+- challenge id
+- type of challenge
+- startup id
+- challenge name
+- description
+- public test case
+- private test case
+- array of attemptees id
+- array of completed id
+
+Submission
+- submission id
+- student id
+- submission file
+
+Achievement
+- Name of achievement
+- organisation
+

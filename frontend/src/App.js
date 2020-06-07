@@ -7,11 +7,12 @@ import StartupProfile from "./startups/pages/StartupProfile";
 import Students from "./students/pages/Students";
 import StudentProfile from "./students/pages/StudentProfile";
 import Challenge from "./challenges/pages/Challenge";
-import EditChallenge from "./challenges/pages/EditChallenge";
-import ChallengeList from "./challenges/pages/ChallengeList";
+//import EditChallenge from "./challenges/pages/EditChallenge";
+import Challenges from "./challenges/pages/Challenges";
 import StartupChallenge from "./startup-challenges/pages/StartupChallenge";
 import EditStartUpChallenge from "./startup-challenges/pages/EditStartupChallenge";
 import StartupChallengeList from "./startup-challenges/pages/StartupChallengeList";
+import NewStartupChallenge from "./startup-challenges/pages/NewStartupChallenge.js";
 import Auth from "./shared/components/authentication/pages/Auth";
 import MainNavigation from "./shared/components/navigation/pages/MainNavigation";
 import Guide from "./shared/components/guide/Guide";
@@ -22,12 +23,12 @@ const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userType, setUserType] = useState();
 
-    const loginAsStudent = useCallback(() => {
+    const loginAsStudent = useCallback((id) => {
       setIsLoggedIn(true);
       setUserType("student");
     }, []);
 
-    const loginAsStartup = useCallback(() => {
+    const loginAsStartup = useCallback((id) => {
       setIsLoggedIn(true);
       setUserType("startup");
     }, []);
@@ -63,7 +64,7 @@ const App = () => {
                 </Route>
 
                 <Route path="/challenges" exact={true}>
-                    <ChallengeList />
+                    <Challenges />
                 </Route>
 
                 <Route path="/challenges/:challengeId">
@@ -105,12 +106,16 @@ const App = () => {
                     <Startups />
                 </Route>
 
+                <Route path="/startup/new" exact={true}>
+                    <NewStartupChallenge />
+                </Route>
+
                 <Route path="/startup/:startupId">
                     <StartupProfile />
                 </Route>
 
                 <Route path="/challenges" exact={true}>
-                    <ChallengeList />
+                    <Challenges />
                 </Route>
 
                 <Route path="/challenges/:challengeId">
@@ -169,7 +174,7 @@ const App = () => {
               </Route>
 
               <Route path="/challenges" exact={true}>
-                  <ChallengeList />
+                  <Challenges />
               </Route>
 
               <Route path="/challenges/:challengeId">

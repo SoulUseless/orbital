@@ -24,12 +24,24 @@ const MainNavigation = (props) => {
     let titleBar; //hopefully can use user name to replace placeholder
     if (auth.isLoggedIn) {
         if (auth.userType === "student") {
-            titleBar = <h1 className="nav-title"> Welcome to Level Up, ((student))! </h1>
+            titleBar = (
+                <h1 className="nav-title" style={{ textAlign: "center" }}>
+                    Welcome to Level Up, ((student))!
+                </h1>
+            );
         } else {
-            titleBar = <h1 className="nav-title"> Welcome to Level Up, ((startup))! </h1>
+            titleBar = (
+                <h1 className="nav-title" style={{ textAlign: "center" }}>
+                    Welcome to Level Up, ((startup))!
+                </h1>
+            );
         }
     } else {
-        titleBar = <h1 className="nav-title"> Welcome to Level Up! </h1>
+        titleBar = (
+            <h1 className="nav-title" style={{ textAlign: "center" }}>
+                Welcome to Level Up!
+            </h1>
+        );
     }
     
     return (
@@ -61,10 +73,12 @@ const MainNavigation = (props) => {
                         {/* broken? */}
                     </Link>
                 </div>
-                {titleBar}                
-                <nav className="main-navigation__header-nav">
-                    <NavLinks />
-                </nav>
+                <div>
+                    {titleBar}
+                    <nav className="main-navigation__header-nav">
+                        <NavLinks />
+                    </nav>
+                </div>
             </MainHeader>
         </React.Fragment>
     );
