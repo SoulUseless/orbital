@@ -62,22 +62,30 @@ const MainNavigation = (props) => {
                     <span />
                     <span />
                 </button>
-                <div className="main-navigation__title">
-                    <Link to="/">
-                        <img
-                            src="logo.png"
-                            alt="Logo"
-                            height="150"
-                            width="150"
-                        />
-                        {/* broken? */}
-                    </Link>
-                </div>
-                <div>
-                    {titleBar}
-                    <nav className="main-navigation__header-nav">
-                        <NavLinks />
-                    </nav>
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 5fr",
+                        gridGap: 20,
+                    }}
+                >
+                    <div className="main-navigation__title">
+                        <Link to="/">
+                            <img
+                                src="logo.png"
+                                alt="Logo"
+                                height="150"
+                                width="150"
+                            />
+                            {/* broken? */}
+                        </Link>
+                    </div>
+                    <div>
+                        {titleBar}
+                        <nav className="main-navigation__header-nav">
+                            <NavLinks />
+                        </nav>
+                    </div>
                 </div>
             </MainHeader>
         </React.Fragment>
