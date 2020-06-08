@@ -112,6 +112,7 @@ const Challenges = (props) => {
             }}
         >
             <div className="sidebar">
+                {/*TO DO: SCALABLE, hide the sidebar when with is too small */}
                 {/* radio buttons go here */}
                 <h3> Filters </h3>
                 <div onChange={languageFilterHandler}>

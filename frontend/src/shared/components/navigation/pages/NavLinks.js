@@ -41,22 +41,39 @@ const NavLinks = props => {
 
               {auth.isLoggedIn && (
                   <>
+                      {auth.userType === "student" && (
+                          <li>
+                              <NavLink to="/student/s1" exact>
+                                  {" "}
+                                  {/** to do // studentid is placeholder*/}
+                                  <span style={{ color: "white" }}>
+                                      My Profile
+                                  </span>
+                              </NavLink>
+                          </li>
+                      )}
+
+                      {auth.userType === "startup" && (
+                          <li>
+                              <NavLink to="/startup/su1" exact>
+                                  {" "}
+                                  {/** to do // startupid is placeholder*/}
+                                  <span style={{ color: "white" }}>
+                                      My Profile
+                                  </span>
+                              </NavLink>
+                          </li>
+                      )}
+
                       <li>
-                          <NavLink to="/auth" exact> {/** to do */}
-                              <span style={{ color: "white" }}>
-                                  My Profile
-                              </span>
+                          <NavLink to="/auth" exact>
+                              {" "}
+                              {/* to do*/}
+                              <span style={{ color: "white" }}>Settings</span>
                           </NavLink>
                       </li>
                       <li>
-                          <NavLink to="/auth" exact> {/* to do*/}
-                              <span style={{ color: "white" }}>
-                                  Settings
-                              </span>
-                          </NavLink>
-                      </li>
-                      <li>
-                        <button onClick={auth.logout}> Logout </button>
+                          <button onClick={auth.logout}> Logout </button>
                       </li>
                   </>
               )}

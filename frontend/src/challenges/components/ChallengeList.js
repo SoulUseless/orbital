@@ -55,6 +55,10 @@ const ChallengeList = (props) => {
                 );
             }
         }
+
+        if (props.filters.filteredRequirements.length === 0) {
+            challenges = [];
+        }
         //TODO: requirements check need user info to be set up
     }
 

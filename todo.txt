@@ -1,0 +1,25 @@
+frontend
+- landing page
+- login and signup (POST request)
+- inhouse challenge page (GET request)
+- indiv challenge page (GET request)
+- new startup challenge (POST request)
+- startup challenges page (GET request)
+- startup indiv challenge page (GET request)
+- edit challenge page (GET and PATCH request)
+- delete challenge (DELETE request)
+- user profile page (GET request)
+- edit user profile (GET and PATCH request)
+- user settings page (GET request)
+- file submission element and subsequent page (POST request)
+
+DB
+- user document
+- startup challenge document
+- in house chalenge document (and populate)
+=> come back to indiv challenge page to implement sorting based on XXX
+
+backend
+- routing
+- user control
+- data retrieval
