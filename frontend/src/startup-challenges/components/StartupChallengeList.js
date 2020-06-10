@@ -23,10 +23,26 @@ const StartupChallengeList = (props) => {
     let challenges = props.items;
     if (props.hasFilters) {
         if (!! props.filters.filteredLanguage) {
-            challenges = challenges.filter(challenge => props.filters.filteredLanguage.includes(challenge.language));
+            challenges = challenges.filter(challenge => {
+                const reqs = Object.keys(challenge.requirements);
+                console.log(reqs);
+
+                if (reqs.length === 0) {
+                    return true;
+                }
+                return reqs.reduce((x, y) => x || props.filters.filteredLanguage.includes(y), false);
+                /*props.filters.filteredLanguage.includes(challenge.language)*/
+            });
         }
         if (!! props.filters.filteredTier) {
-            challenges = challenges.filter(challenge => props.filters.filteredTier.includes(challenge.tier));
+            challenges = challenges.filter(challenge => {
+                const tiers = Object.keys(challenge.requirements).map(req => challenge.requirements[req]);
+                if (tiers.length === 0) {
+                    return true;
+                }
+                return tiers.reduce((x, y) => x || props.filters.filteredTier.includes(y), false);
+                //props.filters.filteredTier.includes(challenge.tier)
+            });
         }
         if (!! props.filters.filteredStartup){
             challenges = challenges.filter(challenge => props.filters.filteredStartup.includes(challenge.owner));

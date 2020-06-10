@@ -12,56 +12,47 @@ const DUMMY_CHALLENGES = [
         name: "test1",
         owner: "google",
         description: "my first challenge",
-        language: "javascript",
-        requirements: [],
+        requirements: {},
         tier: "bronze",
-        url: "https://cdn.worldvectorlogo.com/logos/javascript.svg"
+        url: "https://cdn.worldvectorlogo.com/logos/google-icon.svg"
     },
     {
         id: "c2",
         name: "test2",
         owner: "google",
         description: "my first challenge",
-        language: "python",
-        requirements: ["c1"],
-        tier: "bronze",
-        url: "https://logodownload.org/wp-content/uploads/2019/10/python-logo-4.png"
+        requirements: { javascript: "silver", java: "gold" },
+        url: "https://cdn.worldvectorlogo.com/logos/google-icon.svg"
     },
     {
         id: "c3",
         name: "test3",
         owner: "facebook",
         description: "my first challenge",
-        language: "javascript",
-        requirements: [],
-        tier: "silver",
-        url: "https://cdn.worldvectorlogo.com/logos/javascript.svg"
+        requirements: {},
+        url: "https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-facebook-2019-square1-512.png"
     },
     {
         id: "c4",
         name: "test4",
         owner: "tencent",
         description: "my first challenge",
-        language: "javascript",
-        requirements: [],
-        tier: "silver",
-        url: "https://cdn.worldvectorlogo.com/logos/javascript.svg"
+        requirements: {},
+        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv_MNlp6gBL_CAc8mnwUirBnqJIBN7yjtxZZhjxAMwExKm0beX&s"
     },
     {
         id: "c5",
         name: "test5",
         owner: "facebook",
         description: "my first challenge",
-        language: "python",
-        requirements: [],
-        tier: "gold",
-        url: "https://logodownload.org/wp-content/uploads/2019/10/python-logo-4.png"
+        requirements: {},
+        url: "https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-facebook-2019-square1-512.png"
     },
 ];
 
 const StartupChallenges = (props) => {
     const [filteredLanguage, setFilteredLanguage] = useState(["python", "javascript"]);
-    const [filteredTier, setFilteredTier] = useState(["bronze", "silver", "gold"]);
+    const [filteredTier, setFilteredTier] = useState(["silver", "gold"]);
     const [filteredOwnership, setFilteredOwnership] = useState(["yes", "no"]); //TO DO after profile is implemented
     const [filteredStartup, setFilteredStartup] = useState(["google", "facebook", "tencent"]);
     //can consider retrieving this from a database?
@@ -140,20 +131,20 @@ const StartupChallenges = (props) => {
                 <h3> Filters </h3>
                 <div onChange={languageFilterHandler}>
                     <h4> Language</h4>
-                    <input type="checkbox" value="python" defaultChecked />{" "}
+                    <input type="checkbox" value="python" defaultChecked />
                     Python <br />
+                    <input type="checkbox" value="java" defaultChecked />
+                    Java <br />
                     <input
                         type="checkbox"
                         value="javascript"
                         defaultChecked
-                    />{" "}
+                    />
                     Javascript
                 </div>
 
                 <div onChange={tierFilterHandler}>
                     <h4> Tier</h4>
-                    <input type="checkbox" value="bronze" defaultChecked />{" "}
-                    Bronze <br />
                     <input type="checkbox" value="silver" defaultChecked />{" "}
                     Silver <br />
                     <input type="checkbox" value="gold" defaultChecked /> Gold
@@ -167,13 +158,13 @@ const StartupChallenges = (props) => {
                         type="checkbox"
                         value="facebook"
                         defaultChecked
-                    />{" "}
+                    />
                     Facebook <br />
                     <input
                         type="checkbox"
                         value="tencent"
                         defaultChecked
-                    />{" "}
+                    />
                     Tencent
                 </div>
 

@@ -21,11 +21,19 @@ const DUMMY_CHALLENGE = {
         { input: "factorial(5)", output: "120" },
     ],
 };
+
+const DUMMY_MODULES_COMPLETED = ["c3", "c5"];
+
+
 const Challenge = (props) => {
     const auth = useContext(AuthContext);
 
+    const isQualified = DUMMY_CHALLENGE.requirements.reduce((x, y) => x && DUMMY_MODULES_COMPLETED.includes(y), true);
+
     const footer = auth.isLoggedIn && auth.userType === "student" ? (
-        <h1> SUBMITTER PLACEHOLDER </h1>
+        isQualified
+        ? <h1> SUBMITTER PLACEHOLDER </h1>
+        : <h1> you are not qualified </h1>
     ) : (
         <div className="challenge-auth-container">
             <Button to="/auth">
