@@ -66,8 +66,7 @@ const NavLinks = props => {
                       )}
 
                       <li>
-                          <NavLink to="/auth" exact>
-                              {" "}
+                          <NavLink to="/settings" exact>
                               {/* to do*/}
                               <span style={{ color: "white" }}>Settings</span>
                           </NavLink>

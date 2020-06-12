@@ -3,11 +3,11 @@ import React from "react";
 import Input from "../../shared/components/formElements/Input";
 import Button from "../../shared/components/formElements/Button";
 import Card from "../../shared/components/UIElements/Card";
-import MultiInput from "../../shared/components/formElements/MultiInput";
+//import MultiInput from "../../shared/components/formElements/MultiInput";
+import MultiDropdown from "../../shared/components/formElements/MultiDropdown";
 //import FileUploader from "../../shared/components/formElements/FileUploader"; TODO
 import {
     VALIDATOR_REQUIRE,
-    VALIDATOR_MINLENGTH
 } from "../../shared/util/validators";
 import {useForm} from "../../shared/hooks/form-hook";
 
@@ -25,7 +25,7 @@ const NewStartupChallenge = (props) => {
             isValid: false
           },
           requirements: {
-              value: {},
+              value: [],
               isValid: true
           },
           taskDescription: {
@@ -48,6 +48,8 @@ const NewStartupChallenge = (props) => {
         console.log(event); //TO DO when backend up
     }
 
+    console.log(formState.inputs);
+    
     return (
         <Card className="challenge-form">
             <h2> New Challenge Creator </h2>
@@ -72,18 +74,17 @@ const NewStartupChallenge = (props) => {
                     onInput={inputHandler}
                 />
 
-                <MultiInput
+                <MultiDropdown
                     element="input"
                     id="requirements"
-                    type="text"
+                    options={[["java", "javascript", "python"], ["silver", "gold"]]}
                     label="Requirements of Challenge"
-                    validators={[VALIDATOR_REQUIRE()]}
                     errorText="Please enter at least one requirement."
                     onInput={inputHandler}
                 />
 
                 <Input
-                    id="task-description"
+                    id="taskDescription"
                     type="text"
                     label="Brief Description of Task Requirement"
                     validators={[VALIDATOR_REQUIRE()]}

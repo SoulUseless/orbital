@@ -16,6 +16,7 @@ import NewStartupChallenge from "./startup-challenges/pages/NewStartupChallenge.
 import Auth from "./shared/components/authentication/pages/Auth";
 import MainNavigation from "./shared/components/navigation/pages/MainNavigation";
 import Guide from "./shared/components/guide/Guide";
+import Settings from "./shared/components/settings/settings";
 
 import { AuthContext } from "./shared/context/auth-context";
 
@@ -83,7 +84,10 @@ const App = () => {
                     <Guide />
                 </Route>
 
-                {/*ADD IN SETTING ROUTES */}
+                <Route path="/settings">
+                    <Settings />
+                </Route>
+
                 <Redirect to="/" />
                 {/* TO DO: save token and use this to redirect to student profile*/}
             </Switch>
@@ -144,7 +148,10 @@ const App = () => {
                     <Guide />
                 </Route>
 
-                {/*ADD IN SETTING ROUTES */}
+                <Route path="/settings">
+                    <Settings />
+                </Route>
+
                 <Redirect to="/" />
                 {/* TO DO: save token and use this to redirect to startup profile*/}
             </Switch>

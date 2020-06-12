@@ -130,8 +130,8 @@ const StartupChallenge = (props) => {
                             </th>
                             <td>
                                 <ul>
-                                    {Object.keys(DUMMY_CHALLENGE.requirements).map((lang) => (
-                                        <li>
+                                    {Object.keys(DUMMY_CHALLENGE.requirements).map((lang, index) => (
+                                        <li key={`requirement-${index + 1}`}>
                                             {`${lang.charAt(0).toUpperCase() + lang.slice(1)}: ${DUMMY_CHALLENGE.requirements[lang]}`}
                                         </li>
                                     ))}
@@ -154,9 +154,9 @@ const StartupChallenge = (props) => {
                                 <th className="test-case-col">Input</th>
                                 <th className="test-case-col">Expected Output</th>
                             </tr>
-                            {DUMMY_CHALLENGE.publicTestCases.map((ts) => {
+                            {DUMMY_CHALLENGE.publicTestCases.map((ts, index) => {
                                 return (
-                                    <tr>
+                                    <tr key={`test-case-${index + 1}`}>
                                         <td className="test-case-col">
                                             {ts.input}
                                         </td>
