@@ -1,8 +1,9 @@
-import React, {useContext} from "react";
+import React, { useState, useContext } from "react";
 import { Link } from 'react-router-dom';
 
 import Button from "../../shared/components/formElements/Button";
 import Card from "../../shared/components/UIElements/Card";
+import Modal from "../../shared/components/UIElements/Modal";
 import {AuthContext} from "../../shared/context/auth-context";
 
 const DUMMY_CHALLENGE = {
@@ -38,6 +39,21 @@ const compareCredentials = (c1, c2) => {
 
 const StartupChallenge = (props) => {
     const auth = useContext(AuthContext);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+    const showDeleteWarningHandler = () => {
+        setShowConfirmModal(true);
+    };
+    
+    const cancelDeleteHandler = () => {
+        setShowConfirmModal(false);
+    };
+    
+    const confirmDeleteHandler = () => {
+        setShowConfirmModal(false);
+        console.log("DELETING..."); //TODO: send DELETE request
+    };
+    
     let isQualified;
     if (!auth.isLoggedIn || !auth.userType === "student") {
         isQualified = false;
@@ -68,17 +84,24 @@ const StartupChallenge = (props) => {
     }
     console.log(isQualified);
 
-    const footer = auth.isLoggedIn && auth.userType === "student" ? (
-        isQualified
-        ? <h1> SUBMITTER PLACEHOLDER </h1>
-        : <h1> you are not qualified </h1> 
-    ) : (
-        <div className="challenge-auth-container">
-            <Button to="/auth">
-                <h2> Log In/Sign Up as a Student to Submit </h2>
+    const footer =
+        auth.isLoggedIn && auth.userType === "student" ? (
+            isQualified ? (
+                <h1> SUBMITTER PLACEHOLDER </h1>
+            ) : (
+                <h1> you are not qualified </h1>
+            )
+        ) : auth.isLoggedIn && auth.userType === "startup" ? (
+            <Button onClick={showDeleteWarningHandler} danger> {/*check for startup credentials TODO */}
+                <h2> Delete </h2>
             </Button>
-        </div>
-    );
+        ) : (
+            <div className="challenge-auth-container">
+                <Button to="/auth">
+                    <h2> Log In/Sign Up as a Student to Submit </h2>
+                </Button>
+            </div>
+        );
     
     return (
         <div className="challenge-container">
@@ -105,6 +128,28 @@ const StartupChallenge = (props) => {
                 </div>
                 <hr />
 
+                <Modal
+                    show={showConfirmModal}
+                    onCancel={cancelDeleteHandler}
+                    header="Are you sure?"
+                    footerClass="place-item__modal-actions"
+                    footer={
+                        <React.Fragment>
+                            <Button inverse onClick={cancelDeleteHandler}>
+                                CANCEL
+                            </Button>
+                            <Button danger onClick={confirmDeleteHandler}>
+                                DELETE
+                            </Button>
+                        </React.Fragment>
+                    }
+                >
+                    <p>
+                        Do you want to proceed and delete this challenge? Please
+                        note that it can't be undone thereafter.
+                    </p>
+                </Modal>
+
                 <table>
                     <tbody>
                         <tr>
@@ -130,9 +175,18 @@ const StartupChallenge = (props) => {
                             </th>
                             <td>
                                 <ul>
-                                    {Object.keys(DUMMY_CHALLENGE.requirements).map((lang, index) => (
+                                    {Object.keys(
+                                        DUMMY_CHALLENGE.requirements
+                                    ).map((lang, index) => (
                                         <li key={`requirement-${index + 1}`}>
-                                            {`${lang.charAt(0).toUpperCase() + lang.slice(1)}: ${DUMMY_CHALLENGE.requirements[lang]}`}
+                                            {`${
+                                                lang.charAt(0).toUpperCase() +
+                                                lang.slice(1)
+                                            }: ${
+                                                DUMMY_CHALLENGE.requirements[
+                                                    lang
+                                                ]
+                                            }`}
                                         </li>
                                     ))}
                                 </ul>
@@ -152,20 +206,24 @@ const StartupChallenge = (props) => {
                         <tbody>
                             <tr>
                                 <th className="test-case-col">Input</th>
-                                <th className="test-case-col">Expected Output</th>
+                                <th className="test-case-col">
+                                    Expected Output
+                                </th>
                             </tr>
-                            {DUMMY_CHALLENGE.publicTestCases.map((ts, index) => {
-                                return (
-                                    <tr key={`test-case-${index + 1}`}>
-                                        <td className="test-case-col">
-                                            {ts.input}
-                                        </td>
-                                        <td className="test-case-col">
-                                            {ts.output}
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                            {DUMMY_CHALLENGE.publicTestCases.map(
+                                (ts, index) => {
+                                    return (
+                                        <tr key={`test-case-${index + 1}`}>
+                                            <td className="test-case-col">
+                                                {ts.input}
+                                            </td>
+                                            <td className="test-case-col">
+                                                {ts.output}
+                                            </td>
+                                        </tr>
+                                    );
+                                }
+                            )}
                         </tbody>
                     </table>
                 </div>
