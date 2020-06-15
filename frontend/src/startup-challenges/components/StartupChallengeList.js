@@ -24,7 +24,7 @@ const StartupChallengeList = (props) => {
     if (props.hasFilters) {
         if (!! props.filters.filteredLanguage) {
             challenges = challenges.filter(challenge => {
-                const reqs = Object.keys(challenge.requirements);
+                const reqs = challenge.requirements.map(ch => ch.tier);
                 console.log(reqs);
 
                 if (reqs.length === 0) {
@@ -36,7 +36,7 @@ const StartupChallengeList = (props) => {
         }
         if (!! props.filters.filteredTier) {
             challenges = challenges.filter(challenge => {
-                const tiers = Object.keys(challenge.requirements).map(req => challenge.requirements[req]);
+                const tiers = challenge.requirements.map(ch => ch.level);
                 if (tiers.length === 0) {
                     return true;
                 }
@@ -61,11 +61,17 @@ const StartupChallengeList = (props) => {
         }
     }
 
-    console.log(challenges);
+    if (challenges.length === 0) {
+        return ( 
+        <h4 className="center">
+            Search is too narrow, try widening your parameters.
+        </h4>
+        );
+    }
     return ( 
         <ul className="challenge-list">
             {challenges.map((challenge) => (
-                <NavLink to={"/startup-challenge/" + challenge.id}>
+                <NavLink key={`challenge-${challenge.id}`} to={"/startup-challenge/" + challenge.id}>
                     <StartupChallengeListItem
                         id={challenge.id}
                         name={challenge.name}

@@ -76,7 +76,7 @@ const MultiDropdown = (props) => {
     */
 
     const addRowHandler = () => {
-        inputState.value.push({tier: "", level: ""});
+        inputState.value.push({tier: firstColOptions[0], level: secondColOptions[0]});
         dispatch({
             type: 'CHANGE',
             val: inputState.value,
@@ -97,7 +97,7 @@ const MultiDropdown = (props) => {
 
     //console.log(inputState);
     const elements = inputState.value.map((tierName, index) => (
-        <>
+        <React.Fragment key={`requirement-${index + 1}`}>
             {/*frontend formatting problems */}
             <div
                 className="dropdown-container"
@@ -106,6 +106,7 @@ const MultiDropdown = (props) => {
                 <div className="form-group dropdn">
                     <select
                         className="form-control"
+                        value={tierName.tier}
                         onChange={changeHandler("col1", index)}
                     >
                         {firstColOptions.map((opt, oindex) => (
@@ -121,6 +122,7 @@ const MultiDropdown = (props) => {
                 <div className="form-group dropdn">
                     <select
                         className="form-control"
+                        value={tierName.level}
                         onChange={changeHandler("col2", index)}
                     >
                         {secondColOptions.map((opt, oindex) => (
@@ -137,7 +139,7 @@ const MultiDropdown = (props) => {
                     -
                 </button>
             </div>
-        </>
+        </React.Fragment>
     ));
     //console.log("elements");
     //console.log(numberRepetitions);

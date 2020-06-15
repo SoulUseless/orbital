@@ -51,54 +51,59 @@ const NewStartupChallenge = (props) => {
     console.log(formState.inputs);
     
     return (
-        <Card className="challenge-form">
-            <h2> New Challenge Creator </h2>
-            <hr />
-            <form onSubmit={submitNewChallengeHandler}>
-                <Input
-                    element="input"
-                    id="name"
-                    type="text"
-                    label="Name of Challenge"
-                    validators={[VALIDATOR_REQUIRE()]}
-                    errorText="Please enter a name."
-                    onInput={inputHandler}
-                />
+        <div className="challenge-form-container">
+            <Card className="challenge-form">
+                <h2> New Challenge Creator </h2>
+                <hr />
+                <form onSubmit={submitNewChallengeHandler}>
+                    <Input
+                        element="input"
+                        id="name"
+                        type="text"
+                        label="Name of Challenge"
+                        validators={[VALIDATOR_REQUIRE()]}
+                        errorText="Please enter a name."
+                        onInput={inputHandler}
+                    />
 
-                <Input
-                    id="description"
-                    type="text"
-                    label="Brief Description of Challenge"
-                    validators={[VALIDATOR_REQUIRE()]}
-                    errorText="Please enter a description."
-                    onInput={inputHandler}
-                />
+                    <Input
+                        id="description"
+                        type="text"
+                        label="Brief Description of Challenge"
+                        validators={[VALIDATOR_REQUIRE()]}
+                        errorText="Please enter a description."
+                        onInput={inputHandler}
+                    />
 
-                <MultiDropdown
-                    element="input"
-                    id="requirements"
-                    options={[["java", "javascript", "python"], ["silver", "gold"]]}
-                    label="Requirements of Challenge"
-                    errorText="Please enter at least one requirement."
-                    onInput={inputHandler}
-                />
+                    <MultiDropdown
+                        element="input"
+                        id="requirements"
+                        options={[
+                            ["java", "javascript", "python"],
+                            ["silver", "gold"],
+                        ]}
+                        label="Requirements of Challenge"
+                        errorText="Please enter at least one requirement."
+                        onInput={inputHandler}
+                    />
 
-                <Input
-                    id="taskDescription"
-                    type="text"
-                    label="Brief Description of Task Requirement"
-                    validators={[VALIDATOR_REQUIRE()]}
-                    errorText="Please enter a description."
-                    onInput={inputHandler}
-                />
+                    <Input
+                        id="taskDescription"
+                        type="text"
+                        label="Brief Description of Task Requirement"
+                        validators={[VALIDATOR_REQUIRE()]}
+                        errorText="Please enter a description."
+                        onInput={inputHandler}
+                    />
 
-                {/* hold up for test case setting*/}
+                    {/* hold up for test case setting*/}
 
-                <Button type="submit" disabled={!formState.isValid}>
-                    Submit
-                </Button>
-            </form>
-        </Card>
+                    <Button type="submit" disabled={!formState.isValid}>
+                        Submit
+                    </Button>
+                </form>
+            </Card>
+        </div>
     );
 };
 

@@ -8,47 +8,97 @@ import "./Challenges.css";
 const DUMMY_CHALLENGES = [
     {
         id: "c1",
-        name: "test1",
+        name: "Factorial",
         description: "my first challenge",
         language: "javascript",
-        requirements: [],
+        requirements: ["c3", "c5"], //to be populated to show more information
+        requiredFor: ["c2", "c4"],
+        taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         tier: "bronze",
-        url: "https://cdn.worldvectorlogo.com/logos/javascript.svg"
+        url: "https://cdn.worldvectorlogo.com/logos/javascript.svg",
+        publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ]   
     },
     {
         id: "c2",
-        name: "test2",
+        name: "Factorial",
         description: "my first challenge",
         language: "python",
-        requirements: ["c1"],
+        requirements: ["c3", "c5"], //to be populated to show more information
+        requiredFor: ["c2", "c4"],
+        taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         tier: "bronze",
+        publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
         url: "https://logodownload.org/wp-content/uploads/2019/10/python-logo-4.png"
     },
     {
         id: "c3",
-        name: "test3",
+        name: "Factorial",
         description: "my first challenge",
         language: "javascript",
-        requirements: [],
+        requirements: ["c3", "c5"], //to be populated to show more information
+        requiredFor: ["c2", "c4"],
+        taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         tier: "silver",
-        url: "https://cdn.worldvectorlogo.com/logos/javascript.svg"
+        url: "https://cdn.worldvectorlogo.com/logos/javascript.svg",
+        publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ]  
     },
     {
         id: "c4",
-        name: "test4",
+        name: "Factorial",
         description: "my first challenge",
         language: "javascript",
-        requirements: [],
+        requirements: [], //to be populated to show more information
+        requiredFor: [],
+        taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         tier: "silver",
-        url: "https://cdn.worldvectorlogo.com/logos/javascript.svg"
+        url: "https://cdn.worldvectorlogo.com/logos/javascript.svg",
+        publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ]  
     },
     {
         id: "c5",
-        name: "test5",
+        name: "Factorial",
         description: "my first challenge",
         language: "python",
-        requirements: [],
+        requirements: ["c3", "c5"], //to be populated to show more information
+        requiredFor: ["c2", "c4"],
+        taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         tier: "gold",
+        publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
         url: "https://logodownload.org/wp-content/uploads/2019/10/python-logo-4.png"
     },
 ];

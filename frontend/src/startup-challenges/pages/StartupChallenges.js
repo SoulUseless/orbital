@@ -9,49 +9,107 @@ import "./StartupChallenge.css";
 const DUMMY_CHALLENGES = [
     {
         id: "c1",
-        name: "test1",
-        owner: "google",
+        name: "Factorial",
+        owner: "google", //startup profile name
         description: "my first challenge",
-        requirements: {},
-        tier: "bronze",
-        url: "https://cdn.worldvectorlogo.com/logos/google-icon.svg"
+        requirements: [
+            { tier: "javascript", level: "silver" },
+            { tier: "java", level: "gold" },
+        ], //to be populated to show more information
+        taskDescription:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        url: "https://cdn.worldvectorlogo.com/logos/google-icon.svg", //startup profile pic
+        publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
     },
     {
         id: "c2",
-        name: "test2",
-        owner: "google",
+        name: "Factorial",
+        owner: "google", //startup profile name
         description: "my first challenge",
-        requirements: { javascript: "silver", java: "gold" },
-        url: "https://cdn.worldvectorlogo.com/logos/google-icon.svg"
+        requirements: [
+            { tier: "java", level: "gold" },
+            { tier: "python", level: "gold" },
+        ], //to be populated to show more information
+        taskDescription:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        url: "https://cdn.worldvectorlogo.com/logos/google-icon.svg", //startup profile pic
+        publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
     },
     {
         id: "c3",
-        name: "test3",
-        owner: "facebook",
+        name: "Factorial",
+        owner: "facebook", //startup profile name
         description: "my first challenge",
-        requirements: {},
-        url: "https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-facebook-2019-square1-512.png"
+        requirements: [{ tier: "python", level: "gold" }], //to be populated to show more information
+        taskDescription:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        url:
+            "https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-facebook-2019-square1-512.png",
     },
     {
         id: "c4",
-        name: "test4",
-        owner: "tencent",
+        name: "Factorial",
+        owner: "tencent", //startup profile name
         description: "my first challenge",
-        requirements: {},
-        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv_MNlp6gBL_CAc8mnwUirBnqJIBN7yjtxZZhjxAMwExKm0beX&s"
+        requirements: [{ tier: "python", level: "silver" }], //to be populated to show more information
+        taskDescription:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        url:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv_MNlp6gBL_CAc8mnwUirBnqJIBN7yjtxZZhjxAMwExKm0beX&s",
     },
     {
         id: "c5",
-        name: "test5",
-        owner: "facebook",
+        name: "Factorial",
+        owner: "facebook", //startup profile name
         description: "my first challenge",
-        requirements: {},
-        url: "https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-facebook-2019-square1-512.png"
+        requirements: [{ tier: "java", level: "silver" }], //to be populated to show more information
+        taskDescription:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        url:
+            "https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-facebook-2019-square1-512.png",
     },
 ];
 
 const StartupChallenges = (props) => {
-    const [filteredLanguage, setFilteredLanguage] = useState(["python", "javascript"]);
+    const [filteredLanguage, setFilteredLanguage] = useState(["python", "javascript", "java"]);
     const [filteredTier, setFilteredTier] = useState(["silver", "gold"]);
     const [filteredOwnership, setFilteredOwnership] = useState(["yes", "no"]); //TO DO after profile is implemented
     const [filteredStartup, setFilteredStartup] = useState(["google", "facebook", "tencent"]);
