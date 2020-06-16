@@ -62,10 +62,10 @@ const StartupChallengeList = (props) => {
     }
 
     if (challenges.length === 0) {
-        return ( 
-        <h4 className="center">
-            Search is too narrow, try widening your parameters.
-        </h4>
+        return (
+            <h4 className="center">
+                <Card>Search is too narrow, try widening your parameters.</Card>
+            </h4>
         );
     }
     return ( 

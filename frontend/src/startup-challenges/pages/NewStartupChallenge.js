@@ -5,7 +5,8 @@ import Button from "../../shared/components/formElements/Button";
 import Card from "../../shared/components/UIElements/Card";
 //import MultiInput from "../../shared/components/formElements/MultiInput";
 import MultiDropdown from "../../shared/components/formElements/MultiDropdown";
-//import FileUploader from "../../shared/components/formElements/FileUploader"; TODO
+import FileUpload from "../../shared/components/formElements/FileUpload";
+
 import {
     VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
@@ -16,30 +17,26 @@ import "./NewStartupChallenge.css";
 const NewStartupChallenge = (props) => {
     const [formState, inputHandler] = useForm(
         {
-          name: {
-            value: '',
-            isValid: false
-          },
-          description: {
-            value: '',
-            isValid: false
-          },
-          requirements: {
-              value: [],
-              isValid: true
-          },
-          taskDescription: {
-              value: "",
-              isValid: false
-          },
-          publicTestCases: { //probably do something like processing a uploaded json file
-              value: {},
-              isValid: true //temp for testing
-          },
-          privateTestCases: {
-              value: {},
-              isValid: true
-          }
+            name: {
+                value: "",
+                isValid: false,
+            },
+            description: {
+                value: "",
+                isValid: false,
+            },
+            requirements: {
+                value: [],
+                isValid: true,
+            },
+            taskDescription: {
+                value: "",
+                isValid: false,
+            },
+            testCases: {
+                value: { privateTestCases: [], publicTestCases: [] },
+                isValid: false,
+            },
         },
         false
     );
@@ -84,6 +81,13 @@ const NewStartupChallenge = (props) => {
                         ]}
                         label="Requirements of Challenge"
                         errorText="Please enter at least one requirement."
+                        onInput={inputHandler}
+                    />
+
+                    {/*files uploaded as it is, processed in backend hopefully*/}
+                    <FileUpload
+                        id="testCases"
+                        label="Test Cases of Challenge"
                         onInput={inputHandler}
                     />
 

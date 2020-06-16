@@ -18,14 +18,16 @@ const DUMMY_CHALLENGE = [
         taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         tier: "bronze",
         url: "https://cdn.worldvectorlogo.com/logos/javascript.svg",
-        publicTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
-        privateTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ]   
+        testCases: {
+            publicTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+            privateTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+        },
     },
     {
         id: "c2",
@@ -36,14 +38,16 @@ const DUMMY_CHALLENGE = [
         requiredFor: ["c2", "c4"],
         taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         tier: "bronze",
-        publicTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
-        privateTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
+        testCases: {
+            publicTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+            privateTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+        },
         url: "https://logodownload.org/wp-content/uploads/2019/10/python-logo-4.png"
     },
     {
@@ -56,14 +60,16 @@ const DUMMY_CHALLENGE = [
         taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         tier: "silver",
         url: "https://cdn.worldvectorlogo.com/logos/javascript.svg",
-        publicTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
-        privateTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ]  
+        testCases: {
+            publicTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+            privateTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+        },
     },
     {
         id: "c4",
@@ -75,14 +81,16 @@ const DUMMY_CHALLENGE = [
         taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         tier: "silver",
         url: "https://cdn.worldvectorlogo.com/logos/javascript.svg",
-        publicTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
-        privateTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ]  
+        testCases: {
+            publicTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+            privateTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+        }, 
     },
     {
         id: "c5",
@@ -93,14 +101,16 @@ const DUMMY_CHALLENGE = [
         requiredFor: ["c2", "c4"],
         taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         tier: "gold",
-        publicTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
-        privateTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
+        testCases: {
+            publicTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+            privateTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+        },
         url: "https://logodownload.org/wp-content/uploads/2019/10/python-logo-4.png"
     },
 ];
@@ -204,7 +214,7 @@ const Challenge = (props) => {
                                         Expected Output
                                     </th>
                                 </tr>
-                                {challenge.publicTestCases.map((ts) => {
+                                {challenge.testCases.publicTestCases.map((ts) => {
                                     return (
                                         <tr>
                                             <td className="test-case-col">
