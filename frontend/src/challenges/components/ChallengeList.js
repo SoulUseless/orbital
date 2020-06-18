@@ -55,6 +55,10 @@ const ChallengeList = (props) => {
                 );
             }
         }
+
+        if (props.filters.filteredRequirements.length === 0) {
+            challenges = [];
+        }
         //TODO: requirements check need user info to be set up
     }
 
@@ -62,7 +66,7 @@ const ChallengeList = (props) => {
     return ( 
         <ul className="challenge-list">
             {challenges.map((challenge) => (
-                <NavLink to={"/challenges/" + challenge.id}>
+                <NavLink key={`challenge-${challenge.id}`}to={"/challenges/" + challenge.id}>
                     <ChallengeListItem
                         id={challenge.id}
                         name={challenge.name}

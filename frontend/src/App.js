@@ -11,11 +11,12 @@ import Challenge from "./challenges/pages/Challenge";
 import Challenges from "./challenges/pages/Challenges";
 import StartupChallenge from "./startup-challenges/pages/StartupChallenge";
 import EditStartUpChallenge from "./startup-challenges/pages/EditStartupChallenge";
-import StartupChallengeList from "./startup-challenges/pages/StartupChallengeList";
+import StartupChallenges from "./startup-challenges/pages/StartupChallenges";
 import NewStartupChallenge from "./startup-challenges/pages/NewStartupChallenge.js";
 import Auth from "./shared/components/authentication/pages/Auth";
 import MainNavigation from "./shared/components/navigation/pages/MainNavigation";
 import Guide from "./shared/components/guide/Guide";
+import Settings from "./shared/components/settings/settings";
 
 import { AuthContext } from "./shared/context/auth-context";
 
@@ -72,14 +73,19 @@ const App = () => {
                 </Route>
 
                 <Route path="/startup-challenge" exact={true}>
-                    <StartupChallengeList />
+                    <StartupChallenges />
                 </Route>
 
                 <Route path="/startup-challenge/:challengeId">
                     <StartupChallenge />
                 </Route>
+
                 <Route path="/how-to">
                     <Guide />
+                </Route>
+
+                <Route path="/settings">
+                    <Settings />
                 </Route>
 
                 <Redirect to="/" />
@@ -106,7 +112,7 @@ const App = () => {
                     <Startups />
                 </Route>
 
-                <Route path="/startup/new" exact={true}>
+                <Route path="/startup-challenge/new" exact={true}>
                     <NewStartupChallenge />
                 </Route>
 
@@ -123,7 +129,7 @@ const App = () => {
                 </Route>
 
                 <Route path="/startup-challenge" exact={true}>
-                    <StartupChallengeList />
+                    <StartupChallenges />
                 </Route>
 
                 <Route path="/startup-challenge/edit/:challengeId">
@@ -140,6 +146,10 @@ const App = () => {
 
                 <Route path="/how-to">
                     <Guide />
+                </Route>
+
+                <Route path="/settings">
+                    <Settings />
                 </Route>
 
                 <Redirect to="/" />
@@ -182,7 +192,7 @@ const App = () => {
               </Route>
 
               <Route path="/startup-challenge" exact={true}>
-                  <StartupChallengeList />
+                  <StartupChallenges />
               </Route>
 
               <Route path="/startup-challenge/:challengeId">
@@ -208,7 +218,7 @@ const App = () => {
                 isLoggedIn: isLoggedIn,
                 userType: userType,
                 loginAsStudent: loginAsStudent,
-                loginAsStartUp: loginAsStartup,
+                loginAsStartup: loginAsStartup,
                 logout: logout,
             }}
         >

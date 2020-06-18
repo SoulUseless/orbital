@@ -1,0 +1,10 @@
+{
+	publicTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ],
+        privateTestCases: [
+            { input: "factorial(3)", output: "6" },
+            { input: "factorial(5)", output: "120" },
+        ]
+}
