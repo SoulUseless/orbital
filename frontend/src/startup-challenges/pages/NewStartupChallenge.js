@@ -84,10 +84,11 @@ const NewStartupChallenge = (props) => {
                         onInput={inputHandler}
                     />
 
-                    {/*files uploaded as it is, processed in backend hopefully*/}
+                    {/*changed to process json in frontend*/}
                     <FileUpload
                         id="testCases"
                         label="Test Cases of Challenge"
+                        errorText="Please upload a file in valid JSON format"
                         onInput={inputHandler}
                     />
 

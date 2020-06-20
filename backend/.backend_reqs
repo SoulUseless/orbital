@@ -1,0 +1,26 @@
+CHALLENGES
+- GET getChallengeById
+
+- GET getSubmissionsById
+- POST uploadSubmissionById
+
+STARTUP-CHALLENGES
+- GET getStartupChallengeById - pending DB integration
+- GET getStartupChallengeByStartup - pending DB integration
+- POST createStartupChallenge - in progress
+- PATCH updateStartupChallengeById
+- DELETE deleteStartupChallengeById
+
+- GET getSubmissionsById
+- POST uploadSubmissionById
+
+STARTUP
+- GET getStartupById
+//update startup functionalities
+
+STUDENT
+- GET getStudentById
+- GET getSubmissionsByStudentId
+- GET getCredentialsByStudentId
+
+//update profile functionalities
