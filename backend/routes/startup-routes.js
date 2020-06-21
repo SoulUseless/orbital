@@ -3,9 +3,17 @@
 const express = require('express');
 //const { check } = require("express-validator");
 
-//const placeControllers = require('../controllers/places-controllers');
+const startupControllers = require('../controllers/startup-controllers');
 //can just export the router to app.js
 
 const router = express.Router();
+
+router.get("/:sid", startupControllers.getStartupById);
+
+router.post("/login", startupControllers.startupLogin);
+
+router.post("/signup", startupControllers.startupSignup);
+
+router.get("/", startupControllers.getAllStartups);
 
 module.exports = router;

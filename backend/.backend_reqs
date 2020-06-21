@@ -4,23 +4,28 @@ CHALLENGES
 - GET getSubmissionsById
 - POST uploadSubmissionById
 
-STARTUP-CHALLENGES
-- GET getStartupChallengeById - pending DB integration
-- GET getStartupChallengeByStartup - pending DB integration
-- POST createStartupChallenge - in progress
-- PATCH updateStartupChallengeById
-- DELETE deleteStartupChallengeById
+STARTUP-CHALLENGES -- missing token implemenation
+- GET getStartupChallengeById - DONE
+- GET getStartupChallengeByStartup - pending startup implementation
+- POST createStartupChallenge - DONE
+- PATCH updateStartupChallengeById - DONE
+- DELETE deleteStartupChallengeById - DONE
 
-- GET getSubmissionsById
+- GET getSubmissionsById - DONE
 - POST uploadSubmissionById
 
-STARTUP
-- GET getStartupById
+STARTUP - token done, pending frontend integration before proceeding
+- GET getAllStartups - DONE
+- GET getStartupById - DONE
+- POST startupLogin - DONE
+- POST startupSignup - DONE
 //update startup functionalities
 
 STUDENT
 - GET getStudentById
 - GET getSubmissionsByStudentId
 - GET getCredentialsByStudentId
+- POST studentLogin
+- POST studentSignup
 
 //update profile functionalities

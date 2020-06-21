@@ -6,7 +6,7 @@ import Button from "../../shared/components/formElements/Button";
 import Card from "../../shared/components/UIElements/Card";
 //import MultiInput from "../../shared/components/formElements/MultiInput";
 import MultiDropdown from "../../shared/components/formElements/MultiDropdown";
-//import FileUploader from "../../shared/components/formElements/FileUploader"; TODO
+import FileUpload from "../../shared/components/formElements/FileUpload";
 import {
     VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
@@ -25,14 +25,16 @@ const DUMMY_CHALLENGE = [
         taskDescription:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         url: "https://cdn.worldvectorlogo.com/logos/google-icon.svg", //startup profile pic
-        publicTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
-        privateTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
+        testCases: {
+            publicTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+            privateTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+        },
     },
     {
         id: "c2",
@@ -46,14 +48,16 @@ const DUMMY_CHALLENGE = [
         taskDescription:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         url: "https://cdn.worldvectorlogo.com/logos/google-icon.svg", //startup profile pic
-        publicTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
-        privateTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
+        testCases: {
+            publicTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+            privateTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+        },
     },
     {
         id: "c3",
@@ -63,14 +67,16 @@ const DUMMY_CHALLENGE = [
         requirements: [{ tier: "python", level: "gold" }], //to be populated to show more information
         taskDescription:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        publicTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
-        privateTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
+        testCases: {
+            publicTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+            privateTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+        },
         url:
             "https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-facebook-2019-square1-512.png",
     },
@@ -82,14 +88,16 @@ const DUMMY_CHALLENGE = [
         requirements: [{ tier: "python", level: "silver" }], //to be populated to show more information
         taskDescription:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        publicTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
-        privateTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
+        testCases: {
+            publicTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+            privateTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+        },
         url:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv_MNlp6gBL_CAc8mnwUirBnqJIBN7yjtxZZhjxAMwExKm0beX&s",
     },
@@ -101,14 +109,16 @@ const DUMMY_CHALLENGE = [
         requirements: [{ tier: "java", level: "silver" }], //to be populated to show more information
         taskDescription:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        publicTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
-        privateTestCases: [
-            { input: "factorial(3)", output: "6" },
-            { input: "factorial(5)", output: "120" },
-        ],
+        testCases: {
+            publicTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+            privateTestCases: [
+                { input: "factorial(3)", output: "6" },
+                { input: "factorial(5)", output: "120" },
+            ],
+        },
         url:
             "https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-facebook-2019-square1-512.png",
     },
@@ -121,30 +131,26 @@ const EditStartupChallenge = (props) => {
 
     const [formState, inputHandler, setFormData] = useForm(
         {
-          name: {
-            value: '',
-            isValid: false
-          },
-          description: {
-            value: '',
-            isValid: false
-          },
-          requirements: {
-              value: [],
-              isValid: true
-          },
-          taskDescription: {
-              value: "",
-              isValid: false
-          },
-          publicTestCases: { //probably do something like processing a uploaded json file
-              value: {},
-              isValid: true //temp for testing
-          },
-          privateTestCases: {
-              value: {},
-              isValid: true
-          }
+            name: {
+                value: "",
+                isValid: false,
+            },
+            description: {
+                value: "",
+                isValid: false,
+            },
+            requirements: {
+                value: [],
+                isValid: true,
+            },
+            taskDescription: {
+                value: "",
+                isValid: false,
+            },
+            testCases: {
+                value: { privateTestCases: [], publicTestCases: [] },
+                isValid: false,
+            },
         },
         false
     );
@@ -169,12 +175,8 @@ const EditStartupChallenge = (props) => {
                         value: challenge.taskDescription,
                         isValid: true
                     },
-                    publicTestCases: { //probably do something like processing a uploaded json file
-                        value: challenge.publicTestCases,
-                        isValid: true //temp for testing
-                    },
-                    privateTestCases: {
-                        value: challenge.privateTestCases,
+                    testCases: {
+                        value: challenge.testCases,
                         isValid: true
                     }
                 },
@@ -247,6 +249,13 @@ const EditStartupChallenge = (props) => {
                         onInput={inputHandler}
                     />
 
+                    <FileUpload
+                        id="testCases"
+                        label="Test Cases of Challenge (Will replace the previous set)"
+                        errorText="Please upload a file in valid JSON format"
+                        onInput={inputHandler}
+                    />
+
                     <Input
                         id="taskDescription"
                         type="text"
@@ -254,7 +263,9 @@ const EditStartupChallenge = (props) => {
                         validators={[VALIDATOR_REQUIRE()]}
                         errorText="Please enter a description."
                         initialValue={formState.inputs.taskDescription.value}
-                        initialValidity={formState.inputs.taskDescription.isValid}
+                        initialValidity={
+                            formState.inputs.taskDescription.isValid
+                        }
                         onInput={inputHandler}
                     />
 

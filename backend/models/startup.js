@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 const startupSchema = new Schema({
     name: { type: String, required: true },
-    logo: { type: String, required: true }, //should be url
-    description: { type: String, required: true },
+    logo: { type: String }, //should be url
+    description: { type: String },
     challenges: [
         {
             type: mongoose.Types.ObjectId,
