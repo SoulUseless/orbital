@@ -4,19 +4,25 @@ const Schema = mongoose.Schema;
 
 const startupChallengeSchema = new Schema({
     name: { type: String, required: true },
-    owner: { type: mongoose.Types.ObjectId, required: true, ref: "Startup" },
+    owner: { 
+        type: mongoose.Types.ObjectId,
+        required: true, 
+        ref: "Startup" 
+    },
     description: { type: String, required: true },
     requirements: [
         {
             language: {
-                type: mongoose.Types.ObjectId,
+                //type: mongoose.Types.ObjectId, on hold when developemnt
+                type: String,
                 required: true,
-                ref: "Language",
+                //ref: "Language",
             },
             level: {
-                type: mongoose.Types.ObjectId,
+                //type: mongoose.Types.ObjectId, on hold when development
+                type: String,
                 required: true,
-                ref: "Tier",
+                //ref: "Tier",
             },
         },
     ],

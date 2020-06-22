@@ -1,11 +1,13 @@
-//file contains pure routing
-
 const express = require('express');
-//const { check } = require("express-validator");
 
-//const placeControllers = require('../controllers/places-controllers');
-//can just export the router to app.js
+const challengeControllers = require('../controllers/challenge-controllers');
 
 const router = express.Router();
 
+router.get("/", challengeControllers.getAllChallenges);
+
+router.get("/:cid", challengeControllers.getChallengeById);
+
 module.exports = router;
+
+

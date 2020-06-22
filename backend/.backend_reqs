@@ -1,26 +1,54 @@
 CHALLENGES
+- GET getAllChallenges
 - GET getChallengeById
 
-- GET getSubmissionsById
+- GET getSubmissionsById - not sure if needed or not
+- GET getSubmissionsByStudentId - not sure if needed or not
+
+- POST uploadSubmissionById //need to verify credentials and eligibility => update tree and give tier automatically
+
+STARTUP-CHALLENGES -- missing token implemenation
+- GET getAllChallenges - DONE
+- GET getChallengeById - DONE
+- GET getChallengeByStartup - pending startup implementation
+- POST createStartupChallenge - DONE
+- PATCH updateStartupChallengeById - DONE
+- DELETE deleteStartupChallengeById - DONE
+
+- GET getSubmissionsById - DONE
 - POST uploadSubmissionById
 
-STARTUP-CHALLENGES
-- GET getStartupChallengeById - pending DB integration
-- GET getStartupChallengeByStartup - pending DB integration
-- POST createStartupChallenge - in progress
-- PATCH updateStartupChallengeById
-- DELETE deleteStartupChallengeById
+STARTUP - token done, pending frontend integration before proceeding
+- GET getAllStartups - DONE
+- GET getStartupById - DONE
+- POST startupLogin - DONE
+- POST startupSignup - DONE
+//update startup functionalities (for updating profile)
+- POST startupUpdate
 
-- GET getSubmissionsById
-- POST uploadSubmissionById
-
-STARTUP
-- GET getStartupById
-//update startup functionalities
-
-STUDENT
-- GET getStudentById
-- GET getSubmissionsByStudentId
-- GET getCredentialsByStudentId
-
+STUDENT -- pending token implementation
+- GET getAllStudents - DONE
+- GET getStudentById - DONE
+- GET getSubmissionsByStudentId - DONE
+- GET getCredentialsByStudentId - DONE
+- POST studentLogin - DONE
+- POST studentSignup - DONE
 //update profile functionalities
+- POST studentUpdate - DONE
+
+LANGUAGE
+- GET getAllLanguages - DONE
+
+TIER
+- GET getAllTiers - DONE
+
+DEBUG
+- POST createNewLanguage - DONE
+- POST createNewSubmission
+- POST createNewTier - DONE
+- POST linkSubmission [studentId, challengeId]
+- POST createNewChallenge - DONE
+- POST updateChallenge (for stuff like pre reqs)
+- POST updateChallengeTestCases (shortcut)
+- POST createNewCourse - DONE
+- DELETE deleteChallenge

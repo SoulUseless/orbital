@@ -10,6 +10,9 @@ const challengeRoutes = require('./routes/challenge-routes.js');
 const studentRoutes = require("./routes/student-routes");
 const startupRoutes = require("./routes/startup-routes");
 const startupChallengeRoutes = require("./routes/startup-challenge-routes");
+const languageRoutes = require("./routes/language-routes");
+const tierRoutes = require("./routes/tier-routes");
+const debugRoutes = require("./routes/debug-routes");
 
 const HttpError = require("./models/http-error");
 
@@ -32,6 +35,12 @@ app.use("/api/student", studentRoutes);
 app.use("/api/startup-challenge", startupChallengeRoutes);
 
 app.use("/api/challenge", challengeRoutes);
+
+app.use("/api/language", languageRoutes);
+
+app.use("/api/tier", tierRoutes);
+
+app.use("/api/debug", debugRoutes);
 
 //only runs when all havent send requests
 app.use((req, res, next) => {
@@ -59,8 +68,8 @@ app.use((error, req, res, next) => {
 });
 
 //now using environment variables
-const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PW}@cluster0-un6y8.gcp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-//console.log(url);
+const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PW}@cluster0-un6y8.gcp.mongodb.net/orbital?retryWrites=true&w=majority`;
+console.log(url);
 mongoose
     .connect(url)
     .then(() => {
