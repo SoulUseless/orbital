@@ -16,4 +16,7 @@ router.post("/signup", startupControllers.startupSignup);
 
 router.get("/", startupControllers.getAllStartups);
 
+//TODO verify token
+router.post("/:sid/update", startupControllers.startupUpdate);
+
 module.exports = router;

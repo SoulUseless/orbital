@@ -1,10 +1,12 @@
 CHALLENGES
+- GET getAllChallenges
 - GET getChallengeById
 
 - GET getSubmissionsById
 - POST uploadSubmissionById
 
 STARTUP-CHALLENGES -- missing token implemenation
+- GET getAllChallenges - DONE
 - GET getStartupChallengeById - DONE
 - GET getStartupChallengeByStartup - pending startup implementation
 - POST createStartupChallenge - DONE
@@ -19,13 +21,28 @@ STARTUP - token done, pending frontend integration before proceeding
 - GET getStartupById - DONE
 - POST startupLogin - DONE
 - POST startupSignup - DONE
-//update startup functionalities
+//update startup functionalities (for updating profile)
+- POST startupUpdate
 
 STUDENT
+- GET getAllStudents
 - GET getStudentById
 - GET getSubmissionsByStudentId
 - GET getCredentialsByStudentId
 - POST studentLogin
 - POST studentSignup
-
 //update profile functionalities
+- POST studentUpdate
+
+LANGUAGE
+- GET getAllLanguages - DONE
+
+TIER
+- GET getAllTiers - DONE
+
+DEBUG
+- POST createNewLanguage - DONE
+- POST createNewSubmission
+- POST createNewTier - DONE
+- POST linkSubmission [studentId, challengeId]
+- POST createNewChallenge

@@ -4,63 +4,104 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/http-error");
-const Startup = require("../models/startup");
+const Student = require("../models/student");
+const startup = require("../models/startup");
 
-const getAllStartups = async (req, res, next) => {
-    let startups;
+const getAllStudents = async (req, res, next) => {
+    let students;
     try {
-        startups = await Startup.find({}, "-password");
+        students = await Student.find({}, "-password");
         //either whitelist with <name>, or blacklist with "-<name>""
     } catch (err) {
-        console.log(err);
+        //console.log(err);
         next(new HttpError("database access error", 500));
         return;
     }
 
     //const users = User.find()
     res.status(200).json({
-        startups: startups.map((startup) => startup.toObject({ getters: true })),
+        students: students.map((student) => student.toObject({ getters: true })),
     });
 };
 
-const getStartupById = async (req, res, next) => {
-    const startupId = req.params.sid;
+const getStudentById = async (req, res, next) => {
+    const studentId = req.params.sid;
 
-    let startup;
+    let student;
     try {
-        startup = await Startup.findById(startupId);
+        student = await Student.findById(studentId);
     } catch (err) {
         //console.log(err);
         next(new HttpError("Search failed", 500));
         return;
     }
 
-    if (startup) {
-        res.json(startup);
+    if (student) {
+        res.json(student);
         return;
     } else {
-        next(new HttpError("No such startup found", 404));
+        next(new HttpError("No such student found", 404));
         return;
+    }
+}; 
+
+const getSubmissionsByStudentId = async (req, res, next) => {
+    const studentId = req.params.sid;
+
+    let student;
+    try {
+        student = await Student.findById(studentId);
+    } catch (err) {
+        // console.log(err);
+        next(new HttpError("Search failed", 500));
+        return;
+    }
+
+    if (student) {
+        res.json(student.challengeSubmissions);
+        return;
+    } else {
+        next(new HttpError("No such student found", 404));
     }
 };
 
-const startupLogin = async (req, res, next) => {
+const getCredentialsByStudentId = async (req, res, next) => {
+    const studentId = req.params.sid;
+
+    let student;
+    try {
+        student = await Student.findById(studentId);
+    } catch (err) {
+        // console.log(err);
+        next(new HttpError("Search failed", 500));
+        return;
+    }
+
+    if (student) {
+        res.json(student.credentials); //check whether need to run .populate() or not
+        return;
+    } else {
+        next(new HttpError("No such student found", 404));
+    }
+};
+
+const studentLogin = async (req, res, next) => {
     const { email, password } = req.body;
 
-    let startup;
+    let student;
     try {
-        startup = await Startup.findOne({email});
+        student = await Student.findOne({email});
     } catch (err) {
         next(new HttpError("log in failed", 500));
         return;
     }
 
-    if (startup) {
+    if (student) {
         let isValidPassword = false;
         try {
-            isValidPassword = await bcryptjs.compare(password, startup.password);
+            isValidPassword = await bcryptjs.compare(password, student.password);
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             next(new HttpError("unknown log in error", 500));
             return;
         }
@@ -71,9 +112,9 @@ const startupLogin = async (req, res, next) => {
             try {
                 token = jwt.sign(
                     {
-                        userId: startup.id,
-                        email: startup.email,
-                        userType: "startup",
+                        userId: student.id,
+                        email: student.email,
+                        userType: "student",
                     },
                     process.env.JWT_SECRET, // server private key --> NOT TO BE SHARED
                     { expiresIn: "1h" } // can set self-destruction of the token to prevent token stealing also
@@ -99,10 +140,9 @@ const startupLogin = async (req, res, next) => {
         next(new HttpError("Username is incorrect", 403));
         return;
     }
-
 };
 
-const startupSignup = async (req, res, next) => {
+const studentSignup = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         //console.log(errors);
@@ -111,16 +151,16 @@ const startupSignup = async (req, res, next) => {
     }
     const { name, email, password } = req.body;
 
-    let existingStartup;
+    let existingStudent;
     try {
-        existingStartup = await Startup.findOne({email});
+        existingStudent = await Student.findOne({email});
     } catch (err) {
-        console.log(err);
+        //console.log(err);
         next(new HttpError("Failed to access database", 500));
         return;
     }
 
-    if (existingStartup) {
+    if (existingStudent) {
         next(new HttpError("User already exists, log in instead", 422));
         return;
     }
@@ -134,20 +174,21 @@ const startupSignup = async (req, res, next) => {
         return;
     }
 
-    const createdStartup = new Startup({
+    const createdStudent = new Student({
         name,
-        password: hashedPassword, //encrypted now
+        profilePicture: "", //should be url
+        profileDescription: "",
+        challengeSubmissions: [],
         email,
-        logo: "", //TO BE IMPLEMENTED
-        challenges: [],
-        description: "" //to be implemented in a way that startups can change themselves
+        password: hashedPassword,
+        credentials: [],
     });
 
     try {
-        await createdStartup.save();
-        console.log("new startup created successfully");
+        await createdStudent.save();
+        console.log("new student created successfully");
     } catch (err) {
-        console.log(err);
+        //console.log(err);
         next(new HttpError("failed to create new user"));
         return;
     }
@@ -157,9 +198,9 @@ const startupSignup = async (req, res, next) => {
     try {
         token = jwt.sign(
             {
-                userId: createdStartup.id,
-                email: createdStartup.email,
-                userType: "startup",
+                userId: createdStudent.id,
+                email: createdStudent.email,
+                userType: "student",
             },
             process.env.JWT_SECRET, // server private key --> NOT TO BE SHARED
             { expiresIn: "1h" } // can set self-destruction of the token to prevent token stealing also
@@ -171,23 +212,23 @@ const startupSignup = async (req, res, next) => {
     }
 
     res.status(201).json({
-        userId: createdStartup.id,
-        email: createdStartup.email, //other information up to us
+        userId: createdStudent.id,
+        email: createdStudent.email, //other information up to us
         token: token, //impt to return token
     });
 };
 
-const startupUpdate = async (req, res, next) => {
+const studentUpdate = async (req, res, next) => {
     errors = validationResult(req);
     if (! errors.isEmpty()) {
         //console.log(errors);
         return next(new HttpError("Invalid Inputs detected", 422));
     }
 
-    const startupId = req.params.sid;
-    let startup;
+    const studentId = req.params.sid;
+    let student;
     try {
-        startup = await Startup.findById(startupId);
+        student = await Student.findById(studentId);
     } catch (err) {
         //console.log(err);
         next(new HttpError("Startup query failed", 500));
@@ -202,18 +243,18 @@ const startupUpdate = async (req, res, next) => {
     }
     */
 
-    const {name, logo, description, email, password} = req.body;
-    if (startup) {
-        startup.name = name;
-        startup.logo = logo;
-        startup.description = description;
-        startup.email = email;
+    const {name, profilePicture, profileDescription, email, password} = req.body;
+    if (student) {
+        student.name = name;
+        student.profileDescription = profileDescription;
+        student.profilePicture = profilePicture;
+        student.email = email;
 
         try {
-            const noPasswordChange = await bcryptjs.compare(password, startup.password);
+            const noPasswordChange = await bcryptjs.compare(password, student.password);
             if (!noPasswordChange) {
                 const newHashedPassword = await bcryptjs.hash(password, 12);
-                startup.password = newHashedPassword;
+                student.password = newHashedPassword;
             }
         } catch (err) {
             // console.log(err);
@@ -222,24 +263,26 @@ const startupUpdate = async (req, res, next) => {
         }
 
         try {
-            await startup.save();
+            await student.save();
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             next(new HttpError("Update failed", 500));
             return;
         }
 
         res.status(200).json({
-            startup: startup.toObject({ getters: true }),
+            student: student.toObject({ getters: true }),
         });
     } else {
-        next(new HttpError("No Such Startup Found", 404));
+        next(new HttpError("No Such Student Found", 404));
         return;
     }
 };
 
-exports.getAllStartups = getAllStartups;
-exports.getStartupById = getStartupById;
-exports.startupLogin = startupLogin;
-exports.startupSignup = startupSignup;
-exports.startupUpdate = startupUpdate;
+exports.getAllStudents = getAllStudents;
+exports.getStudentById = getStudentById;
+exports.getSubmissionsByStudentId = getSubmissionsByStudentId;
+exports.getCredentialsByStudentId = getCredentialsByStudentId;
+exports.studentLogin = studentLogin;
+exports.studentSignup = studentSignup;
+exports.studentUpdate = studentUpdate;

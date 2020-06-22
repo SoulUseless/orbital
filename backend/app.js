@@ -10,6 +10,9 @@ const challengeRoutes = require('./routes/challenge-routes.js');
 const studentRoutes = require("./routes/student-routes");
 const startupRoutes = require("./routes/startup-routes");
 const startupChallengeRoutes = require("./routes/startup-challenge-routes");
+const languageRoutes = require("./routes/language-routes");
+const tierRoutes = require("./routes/tier-routes");
+const debugRoutes = require("./routes/debug-routes");
 
 const HttpError = require("./models/http-error");
 
@@ -32,6 +35,12 @@ app.use("/api/student", studentRoutes);
 app.use("/api/startup-challenge", startupChallengeRoutes);
 
 app.use("/api/challenge", challengeRoutes);
+
+app.use("/api/language", languageRoutes);
+
+app.use("/api/tier", tierRoutes);
+
+app.use("/api/debug", debugRoutes);
 
 //only runs when all havent send requests
 app.use((req, res, next) => {

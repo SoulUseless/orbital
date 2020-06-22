@@ -119,7 +119,7 @@ const createStartupChallenge = async (req, res, next) => {
 const updateStartupChallengeById = async (req, res, next) => {
     const errors = validationResult(req);
 
-    //const startupId = req.userData.userId TO DO, when token is built properly
+    //const userId = req.userData.userId TO DO, when token is built properly
 
     if (!errors.isEmpty()) {
         console.log(errors);
