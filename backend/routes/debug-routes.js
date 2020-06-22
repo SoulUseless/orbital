@@ -14,4 +14,8 @@ router.post("/submission/link", debugControllers.linkSubmission);
 
 router.post("/challenge/new", debugControllers.createNewChallenge);
 
+router.post("/challenge/update", debugControllers.updateChallenge);
+
+router.post("/course/new", debugControllers.createNewCourse)
+
 module.exports = router;

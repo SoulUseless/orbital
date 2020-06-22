@@ -7,6 +7,21 @@ const HttpError = require("../models/http-error");
 const StartupChallenge = require("../models/startupChallenge");
 const Startup = require("../models/startup");
 
+const getAllChallenge = async (req, res, next) => {
+    let startupChallenges;
+    try {
+        startupChallenges = await StartupChallenge.find({});
+    } catch (err) {
+        //console.log(err);
+        next(new HttpError("database access error", 500));
+        return;
+    }
+
+    //const users = User.find()
+    res.status(200).json({
+        startupChallenges: startupChallenges.map((c) => c.toObject({ getters: true })),
+    });
+};
 const getChallengeById = async (req, res, next) => {
     const challengeId = req.params.cid; // stored as keys: { pid: "XXX" }
 
@@ -42,12 +57,12 @@ const getChallengeByStartup = async (req, res, next) => {
     const startupId = req.params.sid;
 
     let startupWithChallenges;
+    let challenges;
     try {
-        startupWithChallenges = await User.findById(userId).populate("places");
-
-        places = await StartupChallenge.find({ owner: userId });
+        startupWithChallenges = await Startup.findById(startupId).populate("challenges");
+        challenges = startupWithChallenges.challenges;
     } catch (err) {
-        console.log(err);
+        //console.log(err);
         next(new HttpError("Search failed", 500));
         return;
     }
@@ -178,7 +193,6 @@ const deleteStartupChallengeById = async (req, res, next) => {
     let challenge;
     try {
         challenge = await StartupChallenge.findById(challengeId).populate("owner");
-        //pending population when startup is developed
     } catch (err) {
         console.log(err);
         next( new HttpError("Database error", 500));
@@ -245,3 +259,4 @@ exports.createStartupChallenge = createStartupChallenge;
 exports.updateStartupChallengeById = updateStartupChallengeById;
 exports.deleteStartupChallengeById = deleteStartupChallengeById;
 exports.getSubmissionsById = getSubmissionsById;
+exports.getAllChallenge = getAllChallenge;

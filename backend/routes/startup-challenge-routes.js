@@ -8,7 +8,8 @@ const startupChallengeControllers = require('../controllers/startup-challenge-co
 
 const router = express.Router();
 
-//filter here refers to relative path after being parsed from app.js
+router.get("/all", startupChallengeControllers.getAllChallenge);
+
 router.get("/:cid", startupChallengeControllers.getChallengeById); 
 
 router.get("/startup/:sid", startupChallengeControllers.getChallengeByStartup);

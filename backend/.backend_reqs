@@ -2,13 +2,15 @@ CHALLENGES
 - GET getAllChallenges
 - GET getChallengeById
 
-- GET getSubmissionsById
-- POST uploadSubmissionById
+- GET getSubmissionsById - not sure if needed or not
+- GET getSubmissionsByStudentId - not sure if needed or not
+
+- POST uploadSubmissionById //need to verify credentials and eligibility => update tree and give tier automatically
 
 STARTUP-CHALLENGES -- missing token implemenation
 - GET getAllChallenges - DONE
-- GET getStartupChallengeById - DONE
-- GET getStartupChallengeByStartup - pending startup implementation
+- GET getChallengeById - DONE
+- GET getChallengeByStartup - pending startup implementation
 - POST createStartupChallenge - DONE
 - PATCH updateStartupChallengeById - DONE
 - DELETE deleteStartupChallengeById - DONE
@@ -24,15 +26,15 @@ STARTUP - token done, pending frontend integration before proceeding
 //update startup functionalities (for updating profile)
 - POST startupUpdate
 
-STUDENT
-- GET getAllStudents
-- GET getStudentById
-- GET getSubmissionsByStudentId
-- GET getCredentialsByStudentId
-- POST studentLogin
-- POST studentSignup
+STUDENT -- pending token implementation
+- GET getAllStudents - DONE
+- GET getStudentById - DONE
+- GET getSubmissionsByStudentId - DONE
+- GET getCredentialsByStudentId - DONE
+- POST studentLogin - DONE
+- POST studentSignup - DONE
 //update profile functionalities
-- POST studentUpdate
+- POST studentUpdate - DONE
 
 LANGUAGE
 - GET getAllLanguages - DONE
@@ -45,4 +47,8 @@ DEBUG
 - POST createNewSubmission
 - POST createNewTier - DONE
 - POST linkSubmission [studentId, challengeId]
-- POST createNewChallenge
+- POST createNewChallenge - DONE
+- POST updateChallenge (for stuff like pre reqs)
+- POST updateChallengeTestCases (shortcut)
+- POST createNewCourse - DONE
+- DELETE deleteChallenge

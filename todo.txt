@@ -12,6 +12,8 @@ frontend
 - edit user profile (GET and PATCH request)
 - user settings page (GET request)
 - file submission element and subsequent page (POST request)
+- credential verification (backend retrieval of data => frontend processing)
+
 
 DB
 - user document
