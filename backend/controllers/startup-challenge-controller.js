@@ -22,6 +22,7 @@ const getAllChallenge = async (req, res, next) => {
         startupChallenges: startupChallenges.map((c) => c.toObject({ getters: true })),
     });
 };
+
 const getChallengeById = async (req, res, next) => {
     const challengeId = req.params.cid; // stored as keys: { pid: "XXX" }
 
@@ -82,12 +83,16 @@ const getChallengeByStartup = async (req, res, next) => {
 
 const createStartupChallenge = async (req, res, next) => {
     const errors = validationResult(req);
+    if (req.userData.userType != "startup") {
+        next(new HttpError("Invalid Credentials", 422));
+    }
     if (errors.isEmpty()) {
         //owner to be replaced by token retrieval
-        const {name, owner, description, requirements, taskDescription,testCases} = req.body;
+        const userData = req.userData;
+        const {name, description, requirements, taskDescription,testCases} = req.body;
         const createdChallenge = new StartupChallenge({
             name,
-            owner, 
+            owner: userData.userId, 
             description,
             requirements,
             taskDescription,
@@ -97,7 +102,7 @@ const createStartupChallenge = async (req, res, next) => {
 
         let startup;
         try {
-            startup = await Startup.findById(owner); //owner to be replaced with token retrieval
+            startup = await Startup.findById(userData.userId); //owner to be replaced with token retrieval
         } catch (err) {
             //console.log(err);
             next(new HttpError("database error", 500));
@@ -134,7 +139,7 @@ const createStartupChallenge = async (req, res, next) => {
 const updateStartupChallengeById = async (req, res, next) => {
     const errors = validationResult(req);
 
-    //const userId = req.userData.userId TO DO, when token is built properly
+    const startupId = req.userData.userId;
 
     if (!errors.isEmpty()) {
         console.log(errors);
@@ -152,12 +157,12 @@ const updateStartupChallengeById = async (req, res, next) => {
         }
 
         //run simple startupid check
-        /*
-        if (place.creator.toString() !== userId) {
-            next(new HttpError("You are not allowed", 401));
+        //console.log(challenge.owner.toString());
+        //console.log(startupId);
+        if (challenge.owner.toString() !== startupId) {
+            next(new HttpError("You are not allowed to update this", 401));
             return;
         }
-        */
 
        const {name, description, requirements, taskDescription, testCases} = req.body;
        if (challenge) {
@@ -187,8 +192,8 @@ const updateStartupChallengeById = async (req, res, next) => {
 
 const deleteStartupChallengeById = async (req, res, next) => {
     const challengeId = req.params.cid;
-    //TO DO when token verification is up
-    //const userId = req.userData.userId
+    
+    const startupId = req.userData.userId;
 
     let challenge;
     try {
@@ -203,13 +208,13 @@ const deleteStartupChallengeById = async (req, res, next) => {
         return next(new HttpError("Search failed, nothing to delete", 404));
     }
 
-    /* PENDING IMPLEMENTATION
-    // this field is stored in string so dunnid toString on this
-    if (place.owner.id !== userId) {
-        next (HttpError("You are not allowed", 401));
+    //run simple startupid check
+    //console.log(challenge.owner._id.toString());
+    //console.log(startupId);
+    if (challenge.owner._id.toString() !== startupId) {
+        next(new HttpError("You are not allowed to delete this", 401));
         return;
-    }  
-    */  
+    }
 
     try {
         const session = await mongoose.startSession();
@@ -232,6 +237,9 @@ const deleteStartupChallengeById = async (req, res, next) => {
 
 const getSubmissionsById = async (req, res, next) => {
     const challengeId = req.params.cid;
+    
+    const startupId = req.userData.userId;
+
     let challenge;
     try {
         challenge = await StartupChallenge.findById(challengeId)
@@ -239,6 +247,12 @@ const getSubmissionsById = async (req, res, next) => {
     } catch (err) {
         console.log(err);
         next( new HttpError("Database error", 500));
+        return;
+    }
+
+    console.log(challenge.owner);
+    if (challenge.owner.toString() !== startupId) {
+        next(new HttpError("You are not allowed to access this information", 401));
         return;
     }
 

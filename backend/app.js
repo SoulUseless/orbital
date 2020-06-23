@@ -27,6 +27,24 @@ app.use("/uploads/submissions", express.static(path.join("uploads", "submissions
 
 app.use("/uploads/testcases", express.static(path.join("uploads", "testcases")));
 
+//workaround CORS error
+//cannot anyhow send requests cross-url
+app.use((req, res, next) => {
+    //allow any domain to send requests to backend
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    //set allowed headers
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    //set allowed request types
+    res.setHeader(
+        "Access-Control-Allow-Methods", 
+        "GET, POST, PATCH, DELETE"
+    );
+    next();
+});
+
 //requests must come from urls that start with following url 
 app.use("/api/startup", startupRoutes);
 
