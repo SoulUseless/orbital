@@ -220,12 +220,19 @@ const studentSignup = async (req, res, next) => {
 
 const studentUpdate = async (req, res, next) => {
     errors = validationResult(req);
+    const studentCredentials = req.userData.userId;
+    const studentId = req.params.sid;
+
+    if (studentId !== studentCredentials) {
+        next(new HttpError("You are not allowed to update this page", 401));
+        return;
+    }
+
     if (! errors.isEmpty()) {
         //console.log(errors);
         return next(new HttpError("Invalid Inputs detected", 422));
     }
 
-    const studentId = req.params.sid;
     let student;
     try {
         student = await Student.findById(studentId);

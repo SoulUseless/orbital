@@ -4,7 +4,7 @@ const express = require('express');
 const { check } = require("express-validator");
 
 const startupChallengeControllers = require('../controllers/startup-challenge-controller');
-//can just export the router to app.js
+const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
@@ -14,8 +14,7 @@ router.get("/:cid", startupChallengeControllers.getChallengeById);
 
 router.get("/startup/:sid", startupChallengeControllers.getChallengeByStartup);
 
-//TODO: token check
-//router.use(checkAuth);
+router.use(checkAuth);
 
 router.get("/:cid/submissions", startupChallengeControllers.getSubmissionsById);
 

@@ -8,31 +8,31 @@ CHALLENGES
 - POST uploadSubmissionById //need to verify credentials and eligibility => update tree and give tier automatically
 
 STARTUP-CHALLENGES -- missing token implemenation
-- GET getAllChallenges - DONE
-- GET getChallengeById - DONE
+- GET getAllChallenges - DONE - no token implementation req
+- GET getChallengeById - DONE - no token implementation req
 - GET getChallengeByStartup - pending startup implementation
-- POST createStartupChallenge - DONE
-- PATCH updateStartupChallengeById - DONE
-- DELETE deleteStartupChallengeById - DONE
+- POST createStartupChallenge - DONE - done token implementation
+- PATCH updateStartupChallengeById - DONE - done token implementation
+- DELETE deleteStartupChallengeById - DONE - done token implementation
 
-- GET getSubmissionsById - DONE
+- GET getSubmissionsById - DONE - done token implementation
 - POST uploadSubmissionById
 
-STARTUP - token done, pending frontend integration before proceeding
+STARTUP - token done, pending frontend integration
 - GET getAllStartups - DONE
 - GET getStartupById - DONE
 - POST startupLogin - DONE
-- POST startupSignup - DONE
+- POST startupSignup - DONE - **pending logo**
 //update startup functionalities (for updating profile)
 - POST startupUpdate
 
-STUDENT -- pending token implementation
+STUDENT -- token done, pending frontend integration
 - GET getAllStudents - DONE
 - GET getStudentById - DONE
 - GET getSubmissionsByStudentId - DONE
 - GET getCredentialsByStudentId - DONE
 - POST studentLogin - DONE
-- POST studentSignup - DONE
+- POST studentSignup - DONE - **pending logo**
 //update profile functionalities
 - POST studentUpdate - DONE
 

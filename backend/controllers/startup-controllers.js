@@ -179,12 +179,20 @@ const startupSignup = async (req, res, next) => {
 
 const startupUpdate = async (req, res, next) => {
     errors = validationResult(req);
+
+    const startupCredentials = req.userData.userId;
+    const startupId = req.params.sid;
+
+    if (startupId !== startupCredentials) {
+        next(new HttpError("You are not allowed to update this page", 401));
+        return;
+    }
+
     if (! errors.isEmpty()) {
         //console.log(errors);
         return next(new HttpError("Invalid Inputs detected", 422));
     }
 
-    const startupId = req.params.sid;
     let startup;
     try {
         startup = await Startup.findById(startupId);
@@ -193,14 +201,6 @@ const startupUpdate = async (req, res, next) => {
         next(new HttpError("Startup query failed", 500));
         return;
     }
-
-    //run simple startupid check
-    /*
-    if (place.creator.toString() !== userId) {
-        next(new HttpError("You are not allowed", 401));
-        return;
-    }
-    */
 
     const {name, logo, description, email, password} = req.body;
     if (startup) {
