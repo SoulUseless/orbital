@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/formElements/Button';
 import { AuthContext } from '../../shared/context/auth-context';
-import FileUpload from '../../shared/components/formElements/FileUpload';
+import SubmitFile from '../../shared/components/formElements/SubmitFile';
 
 import './Challenge.css';
 import { useParams } from 'react-router-dom';
@@ -150,12 +150,14 @@ const Challenge = (props) => {
     const footer =
       auth.isLoggedIn && auth.userType === 'student' ? (
         isQualified ? (
-          <FileUpload
-            center
-            id='file'
-            onInput={inputHandler}
-            errorText='Click below to upload file.'
-          />
+          <div className='upload-file'>
+            <SubmitFile
+              center
+              id='file'
+              onInput={inputHandler}
+              errorText='Click below to upload file.'
+            />
+          </div>
         ) : (
           /*<div className='upload-file'>
             <h1> File Upload </h1>
