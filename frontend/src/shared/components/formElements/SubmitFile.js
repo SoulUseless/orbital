@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 
 import Button from './Button';
-import './FileUpload.css';
+import './SubmitFile.css';
 
-const FileUpload = (props) => {
+const SubmitFile = (props) => {
   const [file, setFile] = useState();
   const [previewUrl, setPreviewUrl] = useState();
   const [isValid, setIsValid] = useState(false);
@@ -47,7 +47,7 @@ const FileUpload = (props) => {
         ref={filePickerRef}
         style={{ display: 'none' }}
         type='file'
-        accept='.json'
+        accept='.js, .py'
         onChange={pickedHandler}
       />
 
@@ -66,4 +66,4 @@ const FileUpload = (props) => {
   );
 };
 
-export default FileUpload;
+export default SubmitFile;
