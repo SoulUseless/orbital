@@ -31,18 +31,18 @@ const HttpError = require("../models/http-error");
 const Challenge = require("../models/challenge");
 const Student = require("../models/student");
 
-const convertFormat = async challenge => {
-    
-}
 const getAllChallenges = async (req, res, next) => {
     let challenges;
     try {
-        challenges = await Challenge.find({}).populate({
-            path: "course",
-            populate: {
-                path: 'language tier'
-            }
-        });
+        challenges = await Challenge.find({}).populate([
+            {
+                path: "course",
+                populate: {
+                    path: "language tier",
+                },
+            },
+            { path: "requirements requiredFor" },
+        ]);
     } catch (err) {
         console.log(err);
         next(new HttpError("database access error", 500));
@@ -74,12 +74,15 @@ const getChallengeById = async (req, res, next) => {
 
     let challenge;
     try {
-        challenge = await Challenge.findById(challengeId).populate({
-            path: "course",
-            populate: {
-                path: "language tier",
+        challenge = await Challenge.findById(challengeId).populate([
+            {
+                path: "course",
+                populate: {
+                    path: "language tier",
+                },
             },
-        });
+            { path: "requirements requiredFor" },
+        ]);
     } catch (err) {
         //console.log(err);
         next(new HttpError("Search failed", 500));

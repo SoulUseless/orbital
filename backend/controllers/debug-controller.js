@@ -313,6 +313,60 @@ const updateChallenge = async (req, res, next) => {
 };
 
 const deleteChallenge = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        //console.log(errors);
+        return next(HttpError("Invalid Inputs detected", 422));
+    }
+    const challengeId = req.params.cid;
+    let challenge;
+    try {
+        challenge = await Challenge.findById(challengeId).populate([
+            { path: "course" },
+            { path: "requirements" },
+            { path: "requiredFor" },
+        ]);
+    } catch (err) {
+        //console.log(err);
+        next(new HttpError("Challenge query failed", 500));
+        return;
+    }
+
+    if (challenge) {
+        try {
+            const session = await mongoose.startSession();
+            session.startTransaction();
+
+            await challenge.remove({ session });
+
+            challenge.course.challenges.pull(challenge);
+            await challenge.course.save({ session });
+        
+            await asyncForEach(challenge.requirements, async (c) => {
+                c.requiredFor.pull(challenge);
+                await c.save({ session });
+            });
+
+            await asyncForEach(challenge.requiredFor, async c => {
+                c.requirements.pull(challenge);
+                await c.save({ session });
+            });
+
+        
+            await session.commitTransaction();
+            //console.log("success");
+        } catch (err) {
+            console.log(err);
+            next (new HttpError("Deletion Failed", 500));
+            return;
+        }
+        res.status(201); //code represents something new created on server
+        return res.json({ message: "Successfully deleted" });
+
+    } else {
+        return next(new HttpError("No such challenge, nothing deleted", 404));
+    }
+
 
 };
 
@@ -383,5 +437,4 @@ exports.linkSubmission = linkSubmission;
 exports.createNewChallenge = createNewChallenge;
 exports.updateChallenge = updateChallenge;
 exports.createNewCourse = createNewCourse;
-//exports.updateChallengeTestCases = updateChallengeTestCases;
 exports.deleteChallenge = deleteChallenge;

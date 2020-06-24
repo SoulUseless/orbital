@@ -182,6 +182,8 @@ const studentSignup = async (req, res, next) => {
         email,
         password: hashedPassword,
         credentials: [],
+        completedChallenges: [],
+        completedStartupChallenges: [],
     });
 
     try {

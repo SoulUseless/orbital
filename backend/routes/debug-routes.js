@@ -16,7 +16,7 @@ router.post("/challenge/new", debugControllers.createNewChallenge);
 
 router.post("/challenge/:cid/update", debugControllers.updateChallenge);
 
-router.post("/challenge/:cid/delete", debugControllers.deleteChallenge);
+router.delete("/challenge/:cid/delete", debugControllers.deleteChallenge);
 
 router.post("/course/new", debugControllers.createNewCourse)
 

@@ -13,6 +13,20 @@ const studentSchema = new Schema({
             ref: "Submission",
         },
     ],
+    completedChallenges: [
+        {
+            type: mongoose.Types.ObjectId,
+            required: true,
+            ref: "Challenge",
+        },
+    ],
+    completedStartupChallenges: [
+        {
+            type: mongoose.Types.ObjectId,
+            required: true,
+            ref: "StartupChallenge",
+        },
+    ],
     email: { type: String, required: true, minlength: 6 },
     password: { type: String, required: true },
     credentials: [
@@ -27,7 +41,7 @@ const studentSchema = new Schema({
                 type: String,
                 required: true,
                 //ref: "Tier",
-            }
+            },
             //bronze, silver, gold
         },
     ],

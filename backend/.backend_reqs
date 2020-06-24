@@ -1,6 +1,6 @@
 CHALLENGES
-- GET getAllChallenges
-- GET getChallengeById
+- GET getAllChallenges - DONE
+- GET getChallengeById - DONE
 
 - GET getSubmissionsById - not sure if needed or not
 - GET getSubmissionsByStudentId - not sure if needed or not
@@ -52,6 +52,6 @@ DEBUG
 - POST createNewChallenge - DONE //find a way to prevent cyclical requirements/requiredFor
 - POST updateChallenge (for stuff like pre reqs) - DONE
 - POST updateChallengeTestCases (shortcut) - not req, since updateChallenge accepts partial updates
-- DELETE deleteChallenge
+- DELETE deleteChallenge - DONE
 - GET rerunSubmissions
 - POST createNewCourse - DONE
