@@ -242,14 +242,6 @@ const studentUpdate = async (req, res, next) => {
         return;
     }
 
-    //run simple startupid check
-    /*
-    if (place.creator.toString() !== userId) {
-        next(new HttpError("You are not allowed", 401));
-        return;
-    }
-    */
-
     const {name, profilePicture, profileDescription, email, password} = req.body;
     if (student) {
         student.name = name;
