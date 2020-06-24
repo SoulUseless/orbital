@@ -31,18 +31,9 @@ const studentSchema = new Schema({
     password: { type: String, required: true },
     credentials: [
         {
-            langauge: {
-                type: mongoose.Types.ObjectId,
-                required: true,
-                ref: "Language",
-            },
-            level: {
-                //type: mongoose.Types.ObjectId, on hold when development
-                type: String,
-                required: true,
-                //ref: "Tier",
-            },
-            //bronze, silver, gold
+            type: mongoose.Types.ObjectId,
+            required: true,
+            ref: "Course",
         },
     ],
     //rest should be private information

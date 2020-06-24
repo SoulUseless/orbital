@@ -5,10 +5,11 @@ CHALLENGES
 - GET getSubmissionsById - not sure if needed or not
 - GET getSubmissionsByStudentId - not sure if needed or not
 
-- POST uploadSubmissionById //need to verify credentials and eligibility => update tree and give tier automatically
+- POST uploadSubmissionById - DONE - pending axios and jdoodle integration
+//need to verify credentials and eligibility => update tree and give tier automatically
 //pending integration
 
-STARTUP-CHALLENGES -- missing token implemenation
+STARTUP-CHALLENGES -- token implementation done, pending frontend implementation
 - GET getAllChallenges - DONE - no token implementation req
 - GET getChallengeById - DONE - no token implementation req
 - GET getChallengeByStartup - pending startup implementation
@@ -17,7 +18,7 @@ STARTUP-CHALLENGES -- missing token implemenation
 - DELETE deleteStartupChallengeById - DONE - done token implementation
 
 - GET getSubmissionsById - DONE - done token implementation
-- POST uploadSubmissionById
+- POST uploadSubmissionById - DONE - pending axios and jdoodle integration
 //pending integration
 
 STARTUP - token done, pending frontend integration
