@@ -9,6 +9,21 @@ const Submission = require("../models/submission");
 const Course = require("../models/course");
 const Challenge = require("../models/challenge");
 
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
+}
+
+async function asyncMap(array, callback) {
+    let result = [];
+    for (let index = 0; index < array.length; index++) {
+        const newElement = await callback(array[index], index, array);
+        result.push(newElement);
+    }
+    return result;
+}
+
 const createNewLanguage = async (req, res, next) => {
     const { name, logo } = req.body;
     const newLanguage = new Language({ name, logo });
@@ -61,7 +76,32 @@ const createNewChallenge = async (req, res, next) => {
             testCases,
             submissions: []
         });
-        
+
+        let requirementChallenges;
+        let requiredForChallenges;
+        //populate first, make changes in transaction below
+        try {
+            requirementChallenges = await asyncMap(requirements, challengeId => {
+                try {
+                    return Challenge.findById(challengeId);
+                } catch (err) {
+                    //console.log(err);
+                    throw new HttpError("Database query failed", 500);
+                }
+            });
+
+            requiredForChallenges = await asyncMap(requiredFor, challengeId => {
+                try {
+                    return Challenge.findById(challengeId);
+                } catch (err) {
+                    //console.log(err);
+                    throw new HttpError("Database query failed", 500);
+                }
+            });
+        } catch (err) {
+            return next(err);
+        }
+
         //find course so that it can be updated also
         let courseObject;
         try {
@@ -83,6 +123,18 @@ const createNewChallenge = async (req, res, next) => {
             await createdChallenge.save({ session });
             courseObject.challenges.push(createdChallenge);
             await courseObject.save({ session }); 
+
+            await asyncForEach(requirementChallenges, async challenge => {
+                challenge.requiredFor.push(createdChallenge);
+                await challenge.save({session});
+            });
+
+            await asyncForEach(requiredForChallenges, async challenge => {
+                challenge.requirements.push(createdChallenge);
+                await challenge.save({session});
+            });
+        
+
             await session.commitTransaction();
             //console.log("success");
         } catch (err) {
@@ -101,6 +153,220 @@ const createNewChallenge = async (req, res, next) => {
 };
 
 const updateChallenge = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        //console.log(errors);
+        return next(HttpError("Invalid Inputs detected", 422));
+    }
+    const challengeId = req.params.cid;
+    let challenge;
+    try {
+        challenge = await Challenge.findById(challengeId).populate([
+            { path: "course" },
+            { path: "requirements" },
+            { path: "requiredFor" },
+        ]);
+    } catch (err) {
+        //console.log(err);
+        next(new HttpError("Challenge query failed", 500));
+        return;
+    }
+
+    if (challenge) {
+        const {name, description, requirements, requiredFor, course, taskDescription, testCases} = req.body;
+        //console.log(challenge);
+        if (name) {
+            challenge.name = name;
+        }
+        if (description) {
+            challenge.description = description;
+        }
+        if (testCases) {
+            challenge.testCases = testCases;
+        }
+        if (taskDescription) {
+            challenge.taskDescription = taskDescription;
+        }
+
+        //these 3 needs special actions done to other challenges
+        let oldRequirements = [...challenge.requirements];
+        let requirementsChanged = false;
+        let requirementObjects;
+        if (requirements) {
+            //remove this challenge from challenge.requirement's requiredFor
+            //add this challenge to requirements's requiredFor
+            requirementObjects = await asyncMap(requirements, challengeId => {
+                try {
+                    return Challenge.findById(challengeId);
+                } catch (err) {
+                    //console.log(err);
+                    throw new HttpError("Database query failed", 500);
+                }
+            });
+            requirementsChanged = true;
+            challenge.requirements = requirements;
+        }
+
+        let oldRequiredFor = [...challenge.requiredFor];
+        let requiredForChanged = false;
+        let requiredForObjects;
+        try {
+            if (requiredFor) {
+                requiredForObjects = await asyncMap(requiredFor, challengeId => {
+                    try {
+                        return Challenge.findById(challengeId);
+                    } catch (err) {
+                        //console.log(err);
+                        throw new HttpError("Database query failed", 500);
+                    }
+                });
+                requiredForChanged = true;
+                challenge.requiredFor = requiredFor;
+            }
+        } catch (err) {
+            //console.log(err);
+            return next(err);
+        }
+
+        let oldCourse = challenge.course;
+        let courseChanged = false;
+        let courseObject;
+        try {
+            if (course) {
+                try {
+                    courseObject = await Course.findById(course);
+                } catch (err) {
+                    //console.log(err);
+                    next(new HttpError("database error", 500));
+                    return; 
+                }
+
+                if (!courseObject) {
+                    return next(new HttpError("indicated course not found", 404));
+                }
+                courseChanged = true;
+                challenge.course = course;
+            }
+        } catch (err) {
+            return next(err);
+        }
+
+        try {
+            const session = await mongoose.startSession();
+            session.startTransaction();
+
+            await challenge.save({ session });
+
+            if (courseChanged) {
+                console.log(challenge.course);
+                //update course
+                courseObject.challenges.push(challenge);
+                await courseObject.save({ session }); 
+                oldCourse.challenges.pull(challenge);
+                await oldCourse.save({ session });
+            }
+
+            if (requirementsChanged) {
+                //update requirement
+                //remove challenge from old req, then add challenge to new req
+                await asyncForEach(oldRequirements, async (c) => {
+                    c.requiredFor.pull(challenge);
+                    await c.save({ session });
+                });
+
+                await asyncForEach(requirementObjects, async c => {
+                    c.requiredFor.push(challenge);
+                    await c.save({ session });
+                });
+            }
+
+            if (requiredForChanged) {
+                //update requiredFor
+                //remove challenge from old req, then add challenge to new req
+                await asyncForEach(oldRequiredFor, async c => {
+                    c.requirements.pull(challenge);
+                    await c.save({ session });
+                });
+
+                await asyncForEach(requiredForObjects, async c => {
+                    c.requirements.push(challenge);
+                    await c.save({ session });
+                });
+
+            }
+        
+            await session.commitTransaction();
+            //console.log("success");
+        } catch (err) {
+            console.log(err);
+            next (new HttpError("Commit Failed", 500));
+            return;
+        }
+        res.status(201); //code represents something new created on server
+        return res.json(challenge.toObject({ getters: true }));
+
+    } else {
+        return next(new HttpError("No such challenge", 404));
+    }
+
+
+};
+
+const deleteChallenge = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        //console.log(errors);
+        return next(HttpError("Invalid Inputs detected", 422));
+    }
+    const challengeId = req.params.cid;
+    let challenge;
+    try {
+        challenge = await Challenge.findById(challengeId).populate([
+            { path: "course" },
+            { path: "requirements" },
+            { path: "requiredFor" },
+        ]);
+    } catch (err) {
+        //console.log(err);
+        next(new HttpError("Challenge query failed", 500));
+        return;
+    }
+
+    if (challenge) {
+        try {
+            const session = await mongoose.startSession();
+            session.startTransaction();
+
+            await challenge.remove({ session });
+
+            challenge.course.challenges.pull(challenge);
+            await challenge.course.save({ session });
+        
+            await asyncForEach(challenge.requirements, async (c) => {
+                c.requiredFor.pull(challenge);
+                await c.save({ session });
+            });
+
+            await asyncForEach(challenge.requiredFor, async c => {
+                c.requirements.pull(challenge);
+                await c.save({ session });
+            });
+
+        
+            await session.commitTransaction();
+            //console.log("success");
+        } catch (err) {
+            console.log(err);
+            next (new HttpError("Deletion Failed", 500));
+            return;
+        }
+        res.status(201); //code represents something new created on server
+        return res.json({ message: "Successfully deleted" });
+
+    } else {
+        return next(new HttpError("No such challenge, nothing deleted", 404));
+    }
+
 
 };
 
@@ -171,3 +437,4 @@ exports.linkSubmission = linkSubmission;
 exports.createNewChallenge = createNewChallenge;
 exports.updateChallenge = updateChallenge;
 exports.createNewCourse = createNewCourse;
+exports.deleteChallenge = deleteChallenge;

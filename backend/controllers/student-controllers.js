@@ -182,6 +182,8 @@ const studentSignup = async (req, res, next) => {
         email,
         password: hashedPassword,
         credentials: [],
+        completedChallenges: [],
+        completedStartupChallenges: [],
     });
 
     try {
@@ -241,14 +243,6 @@ const studentUpdate = async (req, res, next) => {
         next(new HttpError("Startup query failed", 500));
         return;
     }
-
-    //run simple startupid check
-    /*
-    if (place.creator.toString() !== userId) {
-        next(new HttpError("You are not allowed", 401));
-        return;
-    }
-    */
 
     const {name, profilePicture, profileDescription, email, password} = req.body;
     if (student) {

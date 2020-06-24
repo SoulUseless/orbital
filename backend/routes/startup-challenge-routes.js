@@ -18,8 +18,8 @@ router.use(checkAuth);
 
 router.get("/:cid/submissions", startupChallengeControllers.getSubmissionsById);
 
-//TO DO
-//router.post("/:cid/submissions", startupChallengeControllers.uploadSubmissionById)
+router.post("/:cid/submissions", startupChallengeControllers.uploadSubmissionById); 
+//going to have middleware for fileUpload
 
 router.patch(
     "/:cid",
