@@ -127,7 +127,7 @@ const DUMMY_MODULES_COMPLETED = ['c3', 'c5'];
 const Challenge = (props) => {
   const auth = useContext(AuthContext);
 
-  const [inputHandler] = useForm(
+  const [formState, inputHandler] = useForm(
     {
       file: {
         value: null,
@@ -136,6 +136,11 @@ const Challenge = (props) => {
     },
     false
   );
+
+  const challengeSubmitHandler = (event) => {
+    event.preventDefault();
+    console.log(formState.inputs); // send this to the backend!
+  };
 
   const challengeId = useParams().challengeId;
   //TO DO: replace with query, and replace if else with try catch
@@ -150,14 +155,19 @@ const Challenge = (props) => {
     const footer =
       auth.isLoggedIn && auth.userType === 'student' ? (
         isQualified ? (
-          <div className='upload-file'>
-            <SubmitFile
-              center
-              id='file'
-              onInput={inputHandler}
-              errorText='Click below to upload file.'
-            />
-          </div>
+          <form className='submit-form' onSubmit={challengeSubmitHandler}>
+            <div className='submit-file'>
+              <SubmitFile
+                center
+                id='file'
+                onInput={inputHandler}
+                errorText='Click below to upload file.'
+              />
+              <Button type='submit' disabled={!formState.isValid}>
+                SUBMIT
+              </Button>
+            </div>
+          </form>
         ) : (
           /*<div className='upload-file'>
             <h1> File Upload </h1>
