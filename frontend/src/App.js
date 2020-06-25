@@ -8,9 +8,9 @@ import {
 
 import Home from './Home';
 import Startups from './users/pages/startups/Startups';
-import StartupProfiles from './users/pages/startups/StartupProfiles';
+import StartupProfile from './users/pages/startups/StartupProfile';
 import Students from './users/pages/students/Students';
-import StudentProfiles from './users/pages/students/StudentProfiles';
+import StudentProfile from './users/pages/students/StudentProfile';
 import Challenge from './challenges/pages/Challenge';
 //import EditChallenge from "./challenges/pages/EditChallenge";
 import Challenges from './challenges/pages/Challenges';
@@ -58,15 +58,15 @@ const App = () => {
           </Route>
 
           <Route path='/student/:studentId'>
-            <StudentProfiles />
+            <StudentProfile />
           </Route>
 
           <Route path='/startup/' exact={true}>
             <Startups />
           </Route>
 
-          <Route path='/users/pages/startup/:startupId'>
-            <StartupProfiles />
+          <Route path='/startup/:startupId'>
+            <StartupProfile />
           </Route>
 
           <Route path='/challenges' exact={true}>
@@ -109,19 +109,19 @@ const App = () => {
           </Route>
 
           <Route path='/student/:studentId'>
-            <StudentProfiles />
+            <StudentProfile />
           </Route>
 
           <Route path='/startup/' exact={true}>
             <Startups />
           </Route>
+          
+          <Route path='/startup/:startupId'>
+            <StartupProfile />
+          </Route>
 
           <Route path='/startup-challenge/new' exact={true}>
             <NewStartupChallenge />
-          </Route>
-
-          <Route path='/startup/:startupId'>
-            <StartupProfiles />
           </Route>
 
           <Route path='/challenges' exact={true}>
@@ -175,7 +175,7 @@ const App = () => {
         </Route>
 
         <Route path='/student/:studentId'>
-          <StudentProfiles />
+          <StudentProfile />
         </Route>
 
         <Route path='/startup/' exact={true}>
@@ -183,7 +183,7 @@ const App = () => {
         </Route>
 
         <Route path='/startup/:startupId'>
-          <StartupProfiles />
+          <StartupProfile />
         </Route>
 
         <Route path='/challenges' exact={true}>
