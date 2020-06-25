@@ -29,7 +29,7 @@ const getStudentById = async (req, res, next) => {
 
     let student;
     try {
-        student = await Student.findById(studentId);
+        student = await Student.findById(studentId).populate("challengeSubmissions credentials");
     } catch (err) {
         //console.log(err);
         next(new HttpError("Search failed", 500));
