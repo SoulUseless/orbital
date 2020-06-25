@@ -1,0 +1,51 @@
+.startup-item {
+  margin: 1rem;
+  width: calc(45% - 2rem);
+  min-width: 17.5rem;
+}
+
+.startup-item a {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  padding: 1rem;
+  color: white;
+  background: #504f4f;
+}
+
+.startup-item__content {
+  padding: 0;
+}
+
+.startup-item__image {
+  width: 6rem;
+  height: 6rem;
+  margin: auto;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.startup-item__info h1 {
+  font-size: 3rem;
+  text-align: center;
+  font-weight: normal;
+  color: black;
+  margin: 5px;
+}
+.startup-item__info h2 {
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: normal;
+  color: black;
+  margin: 3px;
+}
+
+.startup-item__info h3 {
+  margin: 0;
+}
+
+.startup-item__button {
+  margin: auto;
+}
