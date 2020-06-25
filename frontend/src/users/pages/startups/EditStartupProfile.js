@@ -1,6 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import StartupList from '../../components/startups/StartupList';
+import Input from '../../../shared/components/formElements/Input';
+import Button from '../../../shared/components/formElements/Button';
+import Card from '../../../shared/components/UIElements/Card';
+import ImageUpload from '../../../shared/components/formElements/ImageUpload';
+import {
+  VALIDATOR_REQUIRE,
+  VALIDATOR_EMAIL,
+} from '../../../shared/util/validators';
+import { useForm } from '../../../shared/hooks/form-hook';
+import './StartupProfile.css';
 
 const DUMMY_STARTUPS = [
   {
@@ -25,7 +35,7 @@ const DUMMY_STARTUPS = [
   },
   {
     id: 's3',
-    name: 'Tencent',
+    name: 'Facebook',
     logo:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv_MNlp6gBL_CAc8mnwUirBnqJIBN7yjtxZZhjxAMwExKm0beX&s', //should be url
     description:
@@ -35,8 +45,156 @@ const DUMMY_STARTUPS = [
   },
 ];
 
-const Startups = (props) => {
-  return <StartupList items={DUMMY_STARTUPS} />;
-};
+const EditStartupProfile = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const startupId = useParams().startupId;
+  //const startup = DUMMY_STARTUPS.find((s) => s.id === startupId);
+  const [formState, inputHandler, setFormData] = useForm(
+    {
+      name: {
+        value: '',
+        isValid: false,
+      },
+      logo: {
+        value: null,
+        isValid: false,
+      },
+      email: {
+        value: '',
+        isValid: false,
+      },
+      description: {
+        value: '',
+        isValid: false,
+      },
 
-export default Startups;
+      password: {
+        value: '',
+        isValid: false,
+      },
+    },
+    false
+  );
+
+  const identifiedStartup = DUMMY_STARTUPS.find((s) => s.id === startupId);
+
+  useEffect(() => {
+    if (identifiedStartup) {
+      setFormData(
+        {
+          name: {
+            value: identifiedStartup.name,
+            isValid: true,
+          },
+          logo: {
+            value: identifiedStartup.logo,
+            isValid: true,
+          },
+          email: {
+            value: identifiedStartup.email,
+            isValid: true,
+          },
+          description: {
+            value: identifiedStartup.description,
+            isValid: true,
+          },
+          password: {
+            value: '',
+            isValid: true,
+          },
+        },
+        true
+      );
+    }
+    setIsLoading(false);
+  }, [setFormData, identifiedStartup]);
+  const startupProfileUpdateSubmitHandler = (event) => {
+    event.preventDefault();
+    console.log(event); //TO DO when backend up
+  };
+
+  //console.log("input");
+  console.log(formState.inputs);
+
+  if (!identifiedStartup) {
+    return (
+      <div className='center'>
+        <Card>
+          <h2>No startup with id found!</h2>
+        </Card>
+      </div>
+    );
+  }
+  if (isLoading) {
+    return (
+      <div className='center'>
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
+  return (
+    <div className='profile-form-container'>
+      <Card className='profile-form'>
+        <h2> Edit Profile </h2>
+        <hr />
+        <form onSubmit={startupProfileUpdateSubmitHandler}>
+          <Input
+            id='name'
+            type='text'
+            label='Name of Startup'
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText='Please enter a name.'
+            initialValue={formState.inputs.name.value}
+            initialValidity={formState.inputs.name.isValid}
+            onInput={inputHandler}
+          />
+          <Input
+            id='email'
+            type='text'
+            label='Email of Startup'
+            validators={[VALIDATOR_EMAIL()]}
+            errorText='Please enter a valid email address.'
+            initialValue={formState.inputs.name.value}
+            initialValidity={formState.inputs.name.isValid}
+            onInput={inputHandler}
+          />
+          <ImageUpload
+            center
+            id='image'
+            label='Startup Logo'
+            errorText='Please provide an image.'
+            initialValue={formState.inputs.logo.value}
+            initialValidity={formState.inputs.name.isValid}
+            onInput={inputHandler}
+          />
+
+          <Input
+            id='description'
+            type='text'
+            label='Brief Description of Challenge'
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText='Please enter a description.'
+            initialValue={formState.inputs.description.value}
+            initialValidity={formState.inputs.description.isValid}
+            onInput={inputHandler}
+          />
+
+          <Input
+            id='description'
+            type='text'
+            label='Brief Description of your Startup'
+            errorText='Please enter a description.'
+            initialValue={formState.inputs.taskDescription.value}
+            initialValidity={formState.inputs.taskDescription.isValid}
+            onInput={inputHandler}
+          />
+
+          <Button type='submit' disabled={!formState.isValid}>
+            Update Changes
+          </Button>
+        </form>
+      </Card>
+    </div>
+  );
+};
+export default EditStartupProfile;

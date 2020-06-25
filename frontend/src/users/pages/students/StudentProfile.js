@@ -1,64 +1,78 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../../shared/context/auth-context';
+import Button from '../../../shared/components/formElements/Button';
+import Card from '../../../shared/components/UIElements/Card';
+import Avatar from '../../../shared/components/UIElements/Avatar';
+
+import './StudentProfile.css';
 
 const STUDENT = {
-    name: "test",
-    profilePicture: "https://w0.pngwave.com/png/509/153/person-logo-computer-icons-others-png-clip-art.png", //should be url
-    profileDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
-    challengeSubmissions: [//submissions will be populated with nested information
-        "submission1", "submission2"
-        /*
-        {
-            file: { type: String, required: true }, //should be url, pending expansion of functionality
-            owner: { type: mongoose.Types.ObjectId, required: true, ref: "Student" },
-            success: { type: Boolean, required: true } //keep track whether submission is correct without recompiling
-        }
-        */
-    ],
-    completedChallenges: [
-        "c1", "c2"
-    ],
-    completedStartupChallenges: [
-        "c1", "c2"
-    ],
-    email: "test@test.com",
-    credentials: [//courses will be populated with nested information
-        "course1", "course2" 
-        /*
-        {
-          tier: { 
-              type: mongoose.Types.ObjectId, 
-              required: true, 
-              ref: "Tier" 
-          },
-          language: {
-              type: mongoose.Types.ObjectId,
-              required: true,
-              ref: "Language",
-          },
-          challenges: [
-              { type: mongoose.Types.ObjectId, required: true, ref: "challenge" },
-          ],
-        } */
-    ],
+  id: 'stu1',
+  name: 'test',
+  profilePicture:
+    'https://w0.pngwave.com/png/509/153/person-logo-computer-icons-others-png-clip-art.png', //should be url
+  profileDescription:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
+  challengeSubmissions: [
+    //submissions will be populated with nested information
+    'submission1',
+    'submission2',
+  ],
+  completedChallenges: ['c1', 'c2'],
+  completedstudentChallenges: ['c1', 'c2'],
+  email: 'test@test.com',
+  credentials: [
+    //courses will be populated with nested information
+    'course1',
+    'course2',
+  ],
 };
 
 const StudentProfile = (props) => {
   const auth = useContext(AuthContext);
+  const editProfileHandler = (event) => {
+    event.preventDefault();
+    console.log('editing'); // send this to the backend!
+  };
 
-  //get startupid
-  
   //todo: retrieve profile from backend
-
-  if (auth.isLoggedIn && auth.userType === "student") {
-      //render shit here
-      /*ideally return that student's profile only*/
-      return <h1> {STUDENT.toString()} </h1>;
-      //can put todo pending token, then implement edit button here
+  if (
+    auth.isLoggedIn &&
+    auth.userType === 'student'
+    //&& auth.userId === STUDENT.id      //COMMENT OUT FIRST ELSE CANT SHOW
+  ) {
+    return (
+      <form className='student-profile' onClick={editProfileHandler}>
+        <Card className='student-profile__content'>
+          {' '}
+          {/*figure how to shift card to center*/}
+          <div className='student-profile__logo'>
+            <Avatar center image={STUDENT.profilePicture} alt={STUDENT.name} />
+          </div>
+          <div className='student-item__info'>
+            <h1>{STUDENT.name}</h1>
+            <h2>{STUDENT.email}</h2>
+            <h3>{STUDENT.profileDescription}</h3>
+            {/*TODO: PRINT OUT CHALLENGE ACCOMPLISHMENTS TOO*/}
+          </div>
+          <Link to={`/student/edit/${STUDENT.id}`}>
+            <Button
+              to='/EditStudentProfile'
+              className='student-item__button'
+              type='edit'
+            >
+              EDIT
+            </Button>
+          </Link>
+        </Card>
+      </form>
+    );
+    //TO DO: PENDING TOKEN
   } else {
-    return <h1>log in to find out more</h1>; 
-    //render barebones information
+    return <h1>log in to find out more</h1>;
+    //return barebones stuff here
   }
 };
 
