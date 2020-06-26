@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
+const cors = require("cors");
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
@@ -16,22 +17,17 @@ const debugRoutes = require("./routes/debug-routes");
 
 const HttpError = require("./models/http-error");
 
-const app = express();
+const app = express().use('*', cors());;
 
 //extract json data from all incoming requests
 app.use(bodyParser.json());
 
-app.use("/uploads/images", express.static(path.join("uploads", "images")));
-
-app.use("/uploads/submissions", express.static(path.join("uploads", "submissions")));
-
-app.use("/uploads/testcases", express.static(path.join("uploads", "testcases")));
-
+/*
 //workaround CORS error
 //cannot anyhow send requests cross-url
 app.use((req, res, next) => {
     //allow any domain to send requests to backend
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Origin", 'http://localhost:3000');
     //set allowed headers
     res.setHeader(
         "Access-Control-Allow-Headers",
@@ -40,10 +36,18 @@ app.use((req, res, next) => {
     //set allowed request types
     res.setHeader(
         "Access-Control-Allow-Methods", 
-        "GET, POST, PATCH, DELETE"
+        "GET, POST, OPTIONS, PATCH, DELETE"
     );
     next();
 });
+*/
+//app.use(cors());
+
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
+
+app.use("/uploads/submissions", express.static(path.join("uploads", "submissions")));
+
+app.use("/uploads/testcases", express.static(path.join("uploads", "testcases")));
 
 //requests must come from urls that start with following url 
 app.use("/api/startup", startupRoutes);

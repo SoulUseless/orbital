@@ -17,7 +17,7 @@ router.post("/login", studentControllers.studentLogin);
 
 router.post(
     "/signup",
-    fileUpload.single("image"),
+    fileUpload("images").single("image"),
     studentControllers.studentSignup
 );
 
@@ -27,7 +27,7 @@ router.use(checkAuth);
 
 router.post(
     "/:sid/update",
-    fileUpload.single("image"),
+    fileUpload("images").single("image"),
     studentControllers.studentUpdate
 );
 

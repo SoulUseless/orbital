@@ -16,7 +16,7 @@ router.post("/login", startupControllers.startupLogin);
 
 router.post(
     "/signup",
-    fileUpload.single("image"),
+    fileUpload("images").single("image"),
     startupControllers.startupSignup
 );
 
@@ -26,7 +26,7 @@ router.use(checkAuth);
 //TODO verify token
 router.post(
     "/:sid/update",
-    fileUpload.single("image"),
+    fileUpload("images").single("image"),
     startupControllers.startupUpdate
 );
 

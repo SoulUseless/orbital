@@ -1,30 +1,3 @@
-/* OUTPUT format
-
-{
-        id: "c1",
-        name: "Factorial",
-        description: "my first challenge",
-        language: "javascript",
-        requirements: ["c3", "c5"], //to be populated to show more information
-        requiredFor: ["c2", "c4"],
-        taskDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        tier: "bronze",
-        url: "https://cdn.worldvectorlogo.com/logos/javascript.svg",
-        testCases: {
-            publicTestCases: [
-                { input: "factorial(3)", output: "6" },
-                { input: "factorial(5)", output: "120" },
-            ],
-            privateTestCases: [
-                { input: "factorial(3)", output: "6" },
-                { input: "factorial(5)", output: "120" },
-            ],
-        },
-        //add course here also?
-    },
-
-*/
-
 const mongoose = require("mongoose");
 
 const HttpError = require("../models/http-error");
@@ -49,7 +22,7 @@ const getAllChallenges = async (req, res, next) => {
         next(new HttpError("database access error", 500));
         return;
     }
-    console.log(challenges);
+    //console.log(challenges);
     res.status(200).json({
         challenges: challenges.map( challenge => {
             return {
@@ -116,14 +89,17 @@ const getChallengeById = async (req, res, next) => {
 
 
 const uploadSubmissionById = async (req, res, next) => {
+    if (req.method === "OPTIONS") {
+        return next();
+    }
+
     const user = req.userData;
     if (user.userType != "student") {
         return next(new HttpError("You do not have permissions to upload submissions", 401));
     }
 
-    const filePath = "haha.txt"; //DUMMY VARIABLE
-    //const file = req.file;
-    //const filePath = req.file.path;
+    const file = req.file;
+    const filePath = req.file.path;
 
     const studentId = user.userId;
     let student;
@@ -213,6 +189,7 @@ const uploadSubmissionById = async (req, res, next) => {
 
     //DUMMY CHECKS
     const isSuccess = true;
+
     if (isSuccess) {
         //update all relevant information
         newSubmission.success = true;
