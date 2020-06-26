@@ -28,6 +28,8 @@ import Settings from './shared/components/settings/settings';
 import { AuthContext } from './shared/context/auth-context';
 
 const App = () => {
+  //const { token, userId, userType, login, logout } = useAuth();
+  //getting ready for merging with backend
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState();
 

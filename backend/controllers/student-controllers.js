@@ -127,8 +127,9 @@ const studentLogin = async (req, res, next) => {
 
             res.status(200).json({
                 message: "login success",
-                userId: startup.id,
-                email: startup.email, //other information up to us
+                userId: student.id,
+                email: student.email, //other information up to us
+                userType: "student",
                 token: token, //impt to return token
             });
 
@@ -216,6 +217,7 @@ const studentSignup = async (req, res, next) => {
     res.status(201).json({
         userId: createdStudent.id,
         email: createdStudent.email, //other information up to us
+        userType: "student",
         token: token, //impt to return token
     });
 };

@@ -88,6 +88,7 @@ const startupLogin = async (req, res, next) => {
                 message: "login success",
                 userId: startup.id,
                 email: startup.email, //other information up to us
+                userType: "startup",
                 token: token, //impt to return token
             });
 
@@ -173,6 +174,7 @@ const startupSignup = async (req, res, next) => {
     res.status(201).json({
         userId: createdStartup.id,
         email: createdStartup.email, //other information up to us
+        userType: "startup",
         token: token, //impt to return token
     });
 };
