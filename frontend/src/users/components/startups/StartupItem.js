@@ -1,33 +1,38 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 import Avatar from '../../../shared/components/UIElements/Avatar';
 import Card from '../../../shared/components/UIElements/Card';
-import Button from '../../../shared/components/formElements/Button';
+//import Button from '../../../shared/components/formElements/Button';
 
 import './StartupItem.css';
 
 const StartupItem = (props) => {
-  const editProfileHandler = (event) => {
-    event.preventDefault();
-    console.log('editing'); // send this to the backend!
-  };
+  //console.log(`${process.env.REACT_APP_ASSET_URL}/${props.logo}`);
   return (
-    <form className='startup-item' onClick={editProfileHandler}>
+    <Link to={`/startup/${props.id}`}>
+    {/*<form className='startup-item' onClick={editProfileHandler}>
+        AND YOU DONT NEED A FORM FOR REDIRECTION WTF */}
       <Card className='startup-item__content'>
         <div className='startup-item__image'>
-          <Avatar center image={props.image} alt={props.name} />
+          {/*<Avatar image={`${process.env.REACT_APP_ASSET_URL}/${props.logo}`} alt={props.name} />*/}
+          <Avatar image={props.logo} alt={props.name} />
         </div>
 
         <div className='startup-item__info'>
           <h1>{props.name}</h1>
           <h2>{props.email}</h2>
         </div>
-        <Button className='startup-item__button' type='edit'>
-          {/*figure how to align better*/}
-          EDIT
-        </Button>
+
+        {/* TF do you have a edit button on the list
+            <Button className='student-item__button' type='edit'>
+              figure how to align better
+              EDIT
+            </Button>
+          */}
       </Card>
-    </form>
+    {/*</form>*/}
+    </Link>
   );
 };
 

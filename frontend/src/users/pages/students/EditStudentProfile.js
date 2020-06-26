@@ -15,7 +15,7 @@ import './StudentProfile.css';
 
 const DUMMY_PROFILES = [
   {
-    id: 'stu1',
+    id: '5ef5a5464dd6e852c84dd56c',
     name: 'test',
     profilePicture:
       'https://w0.pngwave.com/png/509/153/person-logo-computer-icons-others-png-clip-art.png', //should be url
@@ -80,7 +80,7 @@ const DUMMY_PROFILES = [
   },
 ];
 
-const UpdateStartupProfile = () => {
+const UpdateStudentProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const studentId = useParams().studentId;
 
@@ -148,7 +148,7 @@ const UpdateStartupProfile = () => {
     return (
       <div className='center'>
         <Card>
-          <h2>Could not find startup!</h2>
+          <h2>Could not find student!</h2>
         </Card>
       </div>
     );
@@ -201,7 +201,7 @@ const UpdateStartupProfile = () => {
           center
           id='profilePicture'
           onInput={inputHandler}
-          errorText='Please provide a picture of your startup logo.'
+          errorText='Please provide a profile picture.'
         />
         <Input
           element='input'
@@ -220,4 +220,4 @@ const UpdateStartupProfile = () => {
   );
 };
 
-export default UpdateStartupProfile;
+export default UpdateStudentProfile;

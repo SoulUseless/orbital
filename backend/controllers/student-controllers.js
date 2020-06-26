@@ -177,7 +177,7 @@ const studentSignup = async (req, res, next) => {
 
     const createdStudent = new Student({
         name,
-        profilePicture: "", //should be url
+        profilePicture: req.file.path, //should be url
         profileDescription: "",
         challengeSubmissions: [],
         email,

@@ -21,10 +21,9 @@ const StudentList = (props) => {
         <StudentItem
           key={student.id}
           id={student.id}
-          image={student.image}
+          image={student.profilePicture}
           name={student.name}
           email={student.email}
-          password={student.password}
         />
       ))}
     </ul>
