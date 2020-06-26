@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../../shared/context/auth-context';
 import Button from '../../../shared/components/formElements/Button';
@@ -34,7 +33,6 @@ const StartupProfile = (props) => {
     return (
       <form className='startup-profile' onClick={editProfileHandler}>
         <Card className='startup-profile__content'>
-          {' '}
           {/*figure how to shift card to center*/}
           <div className='startup-profile__logo'>
             <Avatar center image={STARTUP.logo} alt={STARTUP.name} />
@@ -44,16 +42,14 @@ const StartupProfile = (props) => {
             <h2>{STARTUP.email}</h2>
             <h3>{STARTUP.description}</h3>
           </div>
-          <Link to={`/startup/edit/${STARTUP.id}`}>
-            <Button
-              to='/EditStartupProfile'
-              className='startup-item__button'
-              type='edit'
-            >
-              {/*figure how to align better*/}
-              EDIT
-            </Button>
-          </Link>
+
+          <Button
+            to={`/startup/edit/${STARTUP.id}`}
+            className='startup-item__button'
+          >
+            {/*figure how to align better*/}
+            EDIT
+          </Button>
         </Card>
       </form>
     );

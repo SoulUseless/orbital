@@ -59,11 +59,12 @@ const App = () => {
             <Students />
           </Route>
 
-          <Route path='/student/:studentId'>
-            <StudentProfile />
-          </Route>
           <Route path='/student/edit/:studentId'>
             <EditStudentProfile />
+          </Route>
+
+          <Route path='/student/:studentId'>
+            <StudentProfile />
           </Route>
 
           <Route path='/startup/' exact={true}>
@@ -121,12 +122,12 @@ const App = () => {
             <Startups />
           </Route>
 
-          <Route path='/startup/:startupId'>
-            <StartupProfile />
-          </Route>
-
           <Route path='/startup/edit/:startupId'>
             <EditStartUpProfile />
+          </Route>
+
+          <Route path='/startup/:startupId'>
+            <StartupProfile />
           </Route>
 
           <Route path='/startup-challenge/new' exact={true}>

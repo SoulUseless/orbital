@@ -48,7 +48,7 @@ const DUMMY_STARTUPS = [
 const EditStartupProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const startupId = useParams().startupId;
-  //const startup = DUMMY_STARTUPS.find((s) => s.id === startupId);
+
   const [formState, inputHandler, setFormData] = useForm(
     {
       name: {
@@ -99,7 +99,7 @@ const EditStartupProfile = () => {
             isValid: true,
           },
           password: {
-            value: '',
+            value: "",
             isValid: true,
           },
         },
@@ -108,12 +108,12 @@ const EditStartupProfile = () => {
     }
     setIsLoading(false);
   }, [setFormData, identifiedStartup]);
-  const startupProfileUpdateSubmitHandler = (event) => {
+
+  const submitStartupUpdateHandler = (event) => {
     event.preventDefault();
     console.log(event); //TO DO when backend up
   };
 
-  //console.log("input");
   console.log(formState.inputs);
 
   if (!identifiedStartup) {
@@ -137,10 +137,11 @@ const EditStartupProfile = () => {
       <Card className='profile-form'>
         <h2> Edit Profile </h2>
         <hr />
-        <form onSubmit={startupProfileUpdateSubmitHandler}>
+        <form onSubmit={submitStartupUpdateHandler}>
           <Input
             id='name'
             type='text'
+            element='input'
             label='Name of Startup'
             validators={[VALIDATOR_REQUIRE()]}
             errorText='Please enter a name.'
@@ -151,11 +152,12 @@ const EditStartupProfile = () => {
           <Input
             id='email'
             type='text'
+            element='input'
             label='Email of Startup'
             validators={[VALIDATOR_EMAIL()]}
             errorText='Please enter a valid email address.'
-            initialValue={formState.inputs.name.value}
-            initialValidity={formState.inputs.name.isValid}
+            initialValue={formState.inputs.email.value}
+            initialValidity={formState.inputs.email.isValid}
             onInput={inputHandler}
           />
           <ImageUpload
@@ -164,14 +166,15 @@ const EditStartupProfile = () => {
             label='Startup Logo'
             errorText='Please provide an image.'
             initialValue={formState.inputs.logo.value}
-            initialValidity={formState.inputs.name.isValid}
+            initialValidity={formState.inputs.logo.isValid}
             onInput={inputHandler}
           />
 
           <Input
             id='description'
             type='text'
-            label='Brief Description of Challenge'
+            element="textarea"
+            label='Profile Description'
             validators={[VALIDATOR_REQUIRE()]}
             errorText='Please enter a description.'
             initialValue={formState.inputs.description.value}
@@ -180,12 +183,13 @@ const EditStartupProfile = () => {
           />
 
           <Input
-            id='description'
+            id='password'
             type='text'
-            label='Brief Description of your Startup'
+            element='input'
+            label='Password'
             errorText='Please enter a description.'
-            initialValue={formState.inputs.taskDescription.value}
-            initialValidity={formState.inputs.taskDescription.isValid}
+            initialValue={formState.inputs.password.value}
+            initialValidity={formState.inputs.password.isValid}
             onInput={inputHandler}
           />
 

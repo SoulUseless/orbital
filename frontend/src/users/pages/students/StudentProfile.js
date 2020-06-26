@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../../shared/context/auth-context';
 import Button from '../../../shared/components/formElements/Button';
@@ -57,15 +56,12 @@ const StudentProfile = (props) => {
             <h3>{STUDENT.profileDescription}</h3>
             {/*TODO: PRINT OUT CHALLENGE ACCOMPLISHMENTS TOO*/}
           </div>
-          <Link to={`/student/edit/${STUDENT.id}`}>
             <Button
-              to='/EditStudentProfile'
+              to={`/student/edit/${STUDENT.id}`}
               className='student-item__button'
-              type='edit'
             >
               EDIT
             </Button>
-          </Link>
         </Card>
       </form>
     );

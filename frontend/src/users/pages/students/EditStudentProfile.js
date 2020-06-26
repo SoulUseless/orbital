@@ -37,7 +37,6 @@ const DUMMY_PROFILES = [
   },
   {
     id: 'stu2',
-
     name: 'test2',
     profilePicture:
       'https://w0.pngwave.com/png/509/153/person-logo-computer-icons-others-png-clip-art.png', //should be url
@@ -83,7 +82,7 @@ const DUMMY_PROFILES = [
 
 const UpdateStartupProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const startupId = useParams().startupId;
+  const studentId = useParams().studentId;
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -107,26 +106,30 @@ const UpdateStartupProfile = () => {
     false
   );
 
-  const identifiedStartup = DUMMY_PROFILES.find((s) => s.id === startupId);
+  const identifiedStudent = DUMMY_PROFILES.find((s) => s.id === studentId);
 
   useEffect(() => {
-    if (identifiedStartup) {
+    if (identifiedStudent) {
       setFormData(
         {
           name: {
-            value: identifiedStartup.name,
+            value: identifiedStudent.name,
             isValid: true,
           },
           email: {
-            value: identifiedStartup.email,
+            value: identifiedStudent.email,
             isValid: true,
           },
           profilePicture: {
-            value: identifiedStartup.profilePicture,
+            value: identifiedStudent.profilePicture,
+            isValid: true,
+          },
+          profileDescription: {
+            value: identifiedStudent.profileDescription,
             isValid: true,
           },
           password: {
-            value: identifiedStartup.password,
+            value: "",
             isValid: true,
           },
         },
@@ -134,14 +137,14 @@ const UpdateStartupProfile = () => {
       );
     }
     setIsLoading(false);
-  }, [setFormData, identifiedStartup]);
+  }, [setFormData, identifiedStudent]);
 
-  const startupProfileUpdateSubmitHandler = (event) => {
+  const submitStudentUpdateHandler = (event) => {
     event.preventDefault();
     console.log(formState.inputs);
   };
 
-  if (!identifiedStartup) {
+  if (!identifiedStudent) {
     return (
       <div className='center'>
         <Card>
@@ -160,48 +163,60 @@ const UpdateStartupProfile = () => {
   }
 
   return (
-    <form className='place-form' onSubmit={startupProfileUpdateSubmitHandler}>
-      <Input
-        id='name'
-        element='input'
-        type='text'
-        label='Name'
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText='Please enter a valid name.'
-        onInput={inputHandler}
-        initialValue={formState.inputs.title.value}
-        initialValid={formState.inputs.title.isValid}
-      />
-      <Input
-        id='email'
-        element='email'
-        type='email'
-        label='E-Mail'
-        validators={[VALIDATOR_EMAIL()]}
-        errorText='Please enter a valid email address.'
-        onInput={inputHandler}
-        initialValue={formState.inputs.description.value}
-        initialValid={formState.inputs.description.isValid}
-      />
-      <ImageUpload
-        center
-        id='profilePicture'
-        onInput={inputHandler}
-        errorText='Please provide a picture of your startup logo.'
-      />
-      <Input
-        element='input'
-        id='password'
-        type='password'
-        label='Password'
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText='Please enter a valid password, at least 5 characters.'
-        onInput={inputHandler}
-      />
-      <Button type='submit' disabled={!formState.isValid}>
-        UPDATE PROFILE
-      </Button>
-    </form>
+    <Card>
+      <form className='place-form' onSubmit={submitStudentUpdateHandler}>
+        <Input
+          id='name'
+          element='input'
+          type='text' 
+          label='Name'
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText='Please enter a valid name.'
+          onInput={inputHandler}
+          initialValue={formState.inputs.name.value}
+          initialValid={formState.inputs.name.isValid}
+        />
+        <Input
+          id='email'
+          element='input'
+          type='text'
+          label='E-Mail'
+          validators={[VALIDATOR_EMAIL()]}
+          errorText='Please enter a valid email address.'
+          onInput={inputHandler}
+          initialValue={formState.inputs.email.value}
+          initialValid={formState.inputs.email.isValid}
+        />
+        <Input
+          id='profileDescription'
+          element='textarea'
+          label='Profile Description'
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText='Please enter a valid description.'
+          onInput={inputHandler}
+          initialValue={formState.inputs.profileDescription.value}
+          initialValid={formState.inputs.profileDescription.isValid}
+        />
+        <ImageUpload
+          center
+          id='profilePicture'
+          onInput={inputHandler}
+          errorText='Please provide a picture of your startup logo.'
+        />
+        <Input
+          element='input'
+          id='password'
+          type='text'
+          label='Password'
+          validators={[VALIDATOR_MINLENGTH(5)]}
+          errorText='Please enter a valid password, at least 5 characters.'
+          onInput={inputHandler}
+        />
+        <Button type='submit' disabled={!formState.isValid}>
+          UPDATE PROFILE
+        </Button>
+      </form>
+    </Card>
   );
 };
 
