@@ -172,7 +172,7 @@ const startupSignup = async (req, res, next) => {
     }
 
     res.status(201).json({
-        userId: createdStartup.id,
+        userId: createdStartup._id,
         email: createdStartup.email, //other information up to us
         userType: "startup",
         token: token, //impt to return token

@@ -60,7 +60,7 @@ const getAllChallenges = async (req, res, next) => {
                 requirements: challenge.requirements, //to be populated to show more information
                 requiredFor: challenge.requiredFor,
                 taskDescription: challenge.taskDescription,
-                tier: challenge.course.tier,
+                tier: challenge.course.tier.name,
                 url: challenge.course.language.logo,
                 testCases: challenge.testCases,
                 //course: challenge.course,
@@ -72,7 +72,7 @@ const getAllChallenges = async (req, res, next) => {
 
 const getChallengeById = async (req, res, next) => {
     const challengeId = req.params.cid;
-
+    console.log("trig");
     let challenge;
     try {
         challenge = await Challenge.findById(challengeId).populate([
@@ -106,13 +106,14 @@ const getChallengeById = async (req, res, next) => {
             //course: challenge.course
             //add course here also? -- see if needed can just un-comment
         };
-        res.json(challengeOutput);
+        res.json({challenge: challengeOutput});
         return;
     } else {
         next(new HttpError("Challenge not found", 404));
         return;
     }   
-}
+};
+
 
 const uploadSubmissionById = async (req, res, next) => {
     const user = req.userData;

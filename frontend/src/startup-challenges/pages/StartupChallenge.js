@@ -157,7 +157,7 @@ const StartupChallenge = (props) => {
 
   if (challenge) {
     let isQualified;
-    if (!auth.isLoggedIn || !auth.userType === 'student') {
+    if (!auth.token || !auth.userType === 'student') {
       isQualified = false;
     } else {
       console.log(Object.keys(DUMMY_CREDENTIALS));
@@ -182,13 +182,13 @@ const StartupChallenge = (props) => {
     console.log(isQualified);
 
     const footer =
-      auth.isLoggedIn && auth.userType === 'student' ? (
+      auth.token && auth.userType === 'student' ? (
         isQualified ? (
           <h1> SUBMITTER PLACEHOLDER </h1>
         ) : (
           <h1> you are not qualified </h1>
         )
-      ) : auth.isLoggedIn && auth.userType === 'startup' ? (
+      ) : auth.token && auth.userType === 'startup' ? (
         <Button onClick={showDeleteWarningHandler} danger>
           {' '}
           {/*check for startup credentials TODO */}
@@ -208,7 +208,7 @@ const StartupChallenge = (props) => {
           <div className='challenge-header'>
             <img src={challenge.url} alt={'javascript'} />
             <h1> {challenge.name} </h1>
-            {auth.isLoggedIn && auth.userType === 'startup' && (
+            {auth.token && auth.userType === 'startup' && (
               <Link to={`/startup-challenge/edit/${challenge.id}`}>
                 <img
                   src='https://toppng.com/uploads/preview/free-download-pencil-chalk-png-clipart-clip-art-pencil-ico-11562901060ymmwp55mwl.png'

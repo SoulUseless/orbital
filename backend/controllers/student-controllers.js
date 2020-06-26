@@ -214,8 +214,9 @@ const studentSignup = async (req, res, next) => {
         return;
     }
 
+    console.log(createdStudent);
     res.status(201).json({
-        userId: createdStudent.id,
+        userId: createdStudent._id,
         email: createdStudent.email, //other information up to us
         userType: "student",
         token: token, //impt to return token

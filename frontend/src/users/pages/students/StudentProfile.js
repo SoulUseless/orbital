@@ -38,7 +38,7 @@ const StudentProfile = (props) => {
 
   //todo: retrieve profile from backend
   if (
-    auth.isLoggedIn &&
+    auth.token &&
     auth.userType === 'student'
     //&& auth.userId === STUDENT.id      //COMMENT OUT FIRST ELSE CANT SHOW
   ) {

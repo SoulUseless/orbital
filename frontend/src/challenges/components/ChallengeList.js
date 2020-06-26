@@ -62,7 +62,7 @@ const ChallengeList = (props) => {
     //TODO: requirements check need user info to be set up
   }
 
-  console.log(challenges);
+  //console.log(challenges);
   return (
     <ul className='challenge-list'>
       {challenges.map((challenge) => (

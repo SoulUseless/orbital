@@ -26,7 +26,7 @@ const StartupProfile = (props) => {
 
   //todo: retrieve profile from backend
   if (
-    auth.isLoggedIn &&
+    auth.token &&
     auth.userType === 'startup'
     //&& auth.userId === STARTUP.id      //COMMENT OUT FIRST ELSE CANT SHOW
   ) {
