@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -26,28 +26,17 @@ import Guide from './shared/components/guide/Guide';
 import Settings from './shared/components/settings/settings';
 
 import { AuthContext } from './shared/context/auth-context';
+import { useAuth } from "./shared/hooks/auth-hook";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userType, setUserType] = useState();
+  const { token, userId, userType, loginAsStudent, loginAsStartup, logout } = useAuth();
 
-  const loginAsStudent = useCallback((id) => {
-    setIsLoggedIn(true);
-    setUserType('student');
-  }, []);
-
-  const loginAsStartup = useCallback((id) => {
-    setIsLoggedIn(true);
-    setUserType('startup');
-  }, []);
-
-  const logout = useCallback(() => {
-    setIsLoggedIn(false);
-    setUserType(undefined);
-  }, []);
+  //console.log(token);
+  //console.log(userId);
+  //console.log(userType);
 
   let routes;
-  if (isLoggedIn) {
+  if (token) {
     if (userType === 'student') {
       routes = (
         <Switch>
@@ -59,11 +48,12 @@ const App = () => {
             <Students />
           </Route>
 
-          <Route path='/student/:studentId'>
-            <StudentProfile />
-          </Route>
           <Route path='/student/edit/:studentId'>
             <EditStudentProfile />
+          </Route>
+
+          <Route path='/student/:studentId'>
+            <StudentProfile />
           </Route>
 
           <Route path='/startup/' exact={true}>
@@ -121,12 +111,12 @@ const App = () => {
             <Startups />
           </Route>
 
-          <Route path='/startup/:startupId'>
-            <StartupProfile />
-          </Route>
-
           <Route path='/startup/edit/:startupId'>
             <EditStartUpProfile />
+          </Route>
+
+          <Route path='/startup/:startupId'>
+            <StartupProfile />
           </Route>
 
           <Route path='/startup-challenge/new' exact={true}>
@@ -145,12 +135,12 @@ const App = () => {
             <StartupChallenges />
           </Route>
 
-          <Route path='/startup-challenge/:challengeId'>
-            <StartupChallenge />
-          </Route>
-
           <Route path='/startup-challenge/edit/:challengeId'>
             <EditStartUpChallenge />
+          </Route>
+
+          <Route path='/startup-challenge/:challengeId'>
+            <StartupChallenge />
           </Route>
 
           <Route path='/auth'>
@@ -227,8 +217,9 @@ const App = () => {
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: isLoggedIn,
+        token: token,
         userType: userType,
+        userId: userId,
         loginAsStudent: loginAsStudent,
         loginAsStartup: loginAsStartup,
         logout: logout,

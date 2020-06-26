@@ -245,7 +245,7 @@ const StartupChallenges = (props) => {
         </div>
 
         {/*verify token going forward */}
-        {auth.isLoggedIn && auth.userType === 'startup' && (
+        {auth.token && auth.userType === 'startup' && (
           <div onChange={ownershipFilterHandler}>
             <h4> Ownership </h4>
             <input type='checkbox' value='yes' defaultChecked /> View Mine{' '}
@@ -255,7 +255,7 @@ const StartupChallenges = (props) => {
         )}
       </div>
       <div>
-        {auth.isLoggedIn && auth.userType === 'startup' && (
+        {auth.token && auth.userType === 'startup' && (
           <div className='new-challenge-container'>
             <Button to='/startup-challenge/new'>
               <h2> Create New Challenge</h2>

@@ -127,8 +127,9 @@ const studentLogin = async (req, res, next) => {
 
             res.status(200).json({
                 message: "login success",
-                userId: startup.id,
-                email: startup.email, //other information up to us
+                userId: student.id,
+                email: student.email, //other information up to us
+                userType: "student",
                 token: token, //impt to return token
             });
 
@@ -176,7 +177,7 @@ const studentSignup = async (req, res, next) => {
 
     const createdStudent = new Student({
         name,
-        profilePicture: "", //should be url
+        profilePicture: req.file.path, //should be url
         profileDescription: "",
         challengeSubmissions: [],
         email,
@@ -213,9 +214,11 @@ const studentSignup = async (req, res, next) => {
         return;
     }
 
+    console.log(createdStudent);
     res.status(201).json({
-        userId: createdStudent.id,
+        userId: createdStudent._id,
         email: createdStudent.email, //other information up to us
+        userType: "student",
         token: token, //impt to return token
     });
 };

@@ -48,7 +48,6 @@ const DUMMY_STUDENTS = [
   },
   {
     id: 'stu3',
-
     name: 'test3',
     profilePicture:
       'https://w0.pngwave.com/png/509/153/person-logo-computer-icons-others-png-clip-art.png', //should be url

@@ -1,136 +1,60 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+//import { useParams } from "react-router-dom";
 
 import ChallengeList from '../components/ChallengeList';
 import { AuthContext } from '../../shared/context/auth-context';
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
 import './Challenges.css';
-
-const DUMMY_CHALLENGES = [
-  {
-    id: 'c1',
-    name: 'Factorial',
-    description: 'my first challenge',
-    language: 'javascript',
-    requirements: ['c3', 'c5'], //to be populated to show more information
-    requiredFor: ['c2', 'c4'],
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tier: 'bronze',
-    url:
-      'https://pluspng.com/img-png/logo-javascript-png-file-javascript-logo-png-1052.png',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-  },
-  {
-    id: 'c2',
-    name: 'Factorial',
-    description: 'my first challenge',
-    language: 'python',
-    requirements: ['c3', 'c5'], //to be populated to show more information
-    requiredFor: ['c2', 'c4'],
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tier: 'bronze',
-    url: 'https://pluspng.com/img-png/python-logo-png-python-logo-450.png',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-  },
-  {
-    id: 'c3',
-    name: 'Factorial',
-    description: 'my first challenge',
-    language: 'javascript',
-    requirements: ['c3', 'c5'], //to be populated to show more information
-    requiredFor: ['c2', 'c4'],
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tier: 'silver',
-    url:
-      'https://pluspng.com/img-png/logo-javascript-png-file-javascript-logo-png-1052.png',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-  },
-  {
-    id: 'c4',
-    name: 'Python',
-    description: 'my first challenge',
-    language: 'javascript',
-    requirements: [], //to be populated to show more information
-    requiredFor: [],
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tier: 'silver',
-    url: 'https://pluspng.com/img-png/python-logo-png-python-logo-450.png',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-  },
-  {
-    id: 'c5',
-    name: 'Factorial',
-    description: 'my first challenge',
-    language: 'python',
-    requirements: ['c3', 'c5'], //to be populated to show more information
-    requiredFor: ['c2', 'c4'],
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tier: 'gold',
-    url: 'https://pluspng.com/img-png/python-logo-png-python-logo-450.png',
-
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-  },
-];
-
 const Challenges = (props) => {
-  const [filteredLanguage, setFilteredLanguage] = useState([
-    'python',
-    'javascript',
-  ]);
-  const [filteredTier, setFilteredTier] = useState([
-    'bronze',
-    'silver',
-    'gold',
-  ]);
+
+  const { isLoading, error, sendRequest, errorHandler } = useHttpClient();
+  const [loadedChallenges, setLoadedChallenges] = useState();
+  
+  const [filteredLanguage, setFilteredLanguage] = useState();
+  const [filteredTier, setFilteredTier] = useState();
+
+  const [allLanguages, setLanguages] = useState();
+  const [allTiers, setTiers] = useState();
+
+  //const userId = useParams().userId;
+  useEffect(() => {//useEffect doesnt like a async function
+      const getChallenges = async () => {
+          try {
+              const response = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/challenge`);
+              //console.log(response);
+              setLoadedChallenges(response.challenges);
+          } catch (err) {
+              console.log(err);
+          }
+      };
+      getChallenges();
+
+      const getLanguages = async () => {
+        try {
+            const response = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/language`);
+            setFilteredLanguage(response.languages.map(lang => lang.name));
+            setLanguages(response.languages.map(lang => lang.name));
+        } catch (err) {
+            console.log(err);
+        }
+      };
+      getLanguages();
+
+      const getTiers = async () => {
+          try {
+              const response = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/tier`);
+              setFilteredTier(response.tiers.map(t => t.name));
+              setTiers(response.tiers.map(t => t.name));
+          } catch (err) {
+              console.log(err);
+          }
+      };
+      getTiers();
+  }, [sendRequest]);
+
   const [filteredRequirements, setFilteredRequirements] = useState([
     'yes',
     'no',
@@ -154,6 +78,7 @@ const Challenges = (props) => {
     }
     setFilteredLanguage(newFilteredLanguages);
     setHasFilters(true);
+    //console.log(filteredLanguage);
   };
 
   const tierFilterHandler = (event) => {
@@ -174,7 +99,7 @@ const Challenges = (props) => {
 
   const requirementsFilterHandler = (event) => {
     const targetRequirements = event.target.value;
-    console.log(targetRequirements);
+    //console.log(targetRequirements);
     let newFilteredRequirements;
     if (event.target.checked) {
       //something checked
@@ -187,55 +112,77 @@ const Challenges = (props) => {
       );
     }
     setFilteredRequirements(newFilteredRequirements);
-    console.log(filteredRequirements);
+    //console.log(filteredRequirements);
     setHasFilters(true);
   };
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 5fr',
-        gridGap: 20,
-      }}
-    >
-      <div className='sidebar'>
-        {/*TO DO: SCALABLE, hide the sidebar when with is too small */}
-        {/* radio buttons go here */}
-        <h3> Filters </h3>
-        <div onChange={languageFilterHandler}>
-          <h4> Language</h4>
-          <input type='checkbox' value='python' defaultChecked /> Python <br />
-          <input type='checkbox' value='javascript' defaultChecked /> Javascript
-        </div>
-
-        <div onChange={tierFilterHandler}>
-          <h4> Tier</h4>
-          <input type='checkbox' value='bronze' defaultChecked /> Bronze <br />
-          <input type='checkbox' value='silver' defaultChecked /> Silver <br />
-          <input type='checkbox' value='gold' defaultChecked /> Gold
-        </div>
-
-        {auth.isLoggedIn && (
-          <div onChange={requirementsFilterHandler}>
-            <h4> Requirements </h4>
-            <input type='checkbox' value='yes' defaultChecked /> Yes <br />
-            <input type='checkbox' value='no' defaultChecked /> No
+    <>
+      <ErrorModal error={error} onClear={errorHandler} />
+        {isLoading && (
+          <div className="center">
+            <LoadingSpinner />
+            {/*render a loading spinner*/}
           </div>
         )}
-      </div>
-      <div>
-        <ChallengeList
-          items={DUMMY_CHALLENGES}
-          hasFilters={hasFilters}
-          filters={{
-            filteredLanguage,
-            filteredTier,
-            filteredRequirements,
-          }}
-        />
-      </div>
-    </div>
+      {!isLoading && loadedChallenges && allLanguages && allTiers &&
+        (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 5fr',
+              gridGap: 20,
+            }}
+          >
+            <div className='sidebar'>
+              {/*TO DO: SCALABLE, hide the sidebar when with is too small */}
+              {/* radio buttons go here */}
+              <h3> Filters </h3>
+              <div onChange={languageFilterHandler}>
+                <h4> Language</h4>
+                {allLanguages.map(lang => 
+                    <>
+                      <input type='checkbox' value={lang} defaultChecked />
+                        {" " + lang}
+                      <br />
+                    </>
+                )}
+              </div>
+
+              <div onChange={tierFilterHandler}>
+                <h4> Tier</h4>
+                {allTiers.map(lang => 
+                    <>
+                      <input type='checkbox' value={lang} defaultChecked />
+                        {" " + lang}
+                      <br />
+                    </>
+                )}
+              </div>
+
+              {auth.token && (
+                <div onChange={requirementsFilterHandler}>
+                  <h4> Requirements </h4>
+                  <input type='checkbox' value='yes' defaultChecked /> Yes <br />
+                  <input type='checkbox' value='no' defaultChecked /> No
+                </div>
+              )}
+            </div>
+            <div>
+              <ChallengeList
+                items={loadedChallenges}
+                hasFilters={hasFilters}
+                filters={{
+                  filteredLanguage,
+                  filteredTier,
+                  filteredRequirements,
+                }}
+              />
+            </div>
+          </div>
+        )
+      }
+    </>
   );
 };
 

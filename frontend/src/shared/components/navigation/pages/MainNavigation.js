@@ -13,6 +13,7 @@ const MainNavigation = (props) => {
   const auth = useContext(AuthContext); //no tokens yet
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
+  console.log(auth);
   const openDrawerHandler = () => {
     setDrawerIsOpen(true);
   };
@@ -22,7 +23,7 @@ const MainNavigation = (props) => {
   };
 
   let titleBar; //hopefully can use user name to replace placeholder
-  if (auth.isLoggedIn) {
+  if (auth.token) {
     if (auth.userType === 'student') {
       titleBar = (
         <h1 className='nav-title'>Welcome to Level Up, ((student))!</h1>

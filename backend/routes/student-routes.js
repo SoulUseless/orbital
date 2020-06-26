@@ -2,6 +2,8 @@ const express = require('express');
 //const { check } = require("express-validator");
 
 const studentControllers = require('../controllers/student-controllers');
+const fileUpload = require("../middleware/file-upload");
+const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
@@ -13,11 +15,20 @@ router.get("/:sid", studentControllers.getStudentById);
 
 router.post("/login", studentControllers.studentLogin);
 
-router.post("/signup", studentControllers.studentSignup);
+router.post(
+    "/signup",
+    fileUpload.single("image"),
+    studentControllers.studentSignup
+);
 
 router.get("/", studentControllers.getAllStudents);
 
-//TODO verify token
-router.post("/:sid/update", studentControllers.studentUpdate);
+router.use(checkAuth);
+
+router.post(
+    "/:sid/update",
+    fileUpload.single("image"),
+    studentControllers.studentUpdate
+);
 
 module.exports = router;

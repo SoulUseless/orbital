@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from "react";
 
 import StartupList from '../../components/startups/StartupList';
+import { useHttpClient } from "../../../shared/hooks/http-hook";
 
 const DUMMY_STARTUPS = [
   {
@@ -36,6 +37,10 @@ const DUMMY_STARTUPS = [
 ];
 
 const Startups = (props) => {
+  const { isLoading, error, sendRequest, errorHandler } = useHttpClient();
+  const [loadedPlaces, setLoadedPlaces] = useState();
+
+
   return <StartupList items={DUMMY_STARTUPS} />;
 };
 

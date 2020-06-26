@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/formElements/Button';
@@ -6,126 +7,16 @@ import { AuthContext } from '../../shared/context/auth-context';
 import SubmitFile from '../../shared/components/formElements/SubmitFile';
 
 import './Challenge.css';
-import { useParams } from 'react-router-dom';
 import { useForm } from '../../shared/hooks/form-hook';
-
-const DUMMY_CHALLENGE = [
-  {
-    id: 'c1',
-    name: 'Factorial',
-    description: 'my first challenge',
-    language: 'javascript',
-    requirements: ['c3', 'c5'], //to be populated to show more information
-    requiredFor: ['c2', 'c4'],
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tier: 'bronze',
-    url: 'https://cdn.worldvectorlogo.com/logos/javascript.svg',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-  },
-  {
-    id: 'c2',
-    name: 'Factorial',
-    description: 'my first challenge',
-    language: 'python',
-    requirements: ['c3', 'c5'], //to be populated to show more information
-    requiredFor: ['c2', 'c4'],
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tier: 'bronze',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-    url: 'https://pluspng.com/img-png/python-logo-png-python-logo-450.png',
-  },
-  {
-    id: 'c3',
-    name: 'Factorial',
-    description: 'my first challenge',
-    language: 'javascript',
-    requirements: ['c3', 'c5'], //to be populated to show more information
-    requiredFor: ['c2', 'c4'],
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tier: 'silver',
-    url: 'https://cdn.worldvectorlogo.com/logos/javascript.svg',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-  },
-  {
-    id: 'c4',
-    name: 'Factorial',
-    description: 'my first challenge',
-    language: 'python',
-    requirements: [], //to be populated to show more information
-    requiredFor: [],
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tier: 'silver',
-    url: 'https://pluspng.com/img-png/python-logo-png-python-logo-450.png',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-  },
-  {
-    id: 'c5',
-    name: 'Factorial',
-    description: 'my first challenge',
-    language: 'python',
-    requirements: ['c3', 'c5'], //to be populated to show more information
-    requiredFor: ['c2', 'c4'],
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tier: 'gold',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-    url: 'https://pluspng.com/img-png/python-logo-png-python-logo-450.png',
-  },
-];
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const DUMMY_MODULES_COMPLETED = ['c3', 'c5'];
 
 const Challenge = (props) => {
   const auth = useContext(AuthContext);
+  const { isLoading, error, sendRequest, errorHandler } = useHttpClient();
 
   const [formState, inputHandler] = useForm(
     {
@@ -144,16 +35,33 @@ const Challenge = (props) => {
 
   const challengeId = useParams().challengeId;
   //TO DO: replace with query, and replace if else with try catch
-  const challenge = DUMMY_CHALLENGE.find((ch) => ch.id === challengeId);
+  //const challenge = DUMMY_CHALLENGE.find((ch) => ch.id === challengeId);
+
+  const [challenge, setChallenge] = useState();
+
+  useEffect(() => {
+    const getChallenge = async () => {
+      try {
+          const response = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/challenge/${challengeId}`);
+          console.log(response);
+          setChallenge(response.challenge);
+      } catch (err) {
+          console.log(err);
+      }
+    };
+    getChallenge();
+    
+  }, [sendRequest, challengeId]);
 
   if (challenge) {
+    console.log(challenge);
     const isQualified = challenge.requirements.reduce(
       (x, y) => x && DUMMY_MODULES_COMPLETED.includes(y),
       true
     );
 
     const footer =
-      auth.isLoggedIn && auth.userType === 'student' ? (
+      auth.token && auth.userType === 'student' ? (
         isQualified ? (
           <form className='submit-form' onSubmit={challengeSubmitHandler}>
             <div className='submit-file'>
@@ -184,82 +92,106 @@ const Challenge = (props) => {
       );
 
     return (
-      <div className='challenge-container'>
-        <Card className='challenge'>
-          <div className='challenge-header'>
-            <img src={challenge.url} alt={'javascript'} />
-            <h1> {challenge.name} </h1>
-            <Button to='/challenges' inverse>
-              <h2> Back</h2>
-            </Button>
-          </div>
-          <hr />
+      <>
+        <ErrorModal error={error} onClear={errorHandler} />
+          {isLoading && (
+            <div className="center">
+              <LoadingSpinner />
+              {/*render a loading spinner*/}
+            </div>
+          )}
 
-          <table>
-            <tbody>
-              <tr>
-                <th className='left-col'>
-                  <h4>Description</h4>
-                </th>
-                <th>{challenge.description}</th>
-              </tr>
+        {!isLoading && challenge && (
+          <div className='challenge-container'>}
+            <Card className='challenge'>
+              <div className='challenge-header'>
+                <img src={challenge.url} alt={'javascript'} />
+                <h1> {challenge.name} </h1>
+                <Button to='/challenges' inverse>
+                  <h2> Back</h2>
+                </Button>
+              </div>
+              <hr />
 
-              <tr>
-                <th className='left-col'>
-                  <h4>Pre-requisites</h4>
-                </th>
-                <td>
-                  <ul>
-                    {challenge.requirements.map((req) => {
-                      return <li> {req} </li>;
-                    })}
-                  </ul>
-                </td>
-              </tr>
+              <table>
+                <tbody>
+                  <tr>
+                    <th className='left-col'>
+                      <h4>Description</h4>
+                    </th>
+                    <th>{challenge.description}</th>
+                  </tr>
 
-              <tr>
-                <th className='left-col'>
-                  <h4>Required For</h4>
-                </th>
-                <td>
-                  <ul>
-                    {challenge.requiredFor.map((req) => {
-                      return <li> {req} </li>;
-                    })}
-                  </ul>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <tr>
+                    <th className='left-col'>
+                      <h4>Pre-requisites</h4>
+                    </th>
+                    <td>
+                      <ul>
+                        {challenge.requirements.map((req, index) => {
+                          return (
+                            <li key={`req${index}`}>
+                              <Link to={`/challenges/${req._id}`}>
+                                {req.name} 
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </td>
+                  </tr>
 
-          <hr />
+                  <tr>
+                    <th className='left-col'>
+                      <h4>Required For</h4>
+                    </th>
+                    <td>
+                      <ul>
+                        {challenge.requiredFor.map((req, index) => {
+                          return (
+                            <li key={`req${index}`}> 
+                              <Link to={`/challenges/${req._id}`}>
+                                {req.name}
+                                </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
 
-          <h2> Task Requirements </h2>
-          <p>{challenge.taskDescription}</p>
+              <hr />
 
-          <h2> Public Test Cases </h2>
-          <div className='test-case-table-container'>
-            <table className='test-case-table'>
-              <tbody>
-                <tr>
-                  <th className='test-case-col'>Input</th>
-                  <th className='test-case-col'>Expected Output</th>
-                </tr>
-                {challenge.testCases.publicTestCases.map((ts) => {
-                  return (
+              <h2> Task Requirements </h2>
+              <p>{challenge.taskDescription}</p>
+
+              <h2> Public Test Cases </h2>
+              <div className='test-case-table-container'>
+                <table className='test-case-table'>
+                  <tbody>
                     <tr>
-                      <td className='test-case-col'>{ts.input}</td>
-                      <td className='test-case-col'>{ts.output}</td>
+                      <th className='test-case-col'>Input</th>
+                      <th className='test-case-col'>Expected Output</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                    {challenge.testCases.publicTestCases.map((ts, index) => {
+                      return (
+                        <tr key={`testcase${index}`}>
+                          <td className='test-case-col'>{ts.input}</td>
+                          <td className='test-case-col'>{ts.output}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
 
-          {footer}
-        </Card>
-      </div>
+              {footer}
+            </Card>
+          </div>
+        )}
+      </>
     );
   } else {
     return <h1> No challenge with id found. </h1>;

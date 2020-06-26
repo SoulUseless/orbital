@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../../shared/context/auth-context';
 import Button from '../../../shared/components/formElements/Button';
@@ -9,7 +8,7 @@ import Avatar from '../../../shared/components/UIElements/Avatar';
 import './StudentProfile.css';
 
 const STUDENT = {
-  id: 'stu1',
+  id: '5ef5a5464dd6e852c84dd56c',
   name: 'test',
   profilePicture:
     'https://w0.pngwave.com/png/509/153/person-logo-computer-icons-others-png-clip-art.png', //should be url
@@ -32,47 +31,55 @@ const STUDENT = {
 
 const StudentProfile = (props) => {
   const auth = useContext(AuthContext);
-  const editProfileHandler = (event) => {
-    event.preventDefault();
-    console.log('editing'); // send this to the backend!
-  };
 
   //todo: retrieve profile from backend
   if (
-    auth.isLoggedIn &&
+    auth.token &&
     auth.userType === 'student'
-    //&& auth.userId === STUDENT.id      //COMMENT OUT FIRST ELSE CANT SHOW
+    && auth.userId === STUDENT.id      //COMMENT OUT FIRST ELSE CANT SHOW
   ) {
     return (
-      <form className='student-profile' onClick={editProfileHandler}>
-        <Card className='student-profile__content'>
-          {' '}
-          {/*figure how to shift card to center*/}
-          <div className='student-profile__logo'>
-            <Avatar center image={STUDENT.profilePicture} alt={STUDENT.name} />
-          </div>
-          <div className='student-item__info'>
-            <h1>{STUDENT.name}</h1>
-            <h2>{STUDENT.email}</h2>
-            <h3>{STUDENT.profileDescription}</h3>
-            {/*TODO: PRINT OUT CHALLENGE ACCOMPLISHMENTS TOO*/}
-          </div>
-          <Link to={`/student/edit/${STUDENT.id}`}>
+        <Card className="student-profile__content">
+            <div className="student-profile__logo">
+                <Avatar
+                    center
+                    image={STUDENT.profilePicture}
+                    alt={STUDENT.name}
+                />
+            </div>
+            <div className="student-item__info">
+                <h1>{STUDENT.name}</h1>
+                <h2>{STUDENT.email}</h2>
+                <h3>{STUDENT.profileDescription}</h3>
+                {/*TODO: PRINT OUT CHALLENGE ACCOMPLISHMENTS TOO*/}
+            </div>
             <Button
-              to='/EditStudentProfile'
-              className='student-item__button'
-              type='edit'
+                to={`/student/edit/${STUDENT.id}`}
+                className="student-item__button"
             >
-              EDIT
+                EDIT
             </Button>
-          </Link>
         </Card>
-      </form>
     );
     //TO DO: PENDING TOKEN
   } else {
-    return <h1>log in to find out more</h1>;
-    //return barebones stuff here
+    return (
+      <Card className="student-profile__content">
+          <div className="student-profile__logo">
+              <Avatar
+                  center
+                  image={STUDENT.profilePicture}
+                  alt={STUDENT.name}
+              />
+          </div>
+          <div className="student-item__info">
+              <h1>{STUDENT.name}</h1>
+              <h2>{STUDENT.email}</h2>
+              <h3>{STUDENT.profileDescription}</h3>
+              {/*TODO: PRINT OUT CHALLENGE ACCOMPLISHMENTS TOO*/}
+          </div>
+      </Card>
+    );
   }
 };
 

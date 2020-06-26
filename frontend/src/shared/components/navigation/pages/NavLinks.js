@@ -28,7 +28,7 @@ const NavLinks = (props) => {
           </NavLink>
         </li>
 
-        {!auth.isLoggedIn && (
+        {!auth.token && (
           <li>
             <NavLink to='/auth' exact>
               <span style={{ color: 'white' }}> Authenticate </span>
@@ -36,7 +36,7 @@ const NavLinks = (props) => {
           </li>
         )}
 
-        {auth.isLoggedIn && (
+        {auth.token && (
           <>
             {auth.userType === 'student' && (
               <li>
