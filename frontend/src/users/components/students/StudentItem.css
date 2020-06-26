@@ -38,14 +38,20 @@
   font-size: 1.5rem;
   text-align: center;
   font-weight: normal;
-  color: black;
+  color: rgb(77, 75, 75);
   margin: 3px;
+  font-style: italic;
 }
 
 .student-item__info h3 {
   margin: 0;
+  color: #918f8f;
+  text-align: justify;
+  font-size: 1rem;
+  padding: 0.2rem;
 }
 
 .student-item__button {
   margin: auto;
+  padding: 0.2rem;
 }

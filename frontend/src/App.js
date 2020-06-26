@@ -9,8 +9,10 @@ import {
 import Home from './Home';
 import Startups from './users/pages/startups/Startups';
 import StartupProfile from './users/pages/startups/StartupProfile';
+import EditStartUpProfile from './users/pages/startups/EditStartupProfile';
 import Students from './users/pages/students/Students';
 import StudentProfile from './users/pages/students/StudentProfile';
+import EditStudentProfile from './users/pages/students/EditStudentProfile';
 import Challenge from './challenges/pages/Challenge';
 //import EditChallenge from "./challenges/pages/EditChallenge";
 import Challenges from './challenges/pages/Challenges';
@@ -59,6 +61,9 @@ const App = () => {
 
           <Route path='/student/:studentId'>
             <StudentProfile />
+          </Route>
+          <Route path='/student/edit/:studentId'>
+            <EditStudentProfile />
           </Route>
 
           <Route path='/startup/' exact={true}>
@@ -115,9 +120,13 @@ const App = () => {
           <Route path='/startup/' exact={true}>
             <Startups />
           </Route>
-          
+
           <Route path='/startup/:startupId'>
             <StartupProfile />
+          </Route>
+
+          <Route path='/startup/edit/:startupId'>
+            <EditStartUpProfile />
           </Route>
 
           <Route path='/startup-challenge/new' exact={true}>
@@ -136,12 +145,12 @@ const App = () => {
             <StartupChallenges />
           </Route>
 
-          <Route path='/startup-challenge/edit/:challengeId'>
-            <EditStartUpChallenge />
-          </Route>
-
           <Route path='/startup-challenge/:challengeId'>
             <StartupChallenge />
+          </Route>
+
+          <Route path='/startup-challenge/edit/:challengeId'>
+            <EditStartUpChallenge />
           </Route>
 
           <Route path='/auth'>

@@ -21,10 +21,12 @@ const StartupList = (props) => {
         <StartupItem
           key={startup.id}
           id={startup.id}
-          image={startup.image}
+          logo={startup.logo}
           name={startup.name}
           email={startup.email}
           password={startup.password}
+          description={startup.description}
+          challenges={startup.challenges}
         />
       ))}
     </ul>
