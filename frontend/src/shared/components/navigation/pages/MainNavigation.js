@@ -40,7 +40,7 @@ const MainNavigation = (props) => {
               if (userType === "student") {
                 setUser(response.student);
               } else if (userType === "startup") {
-                console.log(response);
+                //console.log(response);
                 setUser(response.startup);
               } 
             }
@@ -76,7 +76,7 @@ const MainNavigation = (props) => {
                   <NavLinks />
               </nav>
           </SideDrawer>
-          {!isLoading && user && (
+          {!isLoading && (
             <MainHeader>
                 <button
                     className="main-navigation__menu-btn"

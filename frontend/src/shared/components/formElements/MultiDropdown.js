@@ -26,7 +26,7 @@ const MultiDropdown = (props) => {
     const [inputState, dispatch] = useReducer(inputReducer, {
         value: props.initialValue || [],
         isTouched: false,
-        isValid: props.initialValid || false
+        isValid: true
       });
 
     const { id, onInput } = props;
@@ -47,14 +47,14 @@ const MultiDropdown = (props) => {
                 if (index !== sindex) {
                     return tierName;
                 } 
-                return { ...tierName, tier: event.target.value};
+                return { ...tierName, language: event.target.value};
             });
         } else {
             newValues = inputState.value.map((tierName, sindex) => {
                 if (index !== sindex) {
                     return tierName;
                 } 
-                return { ...tierName, level: event.target.value};
+                return { ...tierName, tier: event.target.value};
             });
         }
 
@@ -76,12 +76,12 @@ const MultiDropdown = (props) => {
     */
 
     const addRowHandler = () => {
-        inputState.value.push({tier: firstColOptions[0], level: secondColOptions[0]});
+        inputState.value.push({language: firstColOptions[0], tier: secondColOptions[0]});
         dispatch({
             type: 'CHANGE',
             val: inputState.value,
             validators: props.validators,
-            validity: false
+            validity: true
         });
         
         //console.log(inputState);
@@ -95,7 +95,7 @@ const MultiDropdown = (props) => {
         });
     };
 
-    //console.log(inputState);
+    //console.log(inputState.value);
     const elements = inputState.value.map((tierName, index) => (
         <React.Fragment key={`requirement-${index + 1}`}>
             {/*frontend formatting problems */}
@@ -106,7 +106,7 @@ const MultiDropdown = (props) => {
                 <div className="form-group dropdn">
                     <select
                         className="form-control"
-                        value={tierName.tier}
+                        value={tierName.language}
                         onChange={changeHandler("col1", index)}
                     >
                         {firstColOptions.map((opt, oindex) => (
@@ -122,7 +122,7 @@ const MultiDropdown = (props) => {
                 <div className="form-group dropdn">
                     <select
                         className="form-control"
-                        value={tierName.level}
+                        value={tierName.tier}
                         onChange={changeHandler("col2", index)}
                     >
                         {secondColOptions.map((opt, oindex) => (

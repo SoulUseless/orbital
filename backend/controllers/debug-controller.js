@@ -48,7 +48,7 @@ const createNewTier = async (req, res, next) => {
     const newTier = new Tier({ name });
     try {
         await newTier.save();
-        console.log("new language created successfully");
+        console.log("new tier created successfully");
     } catch (err) {
         //console.log(err);
         next(new HttpError("failed to create new tier"));

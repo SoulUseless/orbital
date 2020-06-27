@@ -1,0 +1,11 @@
+debug: award credential to student** (push course, and grant all challenges within course)
+
+startup challenge
+- requirements change to array of course - DONE
+- render the sidebar information using pulled information like challenge - done
+- render challenge information after pulling from backend
+
+create
+- send info to backend (make sure lower case the language and level)
+- take language & level -> course exist ? use that courseObject : create new course
+- push to array of course

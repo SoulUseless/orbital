@@ -51,8 +51,6 @@ const UpdateStudentProfile = () => {
     false
   );
 
-  //const identifiedStudent = DUMMY_PROFILES.find((s) => s.id === studentId);
-
   useEffect(() => {
     const getStudent = async () => {
       try {
@@ -110,9 +108,9 @@ const UpdateStudentProfile = () => {
       console.log("success");
       history.push(`/student/${auth.userId}`);
 
-  } catch (err) {
+    } catch (err) {
       console.log(err);
-  }
+    }
   };
 
   if (isLoading) {
@@ -123,7 +121,7 @@ const UpdateStudentProfile = () => {
           </div>
       );
   } else if (!identifiedStudent && !error) {
-      //no places found
+      //no student found
       return (
           <div className="center">
               <Card>

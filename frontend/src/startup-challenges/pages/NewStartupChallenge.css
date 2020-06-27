@@ -3,6 +3,7 @@
   margin: auto;
   padding-top: 20px;
 }
+
 .challenge-form {
     list-style: none;
     margin: 0 auto;
@@ -12,4 +13,12 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     border-radius: 6px;
     background: white;
+  }
+
+  .modal-content {
+    padding: 0;
+  }
+  
+  .modal-actions {
+    text-align: right;
   }

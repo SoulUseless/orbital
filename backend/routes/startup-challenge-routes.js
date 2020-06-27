@@ -5,6 +5,7 @@ const { check } = require("express-validator");
 
 const startupChallengeControllers = require('../controllers/startup-challenge-controller');
 const checkAuth = require("../middleware/check-auth");
+const fileUpload = require("../middleware/file-upload");
 
 const router = express.Router();
 
@@ -16,9 +17,11 @@ router.get("/startup/:sid", startupChallengeControllers.getChallengeByStartup);
 
 router.use(checkAuth);
 
-router.get("/:cid/submissions", startupChallengeControllers.getSubmissionsById);
+router.get("/submissions/:cid", startupChallengeControllers.getSubmissionsById);
 
-router.post("/:cid/submissions", startupChallengeControllers.uploadSubmissionById); 
+router.post("/submissions/:cid", 
+    fileUpload("submission").single("submission"), 
+    startupChallengeControllers.uploadSubmissionById); 
 //going to have middleware for fileUpload
 
 router.patch(

@@ -77,7 +77,7 @@ tr:nth-child(even) {
   text-align: right;
 }
 
-.map-container {
+.modal-container {
   height: 15rem;
   width:100%;
 }
