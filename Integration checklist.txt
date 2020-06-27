@@ -1,0 +1,33 @@
+- auth login/signup - DONE
+
+- challenge 
+	- view challenge
+	- different access rights depending on user
+	- verify credentials and automated awarding
+	- submit submissions only for students
+	
+- startup challenge management
+	- view challenge
+	- different access rights depending on user
+	- submit submissions only for students
+	- create, update and delete submissions for startups
+	- challenge management page - view information (FRONTEND NOT DONE)
+
+- startup profile
+	- view all profiles in a list
+	- view single profile (display information like challenges created and stats etc)
+	(current page is useless)
+	- different access rights depending on user
+	- update information for startups
+
+- student profile
+	- view all profiles in a list
+	- view single profile (display information like challenges completed and credentials)
+	- different access rights depending on user
+	- update information for students
+
+- going ahead
+	- backend api send submissions for automated grading
+	- search bar?
+	- page to view all students and startups
+	- admin GUI?

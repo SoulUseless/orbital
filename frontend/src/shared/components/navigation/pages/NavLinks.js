@@ -40,8 +40,7 @@ const NavLinks = (props) => {
           <>
             {auth.userType === 'student' && (
               <li>
-                <NavLink to='/student/s1' exact>
-                  {' '}
+                <NavLink to={`/student/${auth.userId}`} exact>
                   {/** to do // studentid is placeholder*/}
                   <span style={{ color: 'white' }}>My Profile</span>
                 </NavLink>
@@ -50,8 +49,7 @@ const NavLinks = (props) => {
 
             {auth.userType === 'startup' && (
               <li>
-                <NavLink to='/startup/su1' exact>
-                  {' '}
+                <NavLink to={`/startup/${auth.userId}`} exact>
                   {/** to do // startupid is placeholder*/}
                   <span style={{ color: 'white' }}>My Profile</span>
                 </NavLink>

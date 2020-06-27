@@ -45,7 +45,6 @@ const getAllChallenges = async (req, res, next) => {
 
 const getChallengeById = async (req, res, next) => {
     const challengeId = req.params.cid;
-    console.log("trig");
     let challenge;
     try {
         challenge = await Challenge.findById(challengeId).populate([

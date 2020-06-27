@@ -36,7 +36,7 @@ const getStartupById = async (req, res, next) => {
     }
 
     if (startup) {
-        res.json(startup);
+        res.json({startup: startup});
         return;
     } else {
         next(new HttpError("No such startup found", 404));

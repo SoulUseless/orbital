@@ -248,7 +248,7 @@ const StartupChallenges = (props) => {
         {auth.token && auth.userType === 'startup' && (
           <div onChange={ownershipFilterHandler}>
             <h4> Ownership </h4>
-            <input type='checkbox' value='yes' defaultChecked /> View Mine{' '}
+            <input type='checkbox' value='yes' defaultChecked /> View Mine
             <br />
             <input type='checkbox' value='no' defaultChecked /> View Others
           </div>
