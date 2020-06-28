@@ -14,7 +14,7 @@ import { useForm } from '../../../shared/hooks/form-hook';
 import { useHttpClient } from '../../../shared/hooks/http-hook';
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner";
-import {AuthContext } from "../../../shared/context/auth-context";
+import { AuthContext } from "../../../shared/context/auth-context";
 
 import './StudentProfile.css';
 
@@ -160,7 +160,7 @@ const UpdateStudentProfile = () => {
                               errorText="Please enter a valid email address."
                               onInput={inputHandler}
                               initialValue={identifiedStudent.email}
-                              initialValid={true}
+                              initialValid={false}
                           />
                           <Input
                               id="profileDescription"

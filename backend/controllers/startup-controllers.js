@@ -139,7 +139,7 @@ const startupSignup = async (req, res, next) => {
         name,
         password: hashedPassword, //encrypted now
         email,
-        logo: "", //TO BE IMPLEMENTED
+        logo: req.file.path, //TO BE IMPLEMENTED
         challenges: [],
         description: "" //to be implemented in a way that startups can change themselves
     });
@@ -204,7 +204,8 @@ const startupUpdate = async (req, res, next) => {
         return;
     }
 
-    const {name, logo, description, email, password} = req.body;
+    const logo = req.file.path;
+    const {name, description, email, password} = req.body;
     if (startup) {
         startup.name = name;
         startup.logo = logo;

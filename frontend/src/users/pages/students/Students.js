@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 
 import StudentList from '../../components/students/StudentList';
 import { useHttpClient } from "../../../shared/hooks/http-hook";
-import ErrorModal from "../../../shared/components/UIElements/ErrorModal"
-import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner"
+import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner";
 
 const Students = (props) => {
   const [students, setStudents] = useState();
   const { isLoading, error, sendRequest, errorHandler } = useHttpClient();
 
-  useEffect(() => {//useEffect doesnt like a async function
+  useEffect(() => {
     const getStudents = async () => {
         try {
             const response = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/student`);

@@ -1,12 +1,17 @@
 import React, { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../../context/auth-context';
 
 import './NavLinks.css';
 
 const NavLinks = (props) => {
   const auth = useContext(AuthContext);
+  const history = useHistory();
 
+  const onLogoutHandler = () => {
+    auth.logout();
+    history.push("/");
+  }
   return (
     <>
       <ul className='nav-links'>
@@ -63,7 +68,7 @@ const NavLinks = (props) => {
               </NavLink>
             </li>
             <li>
-              <button onClick={auth.logout}> Logout </button>
+              <button onClick={onLogoutHandler} style={{ color: 'white' }}> Logout </button>
             </li>
           </>
         )}

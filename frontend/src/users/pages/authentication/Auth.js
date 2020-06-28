@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useHistory } from "react-router-dom";
 
 import Card from '../../../shared/components/UIElements/Card';
 import Input from '../../../shared/components/formElements/Input';
@@ -18,11 +19,11 @@ import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
 import './Auth.css';
 
 const Auth = (props) => {
-  //return <h1> Auth </h1>;
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [userType, setUserType] = useState('Student');
   const { isLoading, error, sendRequest, errorHandler } = useHttpClient();
+  const history = useHistory();
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -97,6 +98,7 @@ const Auth = (props) => {
                 );
                 console.log(responseData);
                 auth.loginAsStudent(responseData.userId, responseData.token);
+                history.push("/");
             } catch (err) {
                 console.log(err);
                 //just to stop the function when an error happens
@@ -117,6 +119,7 @@ const Auth = (props) => {
                     }
                 );
                 auth.loginAsStartup(responseData.userId, responseData.token);
+                history.push("/");
             } catch (err) {
                 console.log(err);
                 //just to stop the function when an error happens
@@ -139,6 +142,7 @@ const Auth = (props) => {
                     formData //headers are set automatically using fetch under the hood
                 );
                 auth.loginAsStudent(responseData.userId, responseData.token);
+                history.push("/");
             } catch (err) {
                 console.log(err);
             }
@@ -150,6 +154,7 @@ const Auth = (props) => {
                     formData //headers are set automatically using fetch under the hood
                 );
                 auth.loginAsStartup(responseData.userId, responseData.token);
+                history.push("/");
             } catch (err) {
                 console.log(err);
             }
