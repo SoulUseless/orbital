@@ -6,20 +6,18 @@ import './StartupChallengeListItem.css';
 const StartupChallengeListItem = (props) => {
   const arrayOfRequirements = props.requirements;
   //console.log(props.requirements);
-  const languages = arrayOfRequirements.map((obj) => obj.language.name).reduce((x, y) => x + " " + y);
+  const languages = arrayOfRequirements.map((obj) => obj.language.name).reduce((x, y) => x + ", " + y);
   //console.log(languages);
 
   return (
     <li className='challenge-item'>
       <Card className='challenge-item__card'>
         <div className='challenge-item__image'>
-          <img src={props.owner.logo} alt={props.name} />
+          <img src={`${process.env.REACT_APP_ASSET_URL}/${props.owner.logo}`} alt={props.name} />
         </div>
         <div className='startup-challenge-item__info'>
           <h4>{props.name}</h4>
           <h5>{languages}</h5>
-          {/* changing this to {languages} crashes
-          need to check */}
           <h5>{props.owner.name}</h5> {/*figure out how to format this nicely */}
         </div>
       </Card>

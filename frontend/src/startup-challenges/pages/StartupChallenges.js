@@ -175,7 +175,7 @@ const StartupChallenges = (props) => {
               {allLanguages.map(lang => 
                     <>
                       <input type='checkbox' value={lang} key={lang} defaultChecked />
-                        {" " + lang}
+                        {" " + lang.charAt(0).toUpperCase() + lang.slice(1)}
                       <br />
                     </>
                 )}
@@ -186,7 +186,7 @@ const StartupChallenges = (props) => {
               {allTiers.map(tier => 
                     <>
                       <input type='checkbox' value={tier} key={tier} defaultChecked />
-                        {" " + tier}
+                        {" " + tier.charAt(0).toUpperCase() + tier.slice(1)}
                       <br />
                     </>
                 )}
@@ -197,7 +197,7 @@ const StartupChallenges = (props) => {
               {allStartups.map(su => 
                     <>
                       <input type='checkbox' value={su.id} key={su.id} defaultChecked />
-                        {" " + su.name}
+                        {" " + su.name.charAt(0).toUpperCase() + su.name.slice(1)}
                       <br />
                     </>
                 )}

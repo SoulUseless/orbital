@@ -90,7 +90,7 @@ const NewStartupChallenge = (props) => {
 
     const submitNewChallengeHandler = async (event) => {
         event.preventDefault();
-        console.log(formState.inputs); //TO DO when backend up
+        //console.log(formState.inputs);
         let responseData;
         try {
             //this one to catch whether the log in is successful

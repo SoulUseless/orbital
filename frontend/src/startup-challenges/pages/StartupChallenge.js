@@ -6,20 +6,25 @@ import Card from '../../shared/components/UIElements/Card';
 import Modal from '../../shared/components/UIElements/Modal';
 import { AuthContext } from '../../shared/context/auth-context';
 import { useHttpClient } from "../../shared/hooks/http-hook";
-import ErrorModal from "../../shared/components/UIElements/ErrorModal"
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner"
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { useForm } from '../../shared/hooks/form-hook';
 import SubmitFile from '../../shared/components/formElements/SubmitFile';
 
-const compareCredentials = (c1, c2) => {
-  if (c1 === 'bronze') {
-    return c2 === 'bronze';
-  }
-  if (c1 === 'silver') {
-    return !c2 === 'gold';
-  } else {
-    return true;
-  }
+const compareCredentials = (cred, req) => {
+    const lang = cred.language._id === req.language._id;
+    let tier;
+    const cred_tier = cred.tier.name;
+    const req_tier = req.tier.name;
+    if (cred_tier === 'bronze') {
+        tier = req_tier === 'bronze';
+    }
+    if (cred_tier === 'silver') {
+        tier = !req_tier === 'gold';
+    } else {
+        tier = true;
+    }
+    return lang && tier;
 };
 
 const StartupChallenge = (props) => {
@@ -73,11 +78,7 @@ const StartupChallenge = (props) => {
   } catch (err) {
       console.log(err);
   }
-    console.log('DELETING...'); //TODO: send DELETE request
   };
-
-  //TO DO: replace with query, and replace if else with try catch
-  //const challenge = DUMMY_CHALLENGE.find((ch) => ch.id === challengeId);
 
   const [challenge, setChallenge] = useState();
   const [student, setStudent] = useState();
@@ -86,7 +87,6 @@ const StartupChallenge = (props) => {
   useEffect(() => {
     const getChallenge = async () => {
       try {
-          console.log(challengeId);
           const response = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/startup-challenge/${challengeId}`);
           //console.log(response);
           setChallenge(response.challenge);
@@ -121,16 +121,29 @@ const StartupChallenge = (props) => {
           const ownerId = challenge.owner._id;
           isOwner = ownerId === auth.userId;
         } else if (auth.userType === "student" && student) {
-          isQualified = challenge.requirements
-              .map((req) => req._id)
-              .reduce(
-                  (x, y) =>
-                      x &&
-                      student.credentials
-                          .map((cred) => cred._id)
-                          .reduce((x, y) => x || compareCredentials(x, y)),
-                  true
-              );
+            //this is more complicated than initially thought out to be
+            let temp = true;
+            for (let i = 0; i < challenge.requirements.length; i++) {
+                for (let j = 0; j < student.credentials.length; j++) {
+                    if (!compareCredentials(student.credentials[j], challenge.requirements[i])) {
+                        temp = false;
+                    }
+                }
+            }
+            isQualified = temp;
+            //console.log(isQualified);
+            /*
+            isQualified = challenge.requirements
+                .reduce(
+                    (x, req) =>
+                        x &&
+                        student.credentials.length < 1 
+                          ? false 
+                          : student.credentials
+                             .reduce((x, cred) => x && compareCredentials(cred, req)),
+                    true
+                );
+                */
         }
       }
       //console.log(isQualified);
@@ -161,28 +174,27 @@ const StartupChallenge = (props) => {
           auth.token && auth.userType === "student" ? (
               isQualified ? (
                 <>
-                <p> {isCompleted && "You have completed this before" } </p>
-                <form className='submit-form' onSubmit={challengeSubmitHandler}>
-                  <div className='submit-file'>
-                    <SubmitFile
-                      center
-                      id='file'
-                      onInput={inputHandler}
-                      errorText='Click below to upload file.'
-                    />
-                    <Button type='submit' disabled={!formState.isValid}>
-                      SUBMIT
-                    </Button>
-                  </div>
-                </form>
-              </>
+                    <p> {isCompleted && "You have completed this before" } </p>
+                    <form className='submit-form' onSubmit={challengeSubmitHandler}>
+                    <div className='submit-file'>
+                        <SubmitFile
+                        center
+                        id='file'
+                        onInput={inputHandler}
+                        errorText='Click below to upload file.'
+                        />
+                        <Button type='submit' disabled={!formState.isValid}>
+                        SUBMIT
+                        </Button>
+                    </div>
+                    </form>
+                </>
               ) : (
                   <h1> you are not qualified </h1>
               )
           ) : auth.token && auth.userType === "startup" ? (
               isOwner ? (
                   <Button onClick={showDeleteWarningHandler} danger>
-                      {/*check for startup credentials TODO */}
                       <h2> Delete </h2>
                   </Button>
               ) : (
@@ -239,12 +251,11 @@ const StartupChallenge = (props) => {
               >
                   <div className="modal-container">{response}</div>
               </Modal>
-
               {!isLoading && challenge && (
                   <div className="challenge-container">
                       <Card className="challenge">
                           <div className="challenge-header">
-                              <img src={challenge.url} alt={"javascript"} />
+                              <img src={`${process.env.REACT_APP_ASSET_URL}/${challenge.owner.logo}`} alt={challenge.owner.name} />
                               <h1> {challenge.name} </h1>
                               {auth.token && auth.userType === "startup" && isOwner && (
                                   <Link

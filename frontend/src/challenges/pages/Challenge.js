@@ -64,11 +64,11 @@ const Challenge = (props) => {
       }
     };
 
-    if (auth.token) {
+    if (auth.token && auth.userType === "student") {
       getStudent();
     }
 
-  }, [sendRequest, challengeId, auth.token, auth.userId]);
+  }, [sendRequest, challengeId, auth.token, auth.userId, auth.userType]);
 
   const challengeSubmitHandler = async (event) => {
     event.preventDefault();
@@ -105,26 +105,30 @@ const Challenge = (props) => {
             : student.completedChallenges.includes(challengeId);
 
     const footer =
-      auth.token && auth.userType === 'student' ? (
-        isQualified ? (
-          <>
-            <p> {isCompleted && "You have completed this before" } </p>
-            <form className='submit-form' onSubmit={challengeSubmitHandler}>
-              <div className='submit-file'>
-                <SubmitFile
-                  center
-                  id='file'
-                  onInput={inputHandler}
-                  errorText='Click below to upload file.'
-                />
-                <Button type='submit' disabled={!formState.isValid}>
-                  SUBMIT
-                </Button>
-              </div>
-            </form>
-          </>
+      auth.token ? (
+        auth.userType === 'student' ? (
+            isQualified ? (
+                <>
+                    <p> {isCompleted && "You have completed this before" } </p>
+                    <form className='submit-form' onSubmit={challengeSubmitHandler}>
+                    <div className='submit-file'>
+                        <SubmitFile
+                        center
+                        id='file'
+                        onInput={inputHandler}
+                        errorText='Click below to upload file.'
+                        />
+                        <Button type='submit' disabled={!formState.isValid}>
+                        SUBMIT
+                        </Button>
+                    </div>
+                    </form>
+                </>
+            ) : (
+            <h1> you are not qualified </h1>
+            )
         ) : (
-          <h1> you are not qualified </h1>
+            <></>
         )
       ) : (
         <div className='challenge-auth-container'>

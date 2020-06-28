@@ -21,8 +21,6 @@ const StartupChallengeList = (props) => {
     );
   }
 
-  //BREAKING, REQUIREMENTS CHANGED FORMATTING
-  //console.log(props.items);
   let challenges = props.items;
   if (props.hasFilters) {
     //console.log( props.filters.filteredLanguage);
@@ -74,7 +72,7 @@ const StartupChallengeList = (props) => {
         );
       }
     }
-    //TODO: requirements check need user info to be set up
+    
     if (props.filters.filteredOwnership.length === 0) {
       challenges = [];
     }
@@ -95,13 +93,9 @@ const StartupChallengeList = (props) => {
           to={'/startup-challenge/' + challenge.id}
         >
           <StartupChallengeListItem
-            id={challenge.id}
             name={challenge.name}
-            url={challenge.url}
             owner={challenge.owner}
             requirements={challenge.requirements}
-            level={challenge.requirements.level}
-            tier={challenge.requirements.tier}
           />
         </NavLink>
       ))}

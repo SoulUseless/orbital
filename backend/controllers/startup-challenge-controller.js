@@ -74,7 +74,6 @@ const getChallengeById = async (req, res, next) => {
     }   
 }
 
-//TO DO: after startup is implemented properly
 const getChallengeByStartup = async (req, res, next) => {
     const startupId = req.params.sid;
 
@@ -124,8 +123,8 @@ const createStartupChallenge = async (req, res, next) => {
             return;
         }
 
-        console.log(language);
-        console.log(tier);
+        //console.log(language);
+        //console.log(tier);
         if (languageObject && languageObject.length === 1 && tierObject && tierObject.length === 1) {
             //ensure no duplicate course
             let existingCourse;
@@ -170,7 +169,6 @@ const createStartupChallenge = async (req, res, next) => {
     if (errors.isEmpty()) {
         //owner to be replaced by token retrieval
         const userData = req.userData;
-        //TODO NOW: requirements need to update
         const {name, description, taskDescription, testCases} = req.body;
         const createdChallenge = new StartupChallenge({
             name,

@@ -130,16 +130,16 @@ const startupSignup = async (req, res, next) => {
     try {
         hashedPassword = await bcryptjs.hash(password, 12); //returns a promise
     } catch (err) {
-        //console.log(err);
+        //console.log(er);
         next(new HttpError("Could not create user", 500));
         return;
     }
 
     const createdStartup = new Startup({
         name,
-        password: hashedPassword, //encrypted now
+        password: hashedPassword,
         email,
-        logo: req.file.path, //TO BE IMPLEMENTED
+        logo: req.file.path, 
         challenges: [],
         description: "" //to be implemented in a way that startups can change themselves
     });

@@ -15,7 +15,6 @@ const StartupProfile = (props) => {
   const auth = useContext(AuthContext);
   const startupId = useParams().startupId;
   const [startup, setStartup] = useState();
-  //todo: retrieve profile from backend
 
   const { isLoading, error, sendRequest, errorHandler } = useHttpClient();
 

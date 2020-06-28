@@ -29,7 +29,10 @@ const getStudentById = async (req, res, next) => {
 
     let student;
     try {
-        student = await Student.findById(studentId).populate("challengeSubmissions credentials");
+        student = await Student.findById(studentId).populate([
+            { path: "challengeSubmissions" },
+            { path: "credentials", populate: { path: "language tier" } },
+        ]);
     } catch (err) {
         //console.log(err);
         next(new HttpError("Search failed", 500));
