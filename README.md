@@ -5,7 +5,7 @@ Please view this as raw for maximum ease.
 To run it, you will require:
 - Nodejs
 - /frontend/.env for frontend secret keys and environments*
-- /backend/nodemon.json for backend secret keys and environments*
+- /backend/nodemon.json for backend secret keys and environments*  
 *These should be disseminated via link on nus-skylabs, otherwise please highlight using the feedback section. Otherwise, you can create your own secret keys.
 
 The format for the secret key files are as follows:  
