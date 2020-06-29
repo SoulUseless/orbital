@@ -2,17 +2,33 @@ const { uuid } = require("uuidv4");
 const { validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 const fs = require("fs");
+//const axios = require("axios");
 
 const HttpError = require("../models/http-error");
 const StartupChallenge = require("../models/startupChallenge");
 const Startup = require("../models/startup");
 const Student = require("../models/student");
 const Submission = require("../models/submission");
+const Language = require("../models/language");
+const Tier = require("../models/tier");
+const Course = require("../models/course");
+
+async function asyncMap(array, callback) {
+    let result = [];
+    for (let index = 0; index < array.length; index++) {
+        const newElement = await callback(array[index], index, array);
+        result.push(newElement);
+    }
+    return result;
+}
 
 const getAllChallenge = async (req, res, next) => {
     let startupChallenges;
     try {
-        startupChallenges = await StartupChallenge.find({});
+        startupChallenges = await StartupChallenge.find({}).populate([
+            { path: "owner" },
+            { path: "requirements", populate: { path: "language tier" } },
+        ]);
     } catch (err) {
         //console.log(err);
         next(new HttpError("database access error", 500));
@@ -26,11 +42,14 @@ const getAllChallenge = async (req, res, next) => {
 };
 
 const getChallengeById = async (req, res, next) => {
-    const challengeId = req.params.cid; // stored as keys: { pid: "XXX" }
-
+    //console.log(req.params);
+    const challengeId = req.params.cid; 
     let challenge;
     try {
-        challenge = await StartupChallenge.findById(challengeId);
+        challenge = await StartupChallenge.findById(challengeId).populate([
+            { path: "owner" },
+            { path: "requirements", populate: { path: "language tier" } },
+        ]);
     } catch (err) {
         console.log(err);
         next(new HttpError("Search failed", 500));
@@ -39,7 +58,7 @@ const getChallengeById = async (req, res, next) => {
 
     //json is automatically sent back
     if (challenge) {
-        res.json(challenge);
+        res.json({challenge: challenge});
         //res.json({ place: place.toObject({ getters: true }) }); // => { place } === { place: place }
 
         //convert the object from mongoose object to js object
@@ -55,7 +74,6 @@ const getChallengeById = async (req, res, next) => {
     }   
 }
 
-//TO DO: after startup is implemented properly
 const getChallengeByStartup = async (req, res, next) => {
     const startupId = req.params.sid;
 
@@ -85,18 +103,78 @@ const getChallengeByStartup = async (req, res, next) => {
 
 const createStartupChallenge = async (req, res, next) => {
     const errors = validationResult(req);
+
     if (req.userData.userType != "startup") {
         next(new HttpError("Invalid Credentials", 422));
     }
+
+    //console.log(req.body);
+    //CONVERT REQUIREMENTS TO COURSES FOR BACKEND STORAGE
+    let courses = await asyncMap(req.body.requirements, async (req) => {
+        const { language, tier } = req;
+        let languageObject;
+        let tierObject;
+        try {
+            languageObject = await Language.find({ name: language });
+            tierObject = await Tier.find({ name: tier });
+        } catch (err) {
+            console.log(err);
+            next(new HttpError("Search failed", 500));
+            return;
+        }
+
+        //console.log(language);
+        //console.log(tier);
+        if (languageObject && languageObject.length === 1 && tierObject && tierObject.length === 1) {
+            //ensure no duplicate course
+            let existingCourse;
+            try {
+                existingCourse = await Course.findOne({
+                    language: languageObject[0]._id.toString(),
+                    tier: tierObject[0]._id.toString(),
+                });
+            } catch (err) {
+                //console.log(err);
+                next(new HttpError("Failed to access database", 500));
+                return;
+            }
+    
+            if (existingCourse) {
+                return existingCourse;
+            }
+    
+            const newCourse = new Course({
+                language: languageObject[0]._id.toString(),
+                tier: tierObject[0]._id.toString(),
+                challenges: [],
+            });
+            try {
+                const session = await mongoose.startSession();
+                session.startTransaction();
+    
+                await newCourse.save({ session });
+                await session.commitTransaction();
+                //console.log("success");
+                return newCourse;
+            } catch (err) {
+                console.log(err);
+                next (new HttpError("Commit Failed", 500));
+                return;
+            }
+        } else {
+            return next (new HttpError("Database Corrupted", 500));
+        }
+    });
+
     if (errors.isEmpty()) {
         //owner to be replaced by token retrieval
         const userData = req.userData;
-        const {name, description, requirements, taskDescription,testCases} = req.body;
+        const {name, description, taskDescription, testCases} = req.body;
         const createdChallenge = new StartupChallenge({
             name,
             owner: userData.userId, 
             description,
-            requirements,
+            requirements: courses,
             taskDescription,
             testCases,
             submissions: []
@@ -130,7 +208,7 @@ const createStartupChallenge = async (req, res, next) => {
             return;
         }
         res.status(201); //code represents something new created on server
-        return res.json({ challenge: createdChallenge });
+        return res.json({ message: "creation of new challenge success", challenge: createdChallenge });
     } else {
         console.log(errors);
         next(HttpError("Invalid Inputs Detected", 422));
@@ -139,56 +217,112 @@ const createStartupChallenge = async (req, res, next) => {
 }
 
 const updateStartupChallengeById = async (req, res, next) => {
+    console.log(req.body);
     const errors = validationResult(req);
-
-    const startupId = req.userData.userId;
-
     if (!errors.isEmpty()) {
         console.log(errors);
-        return next(HttpError("Invalid Inputs detected", 422));
-    } else {
-        const challengeId = req.params.cid;
+        return next(new HttpError("Invalid Inputs detected", 422));
+    }
 
-        let challenge;
+    const startupId = req.userData.userId;
+    //CONVERT REQUIREMENTS TO COURSES FOR BACKEND STORAGE
+    let courses = await asyncMap(req.body.requirements, async (req) => {
+        const { language, tier } = req;
+        let languageObject;
+        let tierObject;
         try {
-            challenge = await StartupChallenge.findById(challengeId);
+            languageObject = await Language.find({ name: language });
+            tierObject = await Tier.find({ name: tier });
         } catch (err) {
             console.log(err);
-            next(new HttpError("Challenge query failed", 500));
+            next(new HttpError("Search failed", 500));
             return;
         }
 
-        //run simple startupid check
-        //console.log(challenge.owner.toString());
-        //console.log(startupId);
-        if (challenge.owner.toString() !== startupId) {
-            next(new HttpError("You are not allowed to update this", 401));
+        console.log(language);
+        console.log(tier);
+        if (languageObject && languageObject.length === 1 && tierObject && tierObject.length === 1) {
+            //ensure no duplicate course
+            let existingCourse;
+            try {
+                existingCourse = await Course.findOne({
+                    language: languageObject[0]._id.toString(),
+                    tier: tierObject[0]._id.toString(),
+                });
+            } catch (err) {
+                //console.log(err);
+                next(new HttpError("Failed to access database", 500));
+                return;
+            }
+
+            if (existingCourse) {
+                return existingCourse;
+            }
+
+            const newCourse = new Course({
+                language: languageObject[0]._id.toString(),
+                tier: tierObject[0]._id.toString(),
+                challenges: [],
+            });
+            try {
+                const session = await mongoose.startSession();
+                session.startTransaction();
+
+                await newCourse.save({ session });
+                await session.commitTransaction();
+                //console.log("success");
+                return newCourse;
+            } catch (err) {
+                console.log(err);
+                next (new HttpError("Commit Failed", 500));
+                return;
+            }
+        } else {
+            return next(new HttpError("Database Corrupted", 500));
+        }
+    });
+    
+    const challengeId = req.params.cid;
+
+    let challenge;
+    try {
+        challenge = await StartupChallenge.findById(challengeId);
+    } catch (err) {
+        console.log(err);
+        next(new HttpError("Challenge query failed", 500));
+        return;
+    }
+
+    //run simple startupid check
+    //console.log(challenge.owner.toString());
+    //console.log(startupId);
+    if (challenge.owner.toString() !== startupId) {
+        next(new HttpError("You are not allowed to update this", 401));
+        return;
+    }
+
+    const {name, description, taskDescription, testCases} = req.body;
+    if (challenge) {
+        challenge.name = name;
+        challenge.description = description;
+        challenge.requirements = courses;
+        challenge.taskDescription = taskDescription;
+        challenge.testCases = testCases;
+
+        try {
+            await challenge.save();
+        } catch (err) {
+            console.log(err);
+            next(new HttpError("Update failed", 500));
             return;
         }
 
-       const {name, description, requirements, taskDescription, testCases} = req.body;
-       if (challenge) {
-           challenge.name = name;
-           challenge.description = description;
-           challenge.requirements = requirements;
-           challenge.taskDescription = taskDescription;
-           challenge.testCases = testCases;
-
-           try {
-               await challenge.save();
-           } catch (err) {
-               console.log(err);
-               next(new HttpError("Update failed", 500));
-               return;
-           }
-
-           res.status(200).json({
-               challenge: challenge.toObject({ getters: true }),
-           });
-       } else {
-           next(new HttpError("No Such Challenge Found", 404));
-           return;
-       }
+        res.status(200).json({
+            challenge: challenge.toObject({ getters: true }),
+        });
+    } else {
+        next(new HttpError("No Such Challenge Found", 404));
+        return;
     }
 };
 
@@ -274,13 +408,16 @@ const getSubmissionsById = async (req, res, next) => {
 
 const uploadSubmissionById = async (req, res, next) => {
     const user = req.userData;
+    if (req.method === "OPTIONS") {
+        return next();
+    }
+
     if (user.userType != "student") {
         return next(new HttpError("You do not have permissions to upload submissions", 401));
     }
 
-    const filePath = "haha.txt"; //DUMMY VARIABLE
-    //const file = req.file;
-    //const filePath = req.file.path;
+    const file = req.file;
+    const filePath = req.file.path;
 
     const studentId = user.userId;
     let student;
@@ -355,7 +492,7 @@ const uploadSubmissionById = async (req, res, next) => {
     */
 
     //DUMMY CHECKS
-    const isSuccess = false;
+    const isSuccess = true;
     if (isSuccess) {
         //update all relevant information
         newSubmission.success = true;

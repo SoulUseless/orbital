@@ -1,10 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import MainHeader from './MainHeader';
 import NavLinks from './NavLinks';
 import SideDrawer from './SideDrawer';
 import Backdrop from '../../UIElements/Backdrop';
+import {useHttpClient} from "../../../hooks/http-hook";
+import ErrorModal from "../../UIElements/ErrorModal";
+import LoadingSpinner from "../../UIElements/LoadingSpinner";
+
 import './MainNavigation.css';
 
 import { AuthContext } from '../../../context/auth-context';
@@ -12,8 +16,10 @@ import { AuthContext } from '../../../context/auth-context';
 const MainNavigation = (props) => {
   const auth = useContext(AuthContext); //no tokens yet
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  const { isLoading, error, sendRequest, errorHandler } = useHttpClient();
 
-  console.log(auth);
+  const [user, setUser] = useState();
+  //console.log(auth);
   const openDrawerHandler = () => {
     setDrawerIsOpen(true);
   };
@@ -22,61 +28,92 @@ const MainNavigation = (props) => {
     setDrawerIsOpen(false);
   };
 
+  useEffect(() => {
+      //useEffect doesnt like a async function
+      const getUser = async (userType) => {
+          try {
+            if (userType) {
+              //console.log(`${process.env.REACT_APP_BACKEND_URL}/${userType}/${auth.userId}`);
+              const response = await sendRequest(
+                  `${process.env.REACT_APP_BACKEND_URL}/${userType}/${auth.userId}`
+              );
+              if (userType === "student") {
+                setUser(response.student);
+              } else if (userType === "startup") {
+                //console.log(response);
+                setUser(response.startup);
+              } 
+            }
+          } catch (err) {
+              console.log(err);
+          }
+      };
+      getUser(auth.userType);
+  }, [sendRequest, auth.userId, auth.userType]);
+
   let titleBar; //hopefully can use user name to replace placeholder
-  if (auth.token) {
-    if (auth.userType === 'student') {
+  if (auth.token && user) {
       titleBar = (
-        <h1 className='nav-title'>Welcome to Level Up, ((student))!</h1>
+        <h1 className='nav-title'> {`Welcome to Level Up, ${user.name}!`}</h1>
       );
-    } else {
-      titleBar = (
-        <h1 className='nav-title'>Welcome to Level Up, ((startup))!</h1>
-      );
-    }
   } else {
     titleBar = <h1 className='nav-title'>Welcome to Level Up!</h1>;
   }
 
   return (
-    <React.Fragment>
-      {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}
-      <SideDrawer show={drawerIsOpen} onClick={closeDrawerHandler}>
-        <nav className='main-navigation__drawer-nav'>
-          <NavLinks />
-        </nav>
-      </SideDrawer>
+      <>
+          <ErrorModal error={error} onClear={errorHandler} />
+          {isLoading && (
+              <div className="center">
+                  <LoadingSpinner />
+                  {/*render a loading spinner*/}
+              </div>
+          )}
 
-      <MainHeader>
-        <button
-          className='main-navigation__menu-btn'
-          onClick={openDrawerHandler}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 5fr',
-            gridGap: 20,
-          }}
-        >
-          <div className='main-navigation__title'>
-            <Link to='/'>
-              <img src='logo.png' alt='Logo' height='150' width='150' />
-              {/* broken? */}
-            </Link>
-          </div>
-          <div>
-            {titleBar}
-            <nav className='main-navigation__header-nav'>
-              <NavLinks />
-            </nav>
-          </div>
-        </div>
-      </MainHeader>
-    </React.Fragment>
+          {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}
+          <SideDrawer show={drawerIsOpen} onClick={closeDrawerHandler}>
+              <nav className="main-navigation__drawer-nav">
+                  <NavLinks />
+              </nav>
+          </SideDrawer>
+          {!isLoading && (
+            <MainHeader>
+                <button
+                    className="main-navigation__menu-btn"
+                    onClick={openDrawerHandler}
+                >
+                    <span />
+                    <span />
+                    <span />
+                </button>
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 5fr",
+                        gridGap: 20,
+                    }}
+                >
+                    <div className="main-navigation__title">
+                        <Link to="/">
+                            <img
+                                src="logo.png"
+                                alt="Logo"
+                                height="150"
+                                width="150"
+                            />
+                            {/* broken? */}
+                        </Link>
+                    </div>
+                    <div>
+                        {titleBar}
+                        <nav className="main-navigation__header-nav">
+                            <NavLinks />
+                        </nav>
+                    </div>
+                </div>
+            </MainHeader>
+          )}
+      </>
   );
 };
 

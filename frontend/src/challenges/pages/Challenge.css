@@ -68,3 +68,16 @@ tr:nth-child(even) {
   margin: auto;
   text-align: center;
 }
+
+.challenge__modal-content {
+  padding: 0;
+}
+
+.challenge__modal-actions {
+  text-align: right;
+}
+
+.modal-container {
+  height: 15rem;
+  width:100%;
+}

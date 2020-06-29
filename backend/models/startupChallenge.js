@@ -11,20 +11,7 @@ const startupChallengeSchema = new Schema({
     },
     description: { type: String, required: true },
     requirements: [
-        {
-            language: {
-                //type: mongoose.Types.ObjectId, on hold when developemnt
-                type: String,
-                required: true,
-                //ref: "Language",
-            },
-            level: {
-                //type: mongoose.Types.ObjectId, on hold when development
-                type: String,
-                required: true,
-                //ref: "Tier",
-            },
-        },
+        {type: mongoose.Types.ObjectId, required: true, ref: "Course"}
     ],
     taskDescription: { type: String, required: true },
     testCases: {

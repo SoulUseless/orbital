@@ -1,12 +1,17 @@
 import React, { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../../context/auth-context';
 
 import './NavLinks.css';
 
 const NavLinks = (props) => {
   const auth = useContext(AuthContext);
+  const history = useHistory();
 
+  const onLogoutHandler = () => {
+    auth.logout();
+    history.push("/");
+  }
   return (
     <>
       <ul className='nav-links'>
@@ -40,9 +45,7 @@ const NavLinks = (props) => {
           <>
             {auth.userType === 'student' && (
               <li>
-                <NavLink to='/student/s1' exact>
-                  {' '}
-                  {/** to do // studentid is placeholder*/}
+                <NavLink to={`/student/${auth.userId}`} exact>
                   <span style={{ color: 'white' }}>My Profile</span>
                 </NavLink>
               </li>
@@ -50,9 +53,7 @@ const NavLinks = (props) => {
 
             {auth.userType === 'startup' && (
               <li>
-                <NavLink to='/startup/su1' exact>
-                  {' '}
-                  {/** to do // startupid is placeholder*/}
+                <NavLink to={`/startup/${auth.userId}`} exact>
                   <span style={{ color: 'white' }}>My Profile</span>
                 </NavLink>
               </li>
@@ -65,7 +66,7 @@ const NavLinks = (props) => {
               </NavLink>
             </li>
             <li>
-              <button onClick={auth.logout}> Logout </button>
+              <button onClick={onLogoutHandler} style={{ color: 'white' }}> Logout </button>
             </li>
           </>
         )}

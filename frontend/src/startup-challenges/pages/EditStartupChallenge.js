@@ -1,131 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 
 import Input from '../../shared/components/formElements/Input';
 import Button from '../../shared/components/formElements/Button';
 import Card from '../../shared/components/UIElements/Card';
-//import MultiInput from "../../shared/components/formElements/MultiInput";
 import MultiDropdown from '../../shared/components/formElements/MultiDropdown';
 import FileUpload from '../../shared/components/formElements/FileUpload';
 import { VALIDATOR_REQUIRE } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
-
-const DUMMY_CHALLENGE = [
-  {
-    id: 'c1',
-    name: 'Factorial',
-    owner: 'google', //startup profile name
-    description: 'my first challenge',
-    requirements: [
-      { tier: 'javascript', level: 'silver' },
-      { tier: 'java', level: 'gold' },
-    ], //to be populated to show more information
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    url: 'https://cdn.worldvectorlogo.com/logos/google-icon.svg', //startup profile pic
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-  },
-  {
-    id: 'c2',
-    name: 'Factorial',
-    owner: 'google', //startup profile name
-    description: 'my first challenge',
-    requirements: [
-      { tier: 'java', level: 'gold' },
-      { tier: 'python', level: 'gold' },
-    ], //to be populated to show more information
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    url: 'https://cdn.worldvectorlogo.com/logos/google-icon.svg', //startup profile pic
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-  },
-  {
-    id: 'c3',
-    name: 'Factorial',
-    owner: 'facebook', //startup profile name
-    description: 'my first challenge',
-    requirements: [{ tier: 'python', level: 'gold' }], //to be populated to show more information
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-    url:
-      'https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-facebook-2019-square1-512.png',
-  },
-  {
-    id: 'c4',
-    name: 'Factorial',
-    owner: 'tencent', //startup profile name
-    description: 'my first challenge',
-    requirements: [{ tier: 'python', level: 'silver' }], //to be populated to show more information
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-    url:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv_MNlp6gBL_CAc8mnwUirBnqJIBN7yjtxZZhjxAMwExKm0beX&s',
-  },
-  {
-    id: 'c5',
-    name: 'Factorial',
-    owner: 'facebook', //startup profile name
-    description: 'my first challenge',
-    requirements: [{ tier: 'java', level: 'silver' }], //to be populated to show more information
-    taskDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    testCases: {
-      publicTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-      privateTestCases: [
-        { input: 'factorial(3)', output: '6' },
-        { input: 'factorial(5)', output: '120' },
-      ],
-    },
-    url:
-      'https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-facebook-2019-square1-512.png',
-  },
-];
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal"
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner"
+import { AuthContext } from '../../shared/context/auth-context';
 
 const EditStartupChallenge = (props) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const auth = useContext(AuthContext);
+  const history = useHistory();
   const challengeId = useParams().challengeId;
-  const challenge = DUMMY_CHALLENGE.find((ch) => ch.id === challengeId);
+  const { isLoading, error, sendRequest, errorHandler } = useHttpClient();
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -153,127 +45,203 @@ const EditStartupChallenge = (props) => {
     false
   );
 
-  useEffect(() => {
-    if (challenge) {
-      setFormData(
-        {
-          name: {
-            value: challenge.name,
-            isValid: true,
-          },
-          description: {
-            value: challenge.description,
-            isValid: true,
-          },
-          requirements: {
-            value: challenge.requirements,
-            isValid: true,
-          },
-          taskDescription: {
-            value: challenge.taskDescription,
-            isValid: true,
-          },
-          testCases: {
-            value: challenge.testCases,
-            isValid: true,
-          },
-        },
-        true
-      );
-    }
-    setIsLoading(false);
-  }, [setFormData, challenge]);
+  
+  const [challenge, setChallenge] = useState();
+  const [allLanguages, setLanguages] = useState();
+  const [allTiers, setTiers] = useState();
 
-  const submitUpdateChallengeHandler = (event) => {
+  useEffect(() => {
+    const getChallenge = async () => {
+        try {
+            const response = await sendRequest(
+                `${process.env.REACT_APP_BACKEND_URL}/startup-challenge/${challengeId}`
+            );
+            setChallenge(response.challenge);
+            //console.log(response.challenge);
+            setFormData(
+                {
+                    name: {
+                        value: response.challenge.name,
+                        isValid: true,
+                    },
+                    description: {
+                        value: response.challenge.description,
+                        isValid: true,
+                    },
+                    requirements: {
+                        value: response.challenge.requirements.map((req) => {
+                            return {
+                                language: req.language.name,
+                                tier: req.tier.name,
+                            };
+                        }),
+                        isValid: true,
+                    },
+                    taskDescription: {
+                        value: response.challenge.taskDescription,
+                        isValid: true,
+                    },
+                    testCases: {
+                        value: response.challenge.testCases,
+                        isValid: true,
+                    },
+                },
+                true
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const getLanguages = async () => {
+      try {
+          const response = await sendRequest(
+              `${process.env.REACT_APP_BACKEND_URL}/language`
+          );
+          setLanguages(response.languages.map((lang) => lang.name));
+      } catch (err) {
+          console.log(err);
+      }
+    };
+    getLanguages();
+
+    const getTiers = async () => {
+      try {
+          const response = await sendRequest(
+              `${process.env.REACT_APP_BACKEND_URL}/tier`
+          );
+          setTiers(response.tiers.map((t) => t.name));
+      } catch (err) {
+          console.log(err);
+      }
+    };
+    getTiers();
+    getChallenge();
+  }, [setFormData, sendRequest, challengeId]);
+
+  const submitUpdateChallengeHandler = async (event) => {
     event.preventDefault();
-    console.log(event); //TO DO when backend up
+    console.log(formState.inputs);
+    try {
+      await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/startup-challenge/${challengeId}`, 
+      "PATCH",
+      JSON.stringify({
+        name: formState.inputs.name.value,
+        description: formState.inputs.description.value,
+        requirements: formState.inputs.requirements.value,
+        taskDescription: formState.inputs.taskDescription.value,
+        testCases: formState.inputs.testCases.value,
+      }),
+      {
+        "Content-Type": "application/json",  
+        Authorization: `Bearer ${auth.token}`
+      });
+      console.log("success");
+      history.push(`/startup-challenge/${challengeId}`);
+
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  //console.log("input");
   console.log(formState.inputs);
 
-  if (!challenge) {
-    return <h1> No challenge with id found. </h1>;
-  }
-
   if (isLoading) {
+      //loading screen
+      return (
+          <div className="center">
+              <LoadingSpinner />
+          </div>
+      );
+  } else if (!challenge && !error) {
+      //no startup challenge found
+      return (
+          <div className="center">
+              <Card>
+                  <h2> No Challenge Found. </h2>
+              </Card>
+          </div>
+      );
+  } else {
     return (
-      <div className='center'>
-        <h2>Loading...</h2>
-      </div>
+        //initial render has problems, all inputs set to false by default somehow
+        <>
+            <ErrorModal error={error} onClear={errorHandler} />
+            {!isLoading && challenge && allLanguages && allTiers && (
+                <div className="challenge-form-container">
+                    <Card className="challenge-form">
+                        <h2> Edit Challenge </h2>
+                        <hr />
+                        <form onSubmit={submitUpdateChallengeHandler}>
+                            <Input
+                                element="input"
+                                id="name"
+                                type="text"
+                                label="Name of Challenge"
+                                validators={[VALIDATOR_REQUIRE()]}
+                                errorText="Please enter a name."
+                                initialValue={challenge.name}
+                                initialValidity={true}
+                                onInput={inputHandler}
+                            />
+
+                            <Input
+                                id="description"
+                                type="text"
+                                label="Brief Description of Challenge"
+                                validators={[VALIDATOR_REQUIRE()]}
+                                errorText="Please enter a description."
+                                initialValue={challenge.description}
+                                initialValidity={true}
+                                onInput={inputHandler}
+                            />
+
+                            <MultiDropdown
+                                element="input"
+                                id="requirements"
+                                options={[allLanguages, allTiers]}
+                                label="Requirements of Challenge"
+                                errorText="Please enter at least one requirement."
+                                initialValue={challenge.requirements.map(
+                                    (req) => {
+                                        return {
+                                            language: req.language.name,
+                                            tier: req.tier.name,
+                                        };
+                                    }
+                                )}
+                                initialValidity={true}
+                                onInput={inputHandler}
+                            />
+
+                            <FileUpload
+                                id="testCases"
+                                label="Test Cases of Challenge (Will replace the previous set)"
+                                errorText="Please upload a file in valid JSON format"
+                                onInput={inputHandler}
+                            />
+
+                            <Input
+                                id="taskDescription"
+                                type="text"
+                                label="Brief Description of Task Requirement"
+                                validators={[VALIDATOR_REQUIRE()]}
+                                errorText="Please enter a description."
+                                initialValue={challenge.taskDescription}
+                                initialValidity={true}
+                                onInput={inputHandler}
+                            />
+
+                            <Button type="submit" disabled={!formState.isValid}>
+                                Submit
+                            </Button>
+                        </form>
+                    </Card>
+                </div>
+            )}
+        </>
     );
   }
-
-  return (
-    <div className='challenge-form-container'>
-      <Card className='challenge-form'>
-        <h2> Edit Challenge </h2>
-        <hr />
-        <form onSubmit={submitUpdateChallengeHandler}>
-          <Input
-            element='input'
-            id='name'
-            type='text'
-            label='Name of Challenge'
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText='Please enter a name.'
-            initialValue={formState.inputs.name.value}
-            initialValidity={formState.inputs.name.isValid}
-            onInput={inputHandler}
-          />
-
-          <Input
-            id='description'
-            type='text'
-            label='Brief Description of Challenge'
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText='Please enter a description.'
-            initialValue={formState.inputs.description.value}
-            initialValidity={formState.inputs.description.isValid}
-            onInput={inputHandler}
-          />
-
-          <MultiDropdown
-            element='input'
-            id='requirements'
-            options={[
-              ['java', 'javascript', 'python'],
-              ['silver', 'gold'],
-            ]}
-            label='Requirements of Challenge'
-            errorText='Please enter at least one requirement.'
-            initialValidity={formState.inputs.requirements.isValid}
-            initialValue={formState.inputs.requirements.value}
-            onInput={inputHandler}
-          />
-
-          <FileUpload
-            id='testCases'
-            label='Test Cases of Challenge (Will replace the previous set)'
-            errorText='Please upload a file in valid JSON format'
-            onInput={inputHandler}
-          />
-
-          <Input
-            id='taskDescription'
-            type='text'
-            label='Brief Description of Task Requirement'
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText='Please enter a description.'
-            initialValue={formState.inputs.taskDescription.value}
-            initialValidity={formState.inputs.taskDescription.isValid}
-            onInput={inputHandler}
-          />
-
-          {/* hold up for test case setting*/}
-
-          <Button type='submit' disabled={!formState.isValid}>
-            Submit
-          </Button>
-        </form>
-      </Card>
-    </div>
-  );
 };
 
 export default EditStartupChallenge;

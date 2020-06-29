@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { NavLink } from 'react-router-dom';
 
 import Card from '../../shared/components/UIElements/Card';
 import StartupChallengeListItem from './StartupChallengeListItem';
+import { AuthContext } from "../../shared/context/auth-context";
+
 import './StartupChallengeList.css';
 
-const DUMMY_STARTUP = 'tencent';
 
 const StartupChallengeList = (props) => {
+  const auth = useContext(AuthContext);
+
   if (props.items.length === 0) {
     return (
       <div className='challenge-list-center'>
@@ -20,9 +23,10 @@ const StartupChallengeList = (props) => {
 
   let challenges = props.items;
   if (props.hasFilters) {
+    //console.log( props.filters.filteredLanguage);
     if (!!props.filters.filteredLanguage) {
       challenges = challenges.filter((challenge) => {
-        const reqs = challenge.requirements.map((ch) => ch.tier);
+        const reqs = challenge.requirements.map((ch) => ch.language.name);
         console.log(reqs);
 
         if (reqs.length === 0) {
@@ -37,7 +41,7 @@ const StartupChallengeList = (props) => {
     }
     if (!!props.filters.filteredTier) {
       challenges = challenges.filter((challenge) => {
-        const tiers = challenge.requirements.map((ch) => ch.level);
+        const tiers = challenge.requirements.map((req) => req.tier.name);
         if (tiers.length === 0) {
           return true;
         }
@@ -49,24 +53,26 @@ const StartupChallengeList = (props) => {
       });
     }
     if (!!props.filters.filteredStartup) {
+      console.log( props.filters.filteredStartup);
       challenges = challenges.filter((challenge) =>
-        props.filters.filteredStartup.includes(challenge.owner)
+        props.filters.filteredStartup.includes(challenge.owner.id)
       );
     }
     //console.log(props.filters.filteredRequirements);
     if (props.filters.filteredOwnership.length === 1) {
+      const ownId = auth.userId;
       if (props.filters.filteredOwnership[0] === 'yes') {
         //view own challenges
         challenges = challenges.filter(
-          (challenge) => challenge.owner === DUMMY_STARTUP
+          (challenge) => challenge.owner.id === ownId
         );
       } else {
         challenges = challenges.filter(
-          (challenge) => challenge.owner !== DUMMY_STARTUP
+          (challenge) => challenge.owner.id !== ownId
         );
       }
     }
-    //TODO: requirements check need user info to be set up
+    
     if (props.filters.filteredOwnership.length === 0) {
       challenges = [];
     }
@@ -87,13 +93,9 @@ const StartupChallengeList = (props) => {
           to={'/startup-challenge/' + challenge.id}
         >
           <StartupChallengeListItem
-            id={challenge.id}
             name={challenge.name}
-            url={challenge.url}
             owner={challenge.owner}
             requirements={challenge.requirements}
-            level={challenge.requirements.level}
-            tier={challenge.requirements.tier}
           />
         </NavLink>
       ))}

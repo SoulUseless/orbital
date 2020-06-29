@@ -15,8 +15,7 @@ const StartupItem = (props) => {
         AND YOU DONT NEED A FORM FOR REDIRECTION WTF */}
       <Card className='startup-item__content'>
         <div className='startup-item__image'>
-          {/*<Avatar image={`${process.env.REACT_APP_ASSET_URL}/${props.logo}`} alt={props.name} />*/}
-          <Avatar image={props.logo} alt={props.name} />
+          <Avatar image={`${process.env.REACT_APP_ASSET_URL}/${props.logo}`} alt={props.name} />
         </div>
 
         <div className='startup-item__info'>

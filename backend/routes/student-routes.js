@@ -25,8 +25,8 @@ router.get("/", studentControllers.getAllStudents);
 
 router.use(checkAuth);
 
-router.post(
-    "/:sid/update",
+router.patch(
+    "/:sid",
     fileUpload("images").single("image"),
     studentControllers.studentUpdate
 );

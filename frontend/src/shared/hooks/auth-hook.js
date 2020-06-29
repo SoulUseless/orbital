@@ -9,7 +9,7 @@ export const useAuth = () => {
   const [userType, setUserType] = useState(null);
 
   const loginAsStudent = useCallback((uid, token, expirationDate) => {
-      console.log("trig");
+      //console.log("trig");
       setUserId(uid);
       setUserType("student");
       //either we already have one, or we create a new one

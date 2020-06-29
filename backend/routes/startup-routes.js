@@ -23,9 +23,9 @@ router.post(
 router.get("/", startupControllers.getAllStartups);
 
 router.use(checkAuth);
-//TODO verify token
-router.post(
-    "/:sid/update",
+
+router.patch(
+    "/:sid",
     fileUpload("images").single("image"),
     startupControllers.startupUpdate
 );

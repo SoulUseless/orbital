@@ -58,7 +58,7 @@ const Challenges = (props) => {
   const [filteredRequirements, setFilteredRequirements] = useState([
     'yes',
     'no',
-  ]); //TO DO after profile is implemented
+  ]); 
   const [hasFilters, setHasFilters] = useState(false);
 
   const auth = useContext(AuthContext);
@@ -143,7 +143,7 @@ const Challenges = (props) => {
                 {allLanguages.map(lang => 
                     <>
                       <input type='checkbox' value={lang} defaultChecked />
-                        {" " + lang}
+                        {" " + lang.charAt(0).toUpperCase() + lang.slice(1)}
                       <br />
                     </>
                 )}
@@ -151,10 +151,10 @@ const Challenges = (props) => {
 
               <div onChange={tierFilterHandler}>
                 <h4> Tier</h4>
-                {allTiers.map(lang => 
+                {allTiers.map(tier => 
                     <>
-                      <input type='checkbox' value={lang} defaultChecked />
-                        {" " + lang}
+                      <input type='checkbox' value={tier} defaultChecked />
+                        {" " + tier.charAt(0).toUpperCase() + tier.slice(1)}
                       <br />
                     </>
                 )}
@@ -163,8 +163,8 @@ const Challenges = (props) => {
               {auth.token && (
                 <div onChange={requirementsFilterHandler}>
                   <h4> Requirements </h4>
-                  <input type='checkbox' value='yes' defaultChecked /> Yes <br />
-                  <input type='checkbox' value='no' defaultChecked /> No
+                  <input type='checkbox' value='yes' defaultChecked /> Fulfilled <br />
+                  <input type='checkbox' value='no' defaultChecked /> Not Fulfilled
                 </div>
               )}
             </div>

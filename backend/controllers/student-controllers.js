@@ -29,7 +29,10 @@ const getStudentById = async (req, res, next) => {
 
     let student;
     try {
-        student = await Student.findById(studentId).populate("challengeSubmissions credentials");
+        student = await Student.findById(studentId).populate([
+            { path: "challengeSubmissions" },
+            { path: "credentials", populate: { path: "language tier" } },
+        ]);
     } catch (err) {
         //console.log(err);
         next(new HttpError("Search failed", 500));
@@ -37,7 +40,7 @@ const getStudentById = async (req, res, next) => {
     }
 
     if (student) {
-        res.json(student);
+        res.json({student: student});
         return;
     } else {
         next(new HttpError("No such student found", 404));
@@ -247,13 +250,14 @@ const studentUpdate = async (req, res, next) => {
         return;
     }
 
-    const {name, profilePicture, profileDescription, email, password} = req.body;
+    //console.log(req.path);
+    const profilePicture = req.file.path;
+    const {name, profileDescription, email, password} = req.body;
     if (student) {
         student.name = name;
         student.profileDescription = profileDescription;
         student.profilePicture = profilePicture;
         student.email = email;
-
         try {
             const noPasswordChange = await bcryptjs.compare(password, student.password);
             if (!noPasswordChange) {

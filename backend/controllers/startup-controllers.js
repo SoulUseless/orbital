@@ -36,7 +36,7 @@ const getStartupById = async (req, res, next) => {
     }
 
     if (startup) {
-        res.json(startup);
+        res.json({startup: startup});
         return;
     } else {
         next(new HttpError("No such startup found", 404));
@@ -130,16 +130,16 @@ const startupSignup = async (req, res, next) => {
     try {
         hashedPassword = await bcryptjs.hash(password, 12); //returns a promise
     } catch (err) {
-        //console.log(err);
+        //console.log(er);
         next(new HttpError("Could not create user", 500));
         return;
     }
 
     const createdStartup = new Startup({
         name,
-        password: hashedPassword, //encrypted now
+        password: hashedPassword,
         email,
-        logo: "", //TO BE IMPLEMENTED
+        logo: req.file.path, 
         challenges: [],
         description: "" //to be implemented in a way that startups can change themselves
     });
@@ -204,7 +204,8 @@ const startupUpdate = async (req, res, next) => {
         return;
     }
 
-    const {name, logo, description, email, password} = req.body;
+    const logo = req.file.path;
+    const {name, description, email, password} = req.body;
     if (startup) {
         startup.name = name;
         startup.logo = logo;

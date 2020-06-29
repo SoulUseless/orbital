@@ -8,14 +8,14 @@ import Card from '../../../shared/components/UIElements/Card';
 import './StudentItem.css';
 
 const StudentItem = (props) => {
+  console.log(props.image);
   return (
     <Link to={`/student/${props.id}`}>
       {/*<form className='student-item' onClick={editProfileHandler}>
         AND YOU DONT NEED A FORM FOR REDIRECTION WTF */}
         <Card className='student-item__content'>
           <div className='student-item__image'>
-            <Avatar center image={props.image} alt={props.name} />
-            {/* <Avatar center image={`${process.env.REACT_APP_ASSET_URL}/${props.image}`} alt={props.name} /> */}
+            <Avatar center image={`${process.env.REACT_APP_ASSET_URL}/${props.image}`} alt={props.name} />
           </div>
 
           <div className='student-item__info'>

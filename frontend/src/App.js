@@ -89,7 +89,7 @@ const App = () => {
           </Route>
 
           <Redirect to='/' />
-          {/* TO DO: save token and use this to redirect to student profile*/}
+
         </Switch>
       );
     } else if (userType === 'startup') {
@@ -156,7 +156,7 @@ const App = () => {
           </Route>
 
           <Redirect to='/' />
-          {/* TO DO: save token and use this to redirect to startup profile*/}
+          
         </Switch>
       );
     } else {
