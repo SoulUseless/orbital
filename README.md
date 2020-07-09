@@ -33,3 +33,22 @@ The format for the secret key files are as follows:
 4. Check your secret key files are in place.
 5. Run `npm start` in both /frontend and /backend.
 6. By default, the frontend will be hosted on `localhost:3000`, while backend will be hosted on `localhost:5000`.
+
+# Common Problems and possible workarounds
+> Unable to connect to Mongo (ECONNREFUSED <your-ip-address)  
+>> 1. Ensure you have the secret keys in the correct directories. (Lack of validation credentials)
+>> 2. Switch to your phone hotspot for network access. (Router could have network access controls on ports)
+>> 3. Set up your own MongoDB credentials. 
+
+> Inability to create multiple documents (if setting up own MongoDB)
+>> Create the following document system: (MongoDB does not allow multiple document transactions)  
+>> `orbital`  
+>> `| challenges`  
+>> `| courses`  
+>> `| languages`  
+>> `| startupchallenges`  
+>> `| startups`  
+>> `| students`  
+>> `| submissions`  
+>> `| tiers`  
+
