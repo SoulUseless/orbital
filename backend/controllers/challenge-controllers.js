@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 
 const HttpError = require("../models/http-error");
 const Challenge = require("../models/challenge");
@@ -69,6 +72,7 @@ const getChallengeById = async (req, res, next) => {
             name: challenge.name,
             description: challenge.description,
             language: challenge.course.language.name,
+            languageExtension: challenge.course.language.fileExtension,
             requirements: challenge.requirements, //to be populated to show more information
             requiredFor: challenge.requiredFor,
             taskDescription: challenge.taskDescription,
@@ -113,7 +117,12 @@ const uploadSubmissionById = async (req, res, next) => {
     const challengeId = req.params.cid;
     let challenge;
     try {
-        challenge = await Challenge.findById(challengeId).populate("course");
+        challenge = await Challenge.findById(challengeId).populate({
+            path: "course",
+            populate: {
+                path: "language",
+            },
+        });
         //pending population when startup is developed
     } catch (err) {
         //console.log(err);
@@ -162,23 +171,74 @@ const uploadSubmissionById = async (req, res, next) => {
         return;
     }
 
-    //SEND THE FILE TO JDOODLE USING THEIR API TO RUN THE CODE
-    /* sample json request -> needs axios integration i think
-    {
-        script : "", //script
-        language: "php", //language
-        versionIndex: "0", //language version
-        clientId: ${process.env.JDOODLE_ID},
-        clientSecret:${process.env.JDOODLE_SECRET}
-    }
+    //console.log(file);
+    //console.log(challenge.course.language);
+    fs.readFile(path.join(__dirname, "/../", filePath), "utf-8", async (err, data) => {
+        if (err) {
+            console.log(err);
+        } else {
+            //TO DO: run function to append test case checks to after last line
+            console.log("success");
+            console.log(data);
+            try {
+                const response = await axios({ //sending the file to axios
+                    method: 'post',
+                    url: 'https://api.jdoodle.com/v1/execute',
+                    data: {
+                        script: data,
+                        language: challenge.course.language.jdoodleName,
+                        versionIndex: challenge.course.language.jdoodleVersion,
+                        clientId: process.env.JDOODLE_ID,
+                        clientSecret: process.env.JDOODLE_SECRET
+                    }
+                });
 
-    send to:
-    {
-        url: 'https://api.jdoodle.com/v1/execute',
-        method: "POST",
-        json: program
-    }
+                console.log(response.data);
+                const isSuccess = response.data.output //processes the outputs
+                    .slice(0, -1)
+                    .split("\n")
+                    .reduce((x, y) => x && (y === "True" || y === "true"));
 
+                //entire code chunk could be a callback?
+                if (isSuccess) {
+                    //update all relevant information
+                    newSubmission.success = true;
+                    student.completedChallenges.push(challenge);
+                    //check if course is completed
+                    let completedCourse = true;
+                    for (let i = 0; i < challenge.course.challenges.length; i++) {
+                        if (!student.completedChallenges.includes(challenge.course.challenges[i])){
+                            completedCourse = false;
+                        }
+                    }
+                    //console.log(challenge.course);
+                    if (completedCourse) {
+                        student.credentials.push(challenge.course);
+                    }
+            
+                    try {
+                        const session = await mongoose.startSession();
+                        session.startTransaction();
+                        await newSubmission.save({session});
+                        await student.save({ session });
+                        await session.commitTransaction();
+                    } catch (err) {
+                        console.log(err);
+                        next(new HttpError("Something went wrong during uploading, please try again", 500));
+                        return;
+                    }
+                    return res.json({message: "submission success"});
+                }
+                //maybe send back data to be rendered on error page?
+                //TO DO: possibly do some more advanced test case checking and print that?
+                return res.json({message: "Submitted, but incorrect"});
+
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    })
+    /* 
     sample responses 
         (success):
         {output, statusCode, memory, cpuTime}
@@ -187,39 +247,7 @@ const uploadSubmissionById = async (req, res, next) => {
     */
 
     //DUMMY CHECKS
-    const isSuccess = true;
-
-    if (isSuccess) {
-        //update all relevant information
-        newSubmission.success = true;
-        student.completedChallenges.push(challenge);
-        //check if course is completed
-        let completedCourse = true;
-        for (let i = 0; i < challenge.course.challenges.length; i++) {
-            if (!student.completedChallenges.includes(challenge.course.challenges[i])){
-                completedCourse = false;
-            }
-        }
-        //console.log(challenge.course);
-        if (completedCourse) {
-            student.credentials.push(challenge.course);
-        }
-
-        try {
-            const session = await mongoose.startSession();
-            session.startTransaction();
-            await newSubmission.save({session});
-            await student.save({ session });
-            await session.commitTransaction();
-        } catch (err) {
-            console.log(err);
-            next(new HttpError("Something went wrong during uploading, please try again", 500));
-            return;
-        }
-        return res.json({message: "submission success"});
-    }
-    //maybe send back data to be rendered on error page?
-    return res.json({message: "Submitted, but incorrect"});
+    //const isSuccess = true;
 };
 
 exports.getAllChallenges = getAllChallenges;

@@ -89,7 +89,7 @@ const Challenge = (props) => {
   };
 
   if (challenge) {
-    //console.log(challenge);
+    console.log(challenge);
     //console.log(student);
     const isQualified =
         !auth.token || !student
@@ -115,6 +115,7 @@ const Challenge = (props) => {
                         <SubmitFile
                         center
                         id='file'
+                        ext={challenge.languageExtension}
                         onInput={inputHandler}
                         errorText='Click below to upload file.'
                         />
