@@ -78,3 +78,72 @@ name|String|Name of Tier. <br />(Bronze, Silver, Gold, Platinum)
 
 # API Endpoints
 
+Challenges (root: **/api/challenge**)
+Function Name|Type|Route|Description
+---------|-----|----|------------
+getAllChallenge|GET|/|Retrieves all internal challenges and their details.  
+getChallengeById|GET|/:cid|Retrieves one internal challenge by its cid and their details.  
+uploadSubmissionById*|POST|/:cid/submissions|Enables uploading of submission files by Student. <br />Submissions are sent to jdoodle API and path stored in MongoDB. <br /> Credentials and completion trackers automatically given upon verification.
+
+*requires valid Student token  <br />
+
+StartupChallenges (root: **/api/startup-challenge**):
+Function Name|Type|Route|Description
+---------|-----|----|------------
+getAllChallenges|GET|/all|Retrieves all internal challenges and their details.
+getChallengeById|GET|/:cid|Retrieves one internal challenge by its cid and their details.
+getChallengeByStartup|GET|/startup/:sid|Retrieves all internal challenges by a startup and their details using their sid.
+getSubmissionById**|GET|/:cid/submissions|Retrieves all submissions by Students on one challenge by its cid.
+uploadSubmissionById*|POST|/:cid/submissions|Enables uploading of submission files by Student.<br />Submissions are sent to jdoodle API and path stored in MongoDB.<br />Credentials and completion trackers automatically given upon verification.
+updateStartupChallengeById**|PATCH|/:cid|Enables editing of the details of StartupChallenge of Startup.<br />Allows uploading of new test cases in JSON.<br />Token verification to ensure only the owner can edit their challenge.
+deleteStartupChallengeById**|DELETE|/:cid|Enables deletion of the StartupChallenge of Startup.<br />Token verification to ensure only the owner can delete the challenge.
+createStartupChallenge**|POST|/new|Enables creation of new StartupChallenge by Startup.<br />Allows uploading of new test cases in JSON.
+
+*requires valid Student token  
+**requires valid Startup token  <br />
+
+Startup (root: **/api/startup**):
+Function Name|Type|Route|Description
+---------|-----|----|------------
+getStartupById|GET|/:sid|Retrieves one Startup by its sid and their details.
+Data depends on parsed token.
+startupLogin|POST|/login|Logs in a Startup.<br />Verifies log in information.<br />Returns a token.
+startupSignup|POST|/signup|Creates a Startup account.<br />Enables uploading a file as profile image.<br />Returns a token.
+getAllStartups|GET|/|Retrieves all Startup information.
+startupUpdate**|POST|/:sid/update|Enables editing of the details of Startup.<br />Allows uploading of new profile picture.<br />Token verification to ensure only the owner can edit their profile.
+
+**requires valid Startup token <br />
+
+Student (root: **/api/student**):
+Function Name|Type|Route|Description
+---------|-----|----|------------
+getSubmissionsByStudentId*|GET|/:sid/submissions|Retrieves all submissions by Student by its sid.
+getCredentialsByStudentId|GET|/:sid/credentials|Retrieves all credentials of Student by its sid.
+getStudentById|GET|/:sidRetrieves one Student by its sid and their details.|Data depends on parsed token.
+studentLogin|POST|/login|Logs in a Student.<br />Verifies log in information.<br />Returns a token.
+studentSignup*|POST|/signup|Creates a Student account.<br />Enables uploading a file as profile image.<br />Returns a token.
+getAllStudents|GET|/|Retrieves all Student information.
+studentUpdate*|PATCH|/:sid|Enables editing of the details of Student.<br />Allows uploading of new profile picture. <br />Token verification to ensure only the owner can edit their profile.
+
+*requires valid Student token <br />
+
+Tier (root: **/api/tier**):
+Function Name|Type|Route|Description
+---------|-----|----|------------
+getAllTiers|GET|/|Retrieves all Tiers.<br />Mainly used for rendering information.
+
+Language (root: **/api/language**):
+Function Name|Type|Route|Description
+---------|-----|----|------------
+getAllLanguages|GET|/|Retrieves all Languages. <br />Mainly used for rendering information.
+
+Debug (root: **/api/debug**): **This are administrator functions**
+Function Name|Type|Route|Description
+---------|-----|----|------------
+createNewLanguage|POST|/language/new|Creates new Language.<br />Used for initialising information.
+createNewTier|POST|/tier/new|Creates new Tier.<br />Used for initialising information.
+createNewCourse|POST|/course/new|Creates new Course (Progression Tier).<br />Used for initialising information.
+createNewChallenge|POST|/challenge/new|Enables creation of new Challenge.<br />Automatically updates dependency Challenges.
+updateChallenge|POST|/challenge/:cid/update|Enables editing of the details of Challenge by :cid.<br />Flexible to allow for partial edits depending on request body. <br />Automatically updates dependency Challenges.
+deleteChallenge|DELETE|/challenge/:cid/delete|Enables deletion of the Challenge by :cid. <br />Automatically updates dependency Challenges.
+
