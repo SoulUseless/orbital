@@ -8,6 +8,8 @@ const Challenge = require("../models/challenge");
 const Student = require("../models/student");
 const Submission = require("../models/submission");
 
+const TestCaseAdder = require("../util/testCaseAdder");
+
 const getAllChallenges = async (req, res, next) => {
     let challenges;
     try {
@@ -178,14 +180,14 @@ const uploadSubmissionById = async (req, res, next) => {
             console.log(err);
         } else {
             //TO DO: run function to append test case checks to after last line
-            console.log("success");
-            console.log(data);
+            //console.log("success");
+            //console.log(data);
             try {
                 const response = await axios({ //sending the file to axios
                     method: 'post',
                     url: 'https://api.jdoodle.com/v1/execute',
                     data: {
-                        script: data,
+                        script: TestCaseAdder.addTestCase(challenge.course.language.name, data, challenge.testCases),
                         language: challenge.course.language.jdoodleName,
                         versionIndex: challenge.course.language.jdoodleVersion,
                         clientId: process.env.JDOODLE_ID,
@@ -193,13 +195,48 @@ const uploadSubmissionById = async (req, res, next) => {
                     }
                 });
 
-                console.log(response.data);
-                const isSuccess = response.data.output //processes the outputs
+                //console.log(response.data);
+                //console.log(challenge.testCases);
+
+                //runs checks if there is any errors while running -> breaks out of whole function
+                //can be bypassed tbh, if "error" is purposely printed
+                if (response.data.output.includes("Error") ||response.data.output.includes("error")) {
+                    return res.json({message: "Error in Code \n " + response.data.output});
+                }
+
+                //sliced in a way to prevent workarounds by printing
+                const testCaseChecks = response.data.output //processes the outputs
                     .slice(0, -1)
                     .split("\n")
-                    .reduce((x, y) => x && (y === "True" || y === "true"));
+                    .slice(-challenge.testCases.publicTestCases.length-challenge.testCases.privateTestCases.length);
 
-                //entire code chunk could be a callback?
+                //to catch if somehow length is different
+                if (testCaseChecks.length != challenge.testCases.publicTestCases.length + challenge.testCases.privateTestCases.length) {
+                    next(new HttpError("Something went wrong during uploading, please try again", 500));
+                    return;
+                }
+
+                let isSuccess = true;
+
+                let publicMistakes = [];
+                let privateMistakes = false;
+                let index = 0;
+                //check which test case failed, or passed
+                while (index < testCaseChecks.length) {
+                    if (index < challenge.testCases.publicTestCases.length) {
+                        if (testCaseChecks[index] === "False" || testCaseChecks[index] === "false") {
+                            isSuccess = false;
+                            publicMistakes.push(challenge.testCases.publicTestCases[index]);
+                        }
+                    } else {
+                        if (testCaseChecks[index] === "False" || testCaseChecks[index] === "false") {
+                            isSuccess = false;
+                            privateMistakes = true;
+                        }
+                    }
+                    index += 1;
+                }                
+                
                 if (isSuccess) {
                     //update all relevant information
                     newSubmission.success = true;
@@ -229,25 +266,23 @@ const uploadSubmissionById = async (req, res, next) => {
                     }
                     return res.json({message: "submission success"});
                 }
-                //maybe send back data to be rendered on error page?
-                //TO DO: possibly do some more advanced test case checking and print that?
-                return res.json({message: "Submitted, but incorrect"});
+                
+                //TO DO: formatting could be done on frontend
+                let message = "Submitted, but incorrect\n\n";
+                if (publicMistakes.length > 0) {
+                    message += "You have failed the following public test cases: \n"
+                    message += publicMistakes.map(x => "Input: " + x.input + "Output: " + x.output + "\n");
+                } 
+                if (privateMistakes) {
+                    message += "You have failed some private test cases"
+                }
+                return res.json({message: message});
 
             } catch (err) {
                 console.log(err);
             }
         }
     })
-    /* 
-    sample responses 
-        (success):
-        {output, statusCode, memory, cpuTime}
-        (error):
-        {error, statusCode}
-    */
-
-    //DUMMY CHECKS
-    //const isSuccess = true;
 };
 
 exports.getAllChallenges = getAllChallenges;

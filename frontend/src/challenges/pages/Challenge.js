@@ -76,16 +76,23 @@ const Challenge = (props) => {
     const formData = new FormData(); //default browser js
     formData.append("submission", formState.inputs.file.value);
     //console.log(formData);
-    responseData = await sendRequest(
-        `${process.env.REACT_APP_BACKEND_URL}/challenge/submissions/${challengeId}`,
-        "POST",
-        formData,
-        {
-            Authorization: `Bearer ${auth.token}`,
+    try {
+        responseData = await sendRequest(
+            `${process.env.REACT_APP_BACKEND_URL}/challenge/submissions/${challengeId}`,
+            "POST",
+            formData,
+            {
+                Authorization: `Bearer ${auth.token}`,
+            }
+        );
+        console.log(responseData);
+        if (responseData.message) {
+            setResponse(responseData.message);
+            openModalHandler();
         }
-    );
-    setResponse(responseData.message);
-    openModalHandler();
+    } catch (err) {
+        console.log(err);
+    }
   };
 
   if (challenge) {
