@@ -106,79 +106,83 @@ const uploadSubmissionById = async (req, res, next) => {
     const file = req.file;
     const filePath = req.file.path;
 
-    const studentId = user.userId;
-    let student;
-    try {
-        student = await Student.findById(studentId);
-    } catch (err) {
-        //console.log(err);
-        next( new HttpError("Database error", 500));
-        return;
-    }
-
-    const challengeId = req.params.cid;
-    let challenge;
-    try {
-        challenge = await Challenge.findById(challengeId).populate({
-            path: "course",
-            populate: {
-                path: "language",
-            },
-        });
-        //pending population when startup is developed
-    } catch (err) {
-        //console.log(err);
-        next( new HttpError("Database error", 500));
-        return;
-    }
-
-    if (!challenge) {
-        return next(new HttpError("No such challenge found", 404));
-    }
-
-    //check if student has completed pre-requisites
-    let completedPrerequisites = true;
-    //console.log(student.completedChallenges);
-    //console.log(challenge.requirements);
-    for (let i = 0; i < challenge.requirements.length; i++) {
-        if (!student.completedChallenges.includes(challenge.requirements[i])){
-            completedPrerequisites = false;
-        }
-    }
-
-    if (!completedPrerequisites) {
-        return next(new HttpError("You have not completed the prerequisite challenges", 401));
-    }
-
-    const newSubmission = new Submission({
-        file: filePath,
-        owner: studentId,
-        success: false
-    });
-
-    try {
-        const session = await mongoose.startSession();
-        session.startTransaction();
-        await newSubmission.save({session});
-
-        student.challengeSubmissions.push(newSubmission);
-        await student.save({ session });
-        
-        challenge.submissions.push(newSubmission);
-        await challenge.save({ session });
-        await session.commitTransaction();
-    } catch (err) {
-        console.log(err);
-        next(new HttpError("Something went wrong during uploading, please try again", 500));
-        return;
-    }
-
     //console.log(file);
     //console.log(challenge.course.language);
     fs.readFile(path.join(__dirname, "/../", filePath), "utf-8", async (err, data) => {
         if (err) {
             console.log(err);
         } else {
+            const studentId = user.userId;
+            let student;
+            try {
+                student = await Student.findById(studentId);
+            } catch (err) {
+                //console.log(err);
+                next( new HttpError("Database error", 500));
+                return;
+            }
+
+            const challengeId = req.params.cid;
+            let challenge;
+            try {
+                challenge = await Challenge.findById(challengeId).populate({
+                    path: "course",
+                    populate: {
+                        path: "language",
+                    },
+                });
+                //pending population when startup is developed
+            } catch (err) {
+                //console.log(err);
+                next( new HttpError("Database error", 500));
+                return;
+            }
+
+            if (!challenge) {
+                return next(new HttpError("No such challenge found", 404));
+            }
+
+            //check if student has completed pre-requisites
+            let completedPrerequisites = true;
+            //console.log(student.completedChallenges);
+            //console.log(challenge.requirements);
+            for (let i = 0; i < challenge.requirements.length; i++) {
+                if (!student.completedChallenges.includes(challenge.requirements[i])){
+                    completedPrerequisites = false;
+                }
+            }
+
+            if (!completedPrerequisites) {
+                return next(new HttpError("You have not completed the prerequisite challenges", 401));
+            }
+
+            if (challenge.course.language.name === "java" && data.includes("public static void main")) {
+                next(new HttpError("Please do not include main() function inside your class"), 400);
+            }
+
+            const newSubmission = new Submission({
+                file: filePath,
+                owner: studentId,
+                success: false
+            });
+
+            try {
+                const session = await mongoose.startSession();
+                session.startTransaction();
+                await newSubmission.save({session});
+
+                student.challengeSubmissions.push(newSubmission);
+                await student.save({ session });
+                
+                challenge.submissions.push(newSubmission);
+                await challenge.save({ session });
+                await session.commitTransaction();
+            } catch (err) {
+                console.log(err);
+                next(new HttpError("Something went wrong during uploading, please try again", 500));
+                return;
+            }
+
             //TO DO: run function to append test case checks to after last line
             //console.log("success");
             //console.log(data);
@@ -250,7 +254,7 @@ const uploadSubmissionById = async (req, res, next) => {
                         }
                     }
                     //console.log(challenge.course);
-                    if (completedCourse) {
+                    if (completedCourse && !student.credentials.includes(challenge.course)) {
                         student.credentials.push(challenge.course);
                     }
             
@@ -285,6 +289,8 @@ const uploadSubmissionById = async (req, res, next) => {
         }
     })
 };
+
+const getSubmissionsById = 
 
 exports.getAllChallenges = getAllChallenges;
 exports.getChallengeById = getChallengeById;

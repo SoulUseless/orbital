@@ -71,7 +71,6 @@ const Challenge = (props) => {
   }, [sendRequest, challengeId, auth.token, auth.userId, auth.userType]);
 
   const challengeSubmitHandler = async (event) => {
-      //TODO: if lang == java, check if public static void main is in code string, if so, reject
     event.preventDefault();
     let responseData;
     const formData = new FormData(); //default browser js
@@ -166,7 +165,8 @@ const Challenge = (props) => {
                 footer={<Button onClick={closeModalHandler}>CLOSE</Button>}
             >
                 <div className="modal-container">
-                    {response}
+                    {response &&
+                        response.split("\n").map((line) => <p>{line}</p>)}
                 </div>
             </Modal>
 
