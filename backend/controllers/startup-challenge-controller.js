@@ -580,7 +580,7 @@ const uploadSubmissionById = async (req, res, next) => {
                     }
                     return res.json({message: "submission success"});
                 }                
-                //TO DO: formatting could be done on frontend
+                
                 let message = "Submitted, but incorrect\n\n";
                 if (publicMistakes.length > 0) {
                     message += "You have failed the following public test cases: \n"
@@ -599,6 +599,12 @@ const uploadSubmissionById = async (req, res, next) => {
     });
 };
 
+const downloadSubmission = async (req, res, next) => {
+    const file = path.join(__dirname, "/../", req.params.sid);
+    console.log(file);
+    res.download(file);
+};
+
 exports.getChallengeById = getChallengeById;
 exports.getChallengeByStartup = getChallengeByStartup;
 exports.createStartupChallenge = createStartupChallenge;
@@ -607,3 +613,4 @@ exports.deleteStartupChallengeById = deleteStartupChallengeById;
 exports.getSubmissionsById = getSubmissionsById;
 exports.getAllChallenge = getAllChallenge;
 exports.uploadSubmissionById = uploadSubmissionById;
+exports.downloadSubmission = downloadSubmission;

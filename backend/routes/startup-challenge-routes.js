@@ -19,6 +19,8 @@ router.use(checkAuth);
 
 router.get("/submissions/:cid", startupChallengeControllers.getSubmissionsById);
 
+//router.get("/submissions/download/:sid", startupChallengeControllers.downloadSubmission);
+
 router.post("/submissions/:cid", 
     fileUpload("submission").single("submission"), 
     startupChallengeControllers.uploadSubmissionById); 

@@ -183,9 +183,6 @@ const uploadSubmissionById = async (req, res, next) => {
                 return;
             }
 
-            //TO DO: run function to append test case checks to after last line
-            //console.log("success");
-            //console.log(data);
             try {
                 console.log(TestCaseAdder.addTestCase(challenge.course.language.name, data, challenge.testCases));
                 const response = await axios({ //sending the file to axios
@@ -272,7 +269,6 @@ const uploadSubmissionById = async (req, res, next) => {
                     return res.json({message: "submission success"});
                 }
                 
-                //TO DO: formatting could be done on frontend
                 let message = "Submitted, but incorrect\n\n";
                 if (publicMistakes.length > 0) {
                     message += "You have failed the following public test cases: \n"
@@ -290,7 +286,6 @@ const uploadSubmissionById = async (req, res, next) => {
     })
 };
 
-const getSubmissionsById = 
 
 exports.getAllChallenges = getAllChallenges;
 exports.getChallengeById = getChallengeById;

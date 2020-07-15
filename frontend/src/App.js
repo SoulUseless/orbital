@@ -18,6 +18,7 @@ import Challenge from './challenges/pages/Challenge';
 import Challenges from './challenges/pages/Challenges';
 import StartupChallenge from './startup-challenges/pages/StartupChallenge';
 import EditStartUpChallenge from './startup-challenges/pages/EditStartupChallenge';
+import StartUpChallengeSubmissions from './startup-challenges/pages/StartUpChallengeSubmissions';
 import StartupChallenges from './startup-challenges/pages/StartupChallenges';
 import NewStartupChallenge from './startup-challenges/pages/NewStartupChallenge.js';
 import Auth from './users/pages/authentication/Auth';
@@ -114,6 +115,7 @@ const App = () => {
           <Route path='/startup/edit/:startupId'>
             <EditStartUpProfile />
           </Route>
+          
 
           <Route path='/startup/:startupId'>
             <StartupProfile />
@@ -137,6 +139,10 @@ const App = () => {
 
           <Route path='/startup-challenge/edit/:challengeId'>
             <EditStartUpChallenge />
+          </Route>
+
+          <Route path='/startup-challenge/submissions/:challengeId'>
+            <StartUpChallengeSubmissions />
           </Route>
 
           <Route path='/startup-challenge/:challengeId'>

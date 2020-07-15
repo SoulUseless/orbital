@@ -187,9 +187,15 @@ const StartupChallenge = (props) => {
               )
           ) : auth.token && auth.userType === "startup" ? (
               isOwner ? (
-                  <Button onClick={showDeleteWarningHandler} danger>
-                      <h2> Delete </h2>
-                  </Button>
+                  <span>
+                    <Button onClick={showDeleteWarningHandler} danger>
+                        <h2> Delete </h2>
+                    </Button>
+
+                    <Button to={`/startup-challenge/submissions/${challengeId}`}>
+                        <h2> View Submissions </h2>
+                    </Button>
+                </span>
               ) : (
                   <></>
               )
