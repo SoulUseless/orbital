@@ -128,7 +128,7 @@ const uploadSubmissionById = async (req, res, next) => {
                 challenge = await Challenge.findById(challengeId).populate({
                     path: "course",
                     populate: {
-                        path: "language",
+                        path: "language tier",
                     },
                 });
                 //pending population when startup is developed
@@ -253,6 +253,10 @@ const uploadSubmissionById = async (req, res, next) => {
                     //console.log(challenge.course);
                     if (completedCourse && !student.credentials.includes(challenge.course)) {
                         student.credentials.push(challenge.course);
+                    } else {
+                        completedCourse = false;
+                        //flips this in the case that it includes
+                        //useful for subsequent lines
                     }
             
                     try {
@@ -266,7 +270,12 @@ const uploadSubmissionById = async (req, res, next) => {
                         next(new HttpError("Something went wrong during uploading, please try again", 500));
                         return;
                     }
-                    return res.json({message: "submission success"});
+                    if (completedCourse) {
+                        return res.json({
+                            message: `Submission Success\n Congratulations you have completed: ${challenge.course.language.name} - ${challenge.course.tier.name}`,
+                        });
+                    }
+                    return res.json({message: "Submission Success"});
                 }
                 
                 let message = "Submitted, but incorrect\n\n";
