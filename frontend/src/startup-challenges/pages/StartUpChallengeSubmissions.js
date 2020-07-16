@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import Button from '../../shared/components/formElements/Button';
 import { AuthContext } from "../../shared/context/auth-context";
@@ -35,13 +35,8 @@ const StartUpChallengeSubmissions = (props) => {
     }, [sendRequest, cid, auth.token]);
 
     const downloadHandler = (name) => async (event) => {
-        //TODO: NOT DOWNLOADING, BUT SENDING TO CORRECT ENDPOINT
         try {
-            const resp = await sendRequest(
-                `${process.env.REACT_APP_BACKEND_URL}/${name}`
-            );
-            console.log("trig");
-            console.log(resp);
+            await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/${name}`);
         } catch (err) {
             console.log(err);
         }
@@ -87,13 +82,19 @@ const StartUpChallengeSubmissions = (props) => {
                                                         index + 1
                                                     }`}
                                                 >
-                                                    <td>{sub.owner.name}</td>
+                                                    <td>
+                                                        <Link to={`/student/${sub.owner._id}`}>
+                                                            {sub.owner.name}
+                                                        </Link>
+                                                    </td>
                                                     <td>
                                                         {sub.success.toString()}
                                                     </td>
                                                     <td>
                                                         <Button
-                                                            onClick={downloadHandler(sub.file)}
+                                                            onClick={downloadHandler(
+                                                                sub.file
+                                                            )}
                                                         >
                                                             Download
                                                         </Button>
