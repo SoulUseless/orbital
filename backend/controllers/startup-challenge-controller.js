@@ -602,7 +602,7 @@ const uploadSubmissionById = async (req, res, next) => {
 const downloadSubmission = async (req, res, next) => {
     const file = path.join(__dirname, "/../", req.params.sid);
     console.log(file);
-    res.download(file);
+    res.download(file,);
 };
 
 exports.getChallengeById = getChallengeById;

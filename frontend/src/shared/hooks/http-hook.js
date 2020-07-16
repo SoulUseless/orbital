@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+import { saveAs } from "file-saver";
 
 export const useHttpClient = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +29,20 @@ export const useHttpClient = () => {
                 body,
                 signal: httpAbortCtrll.signal
             });
+
+            //is a file
+            if (response.headers.get("content-disposition")) {
+                const fileName = response.headers
+                    .get("content-disposition")
+                    .split(";")
+                    .find((n) => n.includes("filename="))
+                    .replace("filename=", "")
+                    .trim();
+                const blob = await response.blob();
+                saveAs(blob, fileName);
+                setIsLoading(false);
+                return;
+            }
 
             const responseData = await response.json();
 

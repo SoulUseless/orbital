@@ -40,6 +40,7 @@ const StartUpChallengeSubmissions = (props) => {
             const resp = await sendRequest(
                 `${process.env.REACT_APP_BACKEND_URL}/${name}`
             );
+            console.log("trig");
             console.log(resp);
         } catch (err) {
             console.log(err);
