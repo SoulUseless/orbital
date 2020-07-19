@@ -49,6 +49,18 @@ app.use("/uploads/submissions", express.static(path.join("uploads", "submissions
 
 app.use("/uploads/testcases", express.static(path.join("uploads", "testcases")));
 
+app.get("/api/uploads/submission/:sid", (req, res, next) => {
+    const file = path.join(__dirname, "/uploads/submission", req.params.sid);
+    res.setHeader(
+        "Access-Control-Expose-Headers",
+        "Content-Disposition"
+    );
+    res.set('Content-Type', 'text/plain');
+    res.set('Content-Disposition', `attachment; filename=${req.params.sid}`);
+    //res.setHeader('Content-Type', 'text');
+    res.download(file); // Set disposition and send it.
+})
+
 //requests must come from urls that start with following url 
 app.use("/api/startup", startupRoutes);
 

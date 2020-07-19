@@ -47,7 +47,7 @@ const SubmitFile = (props) => {
         ref={filePickerRef}
         style={{ display: 'none' }}
         type='file'
-        accept='.js, .py'
+        accept={props.ext}
         onChange={pickedHandler}
       />
 

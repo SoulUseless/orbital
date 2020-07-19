@@ -2,7 +2,8 @@ const { uuid } = require("uuidv4");
 const { validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 const fs = require("fs");
-//const axios = require("axios");
+const path = require("path");
+const axios = require("axios");
 
 const HttpError = require("../models/http-error");
 const StartupChallenge = require("../models/startupChallenge");
@@ -12,6 +13,7 @@ const Submission = require("../models/submission");
 const Language = require("../models/language");
 const Tier = require("../models/tier");
 const Course = require("../models/course");
+const TestCaseAdder = require("../util/testCaseAdder");
 
 async function asyncMap(array, callback) {
     let result = [];
@@ -59,8 +61,6 @@ const getChallengeById = async (req, res, next) => {
     //json is automatically sent back
     if (challenge) {
         res.json({challenge: challenge});
-        //res.json({ place: place.toObject({ getters: true }) }); // => { place } === { place: place }
-
         //convert the object from mongoose object to js object
         //getters: true converts fields into strings
         return;
@@ -419,99 +419,184 @@ const uploadSubmissionById = async (req, res, next) => {
     const file = req.file;
     const filePath = req.file.path;
 
-    const studentId = user.userId;
-    let student;
-    try {
-        student = await Student.findById(studentId);
-        //pending population when startup is developed;
-    } catch (err) {
-        //console.log(err);
-        next( new HttpError("Database error", 500));
-        return;
-    }
-
-    const challengeId = req.params.cid;
-    let challenge;
-    try {
-        challenge = await StartupChallenge.findById(challengeId);
-    } catch (err) {
-        //console.log(err);
-        next( new HttpError("Database error", 500));
-        return;
-    }
-
-    if (!challenge) {
-        return next(new HttpError("No such challenge found", 404));
-    }
-
-    const newSubmission = new Submission({
-        file: filePath,
-        owner: studentId,
-        success: false
-    });
-
-    try {
-        const session = await mongoose.startSession();
-        session.startTransaction();
-        await newSubmission.save({session});
-
-        student.challengeSubmissions.push(newSubmission);
-        await student.save({ session });
-        
-        challenge.submissions.push(newSubmission);
-        await challenge.save({ session });
-        await session.commitTransaction();
-    } catch (err) {
-        console.log(err);
-        next(new HttpError("Something went wrong during uploading, please try again", 500));
-        return;
-    }
-
-    //SEND THE FILE TO JDOODLE USING THEIR API TO RUN THE CODE
-    /* sample json request -> needs axios integration i think
-    {
-        script : "", //script
-        language: "php", //language
-        versionIndex: "0", //language version
-        clientId: ${process.env.JDOODLE_ID},
-        clientSecret:${process.env.JDOODLE_SECRET}
-    }
-
-    send to:
-    {
-        url: 'https://api.jdoodle.com/v1/execute',
-        method: "POST",
-        json: program
-    }
-
-    sample responses 
-        (success):
-        {output, statusCode, memory, cpuTime}
-        (error):
-        {error, statusCode}
-    */
-
-    //DUMMY CHECKS
-    const isSuccess = true;
-    if (isSuccess) {
-        //update all relevant information
-        newSubmission.success = true;
-        student.completedStartupChallenges.push(challenge);
-        try {
-            const session = await mongoose.startSession();
-            session.startTransaction();
-            await newSubmission.save({session});
-            await student.save({ session });
-            await session.commitTransaction();
-        } catch (err) {
+    fs.readFile(path.join(__dirname, "/../", filePath), "utf-8", async (err, data) => {
+        if (err) {
             console.log(err);
-            next(new HttpError("Something went wrong during uploading, please try again", 500));
-            return;
+        } else {
+            const studentId = user.userId;
+            let student;
+            try {
+                student = await Student.findById(studentId);
+            } catch (err) {
+                //console.log(err);
+                next( new HttpError("Database error", 500));
+                return;
+            }
+
+            //main difference with challenge => process using the file extension instead of challenge language
+            const fileExt = "." + file.originalname.split(".")[1];
+            //console.log(fileExt);
+            let fileLang;
+            try {
+                fileLang = await Language.find({fileExtension: fileExt});
+                fileLang = fileLang[0];
+            } catch (err) {
+                next( new HttpError("Database error", 500));
+                return;
+            }
+            if (!fileLang) {
+                next(new HttpError("Invalid File Extension", 422));
+                return;
+            }
+            //console.log(fileLang);
+
+            const challengeId = req.params.cid;
+            let challenge;
+            try {
+                challenge = await StartupChallenge.findById(
+                    challengeId
+                ).populate({
+                    path: "requirements",
+                    populate: { path: "language" },
+                });
+            } catch (err) {
+                //console.log(err);
+                next( new HttpError("Database error", 500));
+                return;
+            }
+
+            if (!challenge) {
+                return next(new HttpError("No such challenge found", 404));
+            }
+            
+            if (challenge.requirements.map(x => x.language._id).includes(fileLang._id)) {
+                return next(new HttpError("Invalid File uploaded", 422));
+            }
+
+            let completedPrerequisites = true;
+            //check if credentials are satisfied
+
+            if (!completedPrerequisites) {
+                return next(new HttpError("You have not obtained the pre-requisite credentials", 401));
+            }
+
+            if (fileLang.name === "java" && data.includes("public static void main")) {
+                next(new HttpError("Please do not include main() function inside your class"), 400);
+            }
+
+            const newSubmission = new Submission({
+                file: filePath,
+                owner: studentId,
+                success: false
+            });
+
+            try {
+                const session = await mongoose.startSession();
+                session.startTransaction();
+                await newSubmission.save({session});
+
+                student.challengeSubmissions.push(newSubmission);
+                await student.save({ session });
+                
+                challenge.submissions.push(newSubmission);
+                await challenge.save({ session });
+                await session.commitTransaction();
+            } catch (err) {
+                console.log(err);
+                next(new HttpError("Something went wrong during uploading, please try again", 500));
+                return;
+            }
+            //console.log(fileLang);
+            try {
+                //console.log(TestCaseAdder.addTestCase(fileLang.name, data, challenge.testCases));
+                const response = await axios({ //sending the file to axios
+                    method: 'post',
+                    url: 'https://api.jdoodle.com/v1/execute',
+                    data: {
+                        script: TestCaseAdder.addTestCase(fileLang.name, data, challenge.testCases),
+                        language: fileLang.jdoodleName,
+                        versionIndex: fileLang.jdoodleVersion,
+                        clientId: process.env.JDOODLE_ID,
+                        clientSecret: process.env.JDOODLE_SECRET
+                    }
+                });
+
+                //console.log(response.data);
+                //console.log(challenge.testCases);
+
+                //runs checks if there is any errors while running -> breaks out of whole function
+                //can be bypassed tbh, if "error" is purposely printed
+                if (response.data.output.includes("Error") ||response.data.output.includes("error")) {
+                    return res.json({message: "Error in Code \n " + response.data.output});
+                }
+
+                //sliced in a way to prevent workarounds by printing
+                const testCaseChecks = response.data.output //processes the outputs
+                    .slice(0, -1)
+                    .split("\n")
+                    .slice(-challenge.testCases.publicTestCases.length-challenge.testCases.privateTestCases.length);
+
+                //to catch if somehow length is different
+                if (testCaseChecks.length != challenge.testCases.publicTestCases.length + challenge.testCases.privateTestCases.length) {
+                    next(new HttpError("Something went wrong during uploading, please try again", 500));
+                    return;
+                }
+
+                let isSuccess = true;
+
+                let publicMistakes = [];
+                let privateMistakes = false;
+                let index = 0;
+                //check which test case failed, or passed
+                while (index < testCaseChecks.length) {
+                    if (index < challenge.testCases.publicTestCases.length) {
+                        if (testCaseChecks[index] === "False" || testCaseChecks[index] === "false") {
+                            isSuccess = false;
+                            publicMistakes.push(challenge.testCases.publicTestCases[index]);
+                        }
+                    } else {
+                        if (testCaseChecks[index] === "False" || testCaseChecks[index] === "false") {
+                            isSuccess = false;
+                            privateMistakes = true;
+                        }
+                    }
+                    index += 1;
+                }                
+                
+                if (isSuccess) {
+                    //update all relevant information
+                    newSubmission.success = true;
+                    student.completedStartupChallenges.push(challenge);
+                    try {
+                        const session = await mongoose.startSession();
+                        session.startTransaction();
+                        await newSubmission.save({session});
+                        await student.save({ session });
+                        await session.commitTransaction();
+                    } catch (err) {
+                        console.log(err);
+                        next(new HttpError("Something went wrong during uploading, please try again", 500));
+                        return;
+                    }
+                    return res.json({message: "submission success"});
+                }                
+                
+                let message = "Submitted, but incorrect\n\n";
+                if (publicMistakes.length > 0) {
+                    message += "You have failed the following public test cases: \n"
+                    message += publicMistakes.map(x => "Input: " + x.input + "Output: " + x.output + "\n");
+                } 
+                if (privateMistakes) {
+                    message += "You have failed some private test cases"
+                }
+                return res.json({message: message});
+
+            } catch (err) {
+                console.log(err);
+            }
+            
         }
-        return res.json({message: "submission success"});
-    }
-    //maybe send back data to be rendered on error page?
-    return res.json({message: "Submitted, but incorrect"});
+    });
 };
 
 exports.getChallengeById = getChallengeById;

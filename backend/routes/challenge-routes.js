@@ -12,12 +12,11 @@ router.get("/:cid", challengeControllers.getChallengeById);
 
 router.use(checkAuth);
 
-router.use(
+router.post(
     "/submissions/:cid/",
     fileUpload("submission").single("submission"),
     challengeControllers.uploadSubmissionById
 ); 
-//going to have middleware for fileUpload
 
 module.exports = router;
 

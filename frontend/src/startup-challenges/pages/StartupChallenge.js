@@ -88,7 +88,7 @@ const StartupChallenge = (props) => {
     const getChallenge = async () => {
       try {
           const response = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/startup-challenge/${challengeId}`);
-          //console.log(response);
+          console.log(response);
           setChallenge(response.challenge);
       } catch (err) {
           console.log(err);
@@ -113,7 +113,6 @@ const StartupChallenge = (props) => {
   }, [sendRequest, challengeId, auth.token, auth.userId, auth.userType]);
 
   if (challenge) {
-      console.log(challenge);
       let isQualified = false;
       let isOwner = false;
       if (auth.token) {
@@ -121,29 +120,16 @@ const StartupChallenge = (props) => {
           const ownerId = challenge.owner._id;
           isOwner = ownerId === auth.userId;
         } else if (auth.userType === "student" && student) {
-            //this is more complicated than initially thought out to be
-            let temp = true;
-            for (let i = 0; i < challenge.requirements.length; i++) {
+            //const challengeReqIds = challenge.requirements.map(x => x._id);
+            //const credentials = student.credentials.map(x => x._id);
+            isQualified = challenge.requirements.every(x => {
                 for (let j = 0; j < student.credentials.length; j++) {
-                    if (!compareCredentials(student.credentials[j], challenge.requirements[i])) {
-                        temp = false;
+                    if (compareCredentials(student.credentials[j], x)) {
+                        return true;
                     }
                 }
-            }
-            isQualified = temp;
-            //console.log(isQualified);
-            /*
-            isQualified = challenge.requirements
-                .reduce(
-                    (x, req) =>
-                        x &&
-                        student.credentials.length < 1 
-                          ? false 
-                          : student.credentials
-                             .reduce((x, cred) => x && compareCredentials(cred, req)),
-                    true
-                );
-                */
+                return false;
+            });
         }
       }
       //console.log(isQualified);
@@ -158,16 +144,22 @@ const StartupChallenge = (props) => {
         const formData = new FormData(); //default browser js
         formData.append("submission", formState.inputs.file.value);
         //console.log(formData);
-        responseData = await sendRequest(
-            `${process.env.REACT_APP_BACKEND_URL}/startup-challenge/submissions/${challengeId}`,
-            "POST",
-            formData,
-            {
-                Authorization: `Bearer ${auth.token}`,
+        try {
+            responseData = await sendRequest(
+                `${process.env.REACT_APP_BACKEND_URL}/startup-challenge/submissions/${challengeId}`,
+                "POST",
+                formData,
+                {
+                    Authorization: `Bearer ${auth.token}`,
+                }
+            );
+            if (responseData.message) {
+                setResponse(responseData.message);
+                openModalHandler();
             }
-        );
-        setResponse(responseData.message);
-        openModalHandler();
+        } catch (err) {
+            console.log(err);
+        }
       };
 
       const footer =
@@ -178,10 +170,11 @@ const StartupChallenge = (props) => {
                     <form className='submit-form' onSubmit={challengeSubmitHandler}>
                     <div className='submit-file'>
                         <SubmitFile
-                        center
-                        id='file'
-                        onInput={inputHandler}
-                        errorText='Click below to upload file.'
+                            center
+                            id='file'
+                            ext={challenge.requirements.map(x => x.language.fileExtension).reduce((x, y) => x + ", " + y)}
+                            onInput={inputHandler}
+                            errorText='Click below to upload file.'
                         />
                         <Button type='submit' disabled={!formState.isValid}>
                         SUBMIT
@@ -194,9 +187,15 @@ const StartupChallenge = (props) => {
               )
           ) : auth.token && auth.userType === "startup" ? (
               isOwner ? (
-                  <Button onClick={showDeleteWarningHandler} danger>
-                      <h2> Delete </h2>
-                  </Button>
+                  <span>
+                    <Button onClick={showDeleteWarningHandler} danger>
+                        <h2> Delete </h2>
+                    </Button>
+
+                    <Button to={`/startup-challenge/submissions/${challengeId}`}>
+                        <h2> View Submissions </h2>
+                    </Button>
+                </span>
               ) : (
                   <></>
               )
@@ -249,27 +248,35 @@ const StartupChallenge = (props) => {
                   footerClass="challenge__modal-actions"
                   footer={<Button onClick={closeModalHandler}>CLOSE</Button>}
               >
-                  <div className="modal-container">{response}</div>
+                  <div className="modal-container">
+                      {response &&
+                          response.split("\n").map((line) => <p>{line}</p>)}
+                  </div>
               </Modal>
               {!isLoading && challenge && (
                   <div className="challenge-container">
                       <Card className="challenge">
                           <div className="challenge-header">
-                              <img src={`${process.env.REACT_APP_ASSET_URL}/${challenge.owner.logo}`} alt={challenge.owner.name} />
+                              <img
+                                  src={`${process.env.REACT_APP_ASSET_URL}/${challenge.owner.logo}`}
+                                  alt={challenge.owner.name}
+                              />
                               <h1> {challenge.name} </h1>
-                              {auth.token && auth.userType === "startup" && isOwner && (
-                                  <Link
-                                      to={`/startup-challenge/edit/${challenge._id}`}
-                                  >
-                                      <img
-                                          src="https://toppng.com/uploads/preview/free-download-pencil-chalk-png-clipart-clip-art-pencil-ico-11562901060ymmwp55mwl.png"
-                                          alt="Edit"
-                                          height="100%"
-                                          width="auto"
-                                          padding-left="20px"
-                                      />
-                                  </Link>
-                              )}
+                              {auth.token &&
+                                  auth.userType === "startup" &&
+                                  isOwner && (
+                                      <Link
+                                          to={`/startup-challenge/edit/${challenge._id}`}
+                                      >
+                                          <img
+                                              src="https://toppng.com/uploads/preview/free-download-pencil-chalk-png-clipart-clip-art-pencil-ico-11562901060ymmwp55mwl.png"
+                                              alt="Edit"
+                                              height="100%"
+                                              width="auto"
+                                              padding-left="20px"
+                                          />
+                                      </Link>
+                                  )}
 
                               <Button to="/startup-challenge" inverse>
                                   <h2> Back</h2>
@@ -315,7 +322,9 @@ const StartupChallenge = (props) => {
                                                               req.language.name
                                                                   .charAt(0)
                                                                   .toUpperCase() +
-                                                              req.language.name.slice(1)
+                                                              req.language.name.slice(
+                                                                  1
+                                                              )
                                                           }: ${req.tier.name}`}
                                                       </li>
                                                   )
