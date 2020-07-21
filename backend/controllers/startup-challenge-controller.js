@@ -469,7 +469,8 @@ const uploadSubmissionById = async (req, res, next) => {
                 return next(new HttpError("No such challenge found", 404));
             }
             
-            if (challenge.requirements.map(x => x.language._id).includes(fileLang._id)) {
+            console.log(challenge.requirements.map(x => x.language._id));
+            if (! challenge.requirements.map(x => x.language._id).includes(fileLang._id)) {
                 return next(new HttpError("Invalid File uploaded", 422));
             }
 

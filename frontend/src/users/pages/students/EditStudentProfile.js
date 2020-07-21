@@ -107,6 +107,7 @@ const UpdateStudentProfile = () => {
       });
       console.log("success");
       history.push(`/student/${auth.userId}`);
+      window.location.reload();
 
     } catch (err) {
       console.log(err);
@@ -185,7 +186,7 @@ const UpdateStudentProfile = () => {
                           <Input
                               element="input"
                               id="password"
-                              type="text"
+                              type="password"
                               label="Password (Enter old password if wish to remain unchanged)"
                               validators={[VALIDATOR_MINLENGTH(5)]}
                               errorText="Please enter a valid password, at least 5 characters."

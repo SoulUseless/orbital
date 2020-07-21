@@ -183,7 +183,7 @@ const StartupChallenge = (props) => {
                     </form>
                 </>
               ) : (
-                  <h1> you are not qualified </h1>
+                  <h1> You are not qualified. </h1>
               )
           ) : auth.token && auth.userType === "startup" ? (
               isOwner ? (
