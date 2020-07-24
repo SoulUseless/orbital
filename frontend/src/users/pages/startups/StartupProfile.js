@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import { AuthContext } from '../../../shared/context/auth-context';
 import Button from '../../../shared/components/formElements/Button';
@@ -55,6 +55,42 @@ const StartupProfile = (props) => {
                       <h1>{startup.name}</h1>
                       <h2>{startup.email}</h2>
                       <h3>{startup.description}</h3>
+                  </div>
+                  <hr />
+                  <div className="startup-challenges">
+                    <h3>Challenges By {startup.name}</h3>
+                    <table className="startup-challenges-table">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    Challenge Name
+                                </th>
+                                <th>
+                                    Link
+                                </th>
+                            </tr>
+                            {startup.challenges.map(
+                                (ch, index) => {
+                                    return (
+                                        <tr
+                                            key={`challenge-${
+                                                index + 1
+                                            }`}
+                                        >
+                                            <td>
+                                                {ch.name}
+                                            </td>
+                                            <td>
+                                                <Link to={`/startup-challenge/${ch._id}`}>
+                                                    Go To Challenge
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    );
+                                }
+                            )}
+                        </tbody>
+                    </table>
                   </div>
 
                   {auth.token &&

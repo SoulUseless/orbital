@@ -6,8 +6,12 @@ import './StartupChallengeListItem.css';
 const StartupChallengeListItem = (props) => {
   const arrayOfRequirements = props.requirements;
   //console.log(props.requirements);
-  const languages = arrayOfRequirements.map((obj) => obj.language.name).reduce((x, y) => x + ", " + y);
+  const languages = arrayOfRequirements
+      .map((obj) => obj.language.name)
+      .map((lang) => lang.charAt(0).toUpperCase() + lang.slice(1))
+      .reduce((x, y) => x + ", " + y);
   //console.log(languages);
+
 
   return (
     <li className='challenge-item'>

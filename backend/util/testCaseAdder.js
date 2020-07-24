@@ -15,9 +15,9 @@ const addTestCase = (lang, code, testCases) => {
     if (lang === "java") {
         //TODO: working properly, but only for basic algorithms and scripting-like functions
         let main_code = "public static void main(String[] args) {";
-        main_code += testCases.publicTestCases.map(x => `System.out.println(Main.${x.input} == ${x.output});`).reduce((x, y) => x + y);
-        main_code += testCases.privateTestCases.map(x => `System.out.println(Main.${x.input} == ${x.output});`).reduce((x, y) => x + y);
-        main_code += "}"
+        main_code += testCases.publicTestCases.map(x => `System.out.println(Main.${x.input} == ${x.output});\n`).reduce((x, y) => x + y);
+        main_code += testCases.privateTestCases.map(x => `System.out.println(Main.${x.input} == ${x.output});\n`).reduce((x, y) => x + y);
+        main_code += "}\n"
         console.log(main_code);
         code = code.trim();
 

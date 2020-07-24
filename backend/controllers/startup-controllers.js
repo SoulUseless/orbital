@@ -28,7 +28,7 @@ const getStartupById = async (req, res, next) => {
 
     let startup;
     try {
-        startup = await Startup.findById(startupId);
+        startup = await Startup.findById(startupId).populate("challenges");
     } catch (err) {
         //console.log(err);
         next(new HttpError("Search failed", 500));
