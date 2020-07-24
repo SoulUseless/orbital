@@ -184,7 +184,7 @@ const uploadSubmissionById = async (req, res, next) => {
             }
 
             try {
-                console.log(TestCaseAdder.addTestCase(challenge.course.language.name, data, challenge.testCases));
+                //console.log(TestCaseAdder.addTestCase(challenge.course.language.name, data, challenge.testCases));
                 const response = await axios({ //sending the file to axios
                     method: 'post',
                     url: 'https://api.jdoodle.com/v1/execute',
