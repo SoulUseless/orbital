@@ -1,7 +1,8 @@
-import React from "react";
+import React from 'react';
+import GuideInfo from './GuideInfo';
 
-const Guide = () => {
-    return <h1> this is a guide </h1>
+const Guide = (props) => {
+  return <GuideInfo />;
 };
 
 export default Guide;
