@@ -10,8 +10,8 @@ const NavLinks = (props) => {
 
   const onLogoutHandler = () => {
     auth.logout();
-    history.push("/");
-  }
+    history.push('/');
+  };
   return (
     <>
       <ul className='nav-links'>
@@ -60,13 +60,10 @@ const NavLinks = (props) => {
             )}
 
             <li>
-              <NavLink to='/settings' exact>
-                {/* to do*/}
-                <span style={{ color: 'white' }}>Settings</span>
-              </NavLink>
-            </li>
-            <li>
-              <button onClick={onLogoutHandler} style={{ color: 'white' }}> Logout </button>
+              <button onClick={onLogoutHandler} style={{ color: 'white' }}>
+                {' '}
+                Logout{' '}
+              </button>
             </li>
           </>
         )}

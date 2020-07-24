@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: -4pt;
+  margin-top: 0pt;
   text-align: center;
 }
 
@@ -24,13 +24,18 @@
   text-decoration: none;
   padding: 0rem;
   margin-left: 40px;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .nav-links a:hover,
 .nav-links a:active,
 .nav-links a.active {
-  background: #363738;
+  background: #474949;
   border-color: #292929;
+  border-radius: 4px;
   color: #292929;
 }
 
@@ -42,7 +47,7 @@
   background: transparent;
   color: 292929;
   cursor: pointer;
-  margin-right: 1rem;
+  margin-left: 1rem;
   text-decoration: none;
   display: inline-block;
 }

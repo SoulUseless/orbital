@@ -28,14 +28,14 @@
 }
 
 .student-item__info h1 {
-  font-size: 3rem;
+  font-size: 2rem;
   text-align: center;
   font-weight: normal;
   color: black;
   margin: 5px;
 }
 .student-item__info h2 {
-  font-size: 1.5rem;
+  font-size: 1rem;
   text-align: center;
   font-weight: normal;
   color: rgb(77, 75, 75);
@@ -46,7 +46,7 @@
 .student-item__info h3 {
   margin: 0;
   color: #918f8f;
-  text-align: justify;
+  text-align: center;
   font-size: 1rem;
   padding: 0.2rem;
 }

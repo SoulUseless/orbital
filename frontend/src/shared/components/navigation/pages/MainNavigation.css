@@ -30,15 +30,14 @@
   margin-top: 45pt;
 }
 
+.main-navigation__logo {
+  max-width: 112px;
+}
+
 .main-navigation__title {
-  color: f1faee;
+  margin-left: 155px;
+  margin-top: -90px;
 }
-
-.main-navigation__title a {
-  text-decoration: none;
-  color: f1faee;
-}
-
 .main-navigation__header-nav {
   display: none;
 }
@@ -58,5 +57,6 @@
 
   .nav-title {
     display: block;
+    margin-top: -30px;
   }
 }

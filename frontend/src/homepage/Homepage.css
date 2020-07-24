@@ -1,0 +1,63 @@
+.info-item {
+  display: inline-block;
+  margin: 1rem 0;
+  width: 33%;
+  align-items: center;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.card.info-item__card {
+  width: 100%;
+  height: 300px;
+  padding: 0.5%;
+  border-right-style: dashed;
+}
+.info-item__icon {
+  width: 50%;
+  height: 100%;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.info-item__icon img {
+  width: 119px;
+  height: 119px;
+  padding: 2px;
+  object-fit: scale-down;
+}
+
+.info-item__description {
+  padding: 0;
+  text-align: center;
+  color: black;
+}
+
+.info-item__description h2 {
+  margin: 0.25rem 0 0 0;
+  color: black;
+}
+
+.info-item__description h3 {
+  margin: 0 0 0.5rem 0;
+  font-weight: lighter;
+  font-style: italic;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  color: rgb(77, 77, 77);
+}
+
+@media (min-width: 768px) {
+  .info-item__icon {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    height: 40%;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-item {
+    height: 50%;
+    width: 33.3%;
+  }
+}

@@ -50,14 +50,14 @@
 }
 
 .startup-challenge-item__info h4 {
-  color: #6495ed;
+  color: rgb(0, 0, 0);
   font-size: 15pt;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .startup-challenge-item__info h5 {
-  color: #add8e6;
+  color: #858585;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
