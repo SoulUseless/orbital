@@ -160,7 +160,7 @@ const Challenges = (props) => {
                 )}
               </div>
 
-              {auth.token && (
+              {auth.token && auth.userType === 'student' && (
                 <div onChange={requirementsFilterHandler}>
                   <h4> Requirements </h4>
                   <input type='checkbox' value='yes' defaultChecked /> Fulfilled <br />
