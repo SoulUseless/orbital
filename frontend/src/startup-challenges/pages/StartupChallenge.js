@@ -206,7 +206,6 @@ const StartupChallenge = (props) => {
                   </Button>
               </div>
           );
-
       return (
           <>
               <ErrorModal error={error} onClear={errorHandler} />
@@ -298,10 +297,14 @@ const StartupChallenge = (props) => {
                                           <h4>Startup</h4>
                                       </th>
                                       <th>
+                                        <Link
+                                            to={`/startup/${challenge.owner._id}`}
+                                        >
                                           {challenge.owner.name
                                               .charAt(0)
                                               .toUpperCase() +
                                               challenge.owner.name.slice(1)}
+                                        </Link>
                                       </th>
                                   </tr>
 

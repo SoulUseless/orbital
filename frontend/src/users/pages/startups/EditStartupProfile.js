@@ -184,11 +184,10 @@ const EditStartupProfile = () => {
                           {/*maybe ask user to key in old password first and then key new password */}
                             <Input
                                 id="password"
-                                type="text"
+                                type="password"
                                 element="input"
                                 label="Password (Enter old password if wish to remain unchanged)"
                                 errorText="Please enter a password."
-                                initialValue="hidden"
                                 initialValidity={false}
                                 onInput={inputHandler}
                             />
